@@ -71,14 +71,26 @@
     .chevron.open { transform: rotate(90deg); }
 
     /* ─── Lesson rows ─── */
-    .lesson-row { display: flex; align-items: center; gap: 8px; padding: 7px 4px; border-bottom: 1px solid #f0f0f0; }
-    .lesson-row:last-child { border-bottom: none; }
+    .lesson-item { border-bottom: 1px solid #f0f0f0; }
+    .lesson-item:last-child { border-bottom: none; }
+    .lesson-row { display: flex; align-items: center; gap: 8px; padding: 7px 4px; cursor: pointer; border-radius: 3px; }
+    .lesson-row:hover { background: #f5f5f5; }
     .lesson-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .dot-past   { background: #B4B2A9; }
     .dot-today  { background: #1D9E75; }
     .dot-future { background: #2E6DA4; }
     .lesson-row-name { flex: 1; font-size: 12px; }
     .lesson-row-meta { font-size: 11px; color: #888; white-space: nowrap; }
+    .lesson-detail {
+      padding: 6px 8px 10px 34px;
+      border-top: 1px solid #f0f0f0;
+      background: #fafafa;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.7;
+    }
+    .lesson-detail-row { display: flex; gap: 6px; }
+    .lesson-detail-row .label { flex-shrink: 0; }
 
     /* ─── Buttons ─── */
     .btn {
@@ -345,6 +357,7 @@ let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [] };
 let expandedClasses  = {};
 let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
+let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
 
 // ════════════════════════════════════════════════════
@@ -729,16 +742,26 @@ function renderSubunitCard(su) {
       html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No lessons yet.</div>`;
     } else {
       suLessons.forEach(lesson => {
-        const isToday = lesson.date === today;
+        const isToday    = lesson.date === today;
+        const isLessonOpen = !!expandedLessons[lesson.id];
+        const detailRows = [
+          lesson.date   ? `<div class="lesson-detail-row"><span class="label">Date</span><span>${friendlyDate(lesson.date)}${lesson.tstart ? ' at ' + friendlyTime(lesson.tstart) : ''}</span></div>` : '',
+          lesson.plan   ? `<div class="lesson-detail-row"><span class="label">Teach</span><span>${esc(lesson.plan)}</span></div>` : '',
+          lesson.pos    ? `<div class="lesson-detail-row"><span class="label">Start at</span><span>${esc(lesson.pos)}</span></div>` : ''
+        ].filter(Boolean).join('');
         html += `
-          <div class="lesson-row">
-            <div class="lesson-dot ${dotClass(lesson.date)}"></div>
-            <div class="lesson-row-name">
-              ${esc(lessonDisplayName(lesson))}
-              ${isToday ? `<span class="badge badge-today" style="font-size:10px;margin-left:4px;">Today</span>` : ''}
+          <div class="lesson-item">
+            <div class="lesson-row" onclick="toggleLesson('${lesson.id}')">
+              ${chevronSvg(isLessonOpen)}
+              <div class="lesson-dot ${dotClass(lesson.date)}"></div>
+              <div class="lesson-row-name">
+                ${esc(lessonDisplayName(lesson))}
+                ${isToday ? `<span class="badge badge-today" style="font-size:10px;margin-left:4px;">Today</span>` : ''}
+              </div>
+              <div class="lesson-row-meta">${lesson.date ? friendlyDate(lesson.date) : ''}${lesson.tstart ? ' ' + friendlyTime(lesson.tstart) : ''}</div>
+              <button class="btn-ghost" onclick="event.stopPropagation();deleteLesson('${lesson.id}')" title="Delete">&#10005;</button>
             </div>
-            <div class="lesson-row-meta">${lesson.date ? friendlyDate(lesson.date) : ''}${lesson.tstart ? ' ' + friendlyTime(lesson.tstart) : ''}</div>
-            <button class="btn-ghost" onclick="deleteLesson('${lesson.id}')" title="Delete">&#10005;</button>
+            ${isLessonOpen ? `<div class="lesson-detail">${detailRows || '<span style="color:#ccc;">No details recorded.</span>'}</div>` : ''}
           </div>`;
       });
     }
@@ -754,6 +777,7 @@ function renderSubunitCard(su) {
 function toggleClass(id)   { expandedClasses[id]  = !expandedClasses[id];  renderClasses(); }
 function toggleBook(id)    { expandedBooks[id]     = !expandedBooks[id];    renderClasses(); }
 function toggleSubunit(id) { expandedSubunits[id]  = !expandedSubunits[id]; renderClasses(); }
+function toggleLesson(id)  { expandedLessons[id]   = !expandedLessons[id];  renderClasses(); }
 
 // ════════════════════════════════════════════════════
 // LOG TAB

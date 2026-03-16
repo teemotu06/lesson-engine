@@ -9,25 +9,17 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 13px;
-      background: #fff;
-      color: #1a1a1a;
-      min-height: 100vh;
+      font-size: 13px; background: #fff; color: #1a1a1a; min-height: 100vh;
     }
 
     /* ─── Tab bar ─── */
     .tab-bar {
-      display: flex;
-      border-bottom: 1px solid #e5e5e5;
-      background: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      display: flex; border-bottom: 1px solid #e5e5e5;
+      background: #fff; position: sticky; top: 0; z-index: 100;
     }
     .tab-btn {
-      flex: 1; padding: 14px 8px; border: none; background: none;
-      cursor: pointer; font-size: 13px; color: #888;
-      border-bottom: 2px solid transparent;
+      flex: 1; padding: 14px 8px; border: none; background: none; cursor: pointer;
+      font-size: 13px; color: #888; border-bottom: 2px solid transparent;
       transition: color 0.15s, border-color 0.15s; font-family: inherit;
     }
     .tab-btn.active { color: #2E6DA4; border-bottom-color: #2E6DA4; font-weight: 600; }
@@ -50,7 +42,7 @@
     .badge-alba  { background: #fef3d0; color: #b07d0d; }
     .badge-day   { background: #efefef; color: #555; font-size: 10px; padding: 2px 6px; }
 
-    /* ─── Cards ─── */
+    /* ─── Class cards (Level 1) ─── */
     .card { background: #f7f7f7; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
     .card-header {
       display: flex; align-items: center; gap: 6px;
@@ -60,24 +52,32 @@
     .card-title { font-weight: 600; font-size: 14px; flex: 1; min-width: 80px; }
     .card-body { padding: 4px 14px 14px; border-top: 1px solid #e8e8e8; }
 
-    .chevron { width: 14px; height: 14px; color: #aaa; transition: transform 0.2s; flex-shrink: 0; }
-    .chevron.open { transform: rotate(90deg); }
-
-    /* ─── Unit cards ─── */
+    /* ─── Book cards (Level 2) ─── */
     .unit-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 6px; margin-bottom: 6px; overflow: hidden; }
     .unit-card .card-header { padding: 10px 12px; }
     .unit-card .card-header:hover { background: #f8f8f8; }
     .unit-card .card-body { padding: 4px 12px 12px; }
     .unit-card .card-title { font-size: 13px; }
 
+    /* ─── Unit/Subunit cards (Level 3) ─── */
+    .subunit-card { background: #fafafa; border: 1px solid #efefef; border-radius: 4px; margin-bottom: 4px; overflow: hidden; }
+    .subunit-card .card-header { padding: 8px 10px; gap: 6px; flex-wrap: wrap; }
+    .subunit-card .card-header:hover { background: #f5f5f5; }
+    .subunit-card .card-body { padding: 4px 10px 10px; border-top: 1px solid #efefef; }
+    .subunit-card .card-title { font-size: 12px; font-weight: 600; }
+
+    /* ─── Chevron ─── */
+    .chevron { width: 14px; height: 14px; color: #aaa; transition: transform 0.2s; flex-shrink: 0; }
+    .chevron.open { transform: rotate(90deg); }
+
     /* ─── Lesson rows ─── */
-    .lesson-row { display: flex; align-items: center; gap: 8px; padding: 8px 4px; border-bottom: 1px solid #f0f0f0; }
+    .lesson-row { display: flex; align-items: center; gap: 8px; padding: 7px 4px; border-bottom: 1px solid #f0f0f0; }
     .lesson-row:last-child { border-bottom: none; }
-    .lesson-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .lesson-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .dot-past   { background: #B4B2A9; }
     .dot-today  { background: #1D9E75; }
     .dot-future { background: #2E6DA4; }
-    .lesson-row-name { flex: 1; font-size: 13px; }
+    .lesson-row-name { flex: 1; font-size: 12px; }
     .lesson-row-meta { font-size: 11px; color: #888; white-space: nowrap; }
 
     /* ─── Buttons ─── */
@@ -118,10 +118,8 @@
     .form-group { margin-bottom: 14px; }
     .form-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; font-weight: 600; margin-bottom: 5px; }
     .form-input {
-      display: block; width: 100%; padding: 8px 10px;
-      border: 1px solid #ddd; border-radius: 6px;
-      font-size: 13px; font-family: inherit; color: #1a1a1a;
-      background: #fff; transition: border-color 0.15s;
+      display: block; width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;
+      font-size: 13px; font-family: inherit; color: #1a1a1a; background: #fff; transition: border-color 0.15s;
     }
     .form-input:focus { outline: none; border-color: #2E6DA4; }
     textarea.form-input { resize: vertical; min-height: 80px; }
@@ -159,7 +157,7 @@
     .next-preview { border: 1px solid #e8e8e8; border-radius: 8px; padding: 14px; }
     .next-preview .label { display: block; margin-bottom: 8px; }
 
-    /* ─── Classes ─── */
+    /* ─── Classes tab ─── */
     .tab-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .tab-section-title { font-size: 16px; font-weight: 700; }
     .class-meta { padding: 10px 0 8px; }
@@ -186,7 +184,7 @@
 
     /* ─── Loading / Error ─── */
     .loading-state { text-align: center; padding: 48px 16px; color: #aaa; font-size: 14px; }
-    .error-state { text-align: center; padding: 48px 16px; color: #e05252; font-size: 14px; }
+    .error-state   { text-align: center; padding: 48px 16px; color: #e05252; font-size: 14px; }
 
     @media (max-width: 480px) {
       .tab-content { padding: 10px; }
@@ -226,10 +224,6 @@
       </select>
     </div>
     <div class="form-group">
-      <label class="form-label">Program / Curriculum</label>
-      <input type="text" id="cls-curriculum" class="form-input" placeholder="e.g. Super Phonics + Stars &amp; Heroes">
-    </div>
-    <div class="form-group">
       <label class="form-label">Start Date</label>
       <input type="date" id="cls-start" class="form-input">
     </div>
@@ -260,39 +254,63 @@
   </div>
 </div>
 
-<!-- ═══ Modal: New Unit ═══ -->
-<div id="modal-unit" class="modal-backdrop" style="display:none;">
+<!-- ═══ Modal: Add Book ═══ -->
+<div id="modal-book" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
-    <div class="modal-title">New Unit</div>
-    <input type="hidden" id="unit-classId">
+    <div class="modal-title">Add Book</div>
+    <input type="hidden" id="book-classId">
     <div class="form-group">
-      <label class="form-label">Unit Name</label>
-      <input type="text" id="unit-name" class="form-input" placeholder="e.g. Unit 1 — Blends">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Program</label>
-      <input type="text" id="unit-program" class="form-input" placeholder="e.g. Super Phonics Book 4">
+      <label class="form-label">Book Name</label>
+      <input type="text" id="book-name" class="form-input" placeholder="e.g. Super Phonics Book 4">
     </div>
     <div class="form-group">
       <label class="form-label">Notes / Focus</label>
-      <textarea id="unit-notes" class="form-input" placeholder="e.g. Students weak on sh/ch digraphs"></textarea>
+      <textarea id="book-notes" class="form-input" placeholder="e.g. Main phonics book for this term"></textarea>
     </div>
     <div class="modal-actions">
-      <button class="btn" onclick="closeModal('modal-unit')">Cancel</button>
-      <button class="btn btn-primary" id="save-unit-btn" onclick="saveUnit()">Save</button>
+      <button class="btn" onclick="closeModal('modal-book')">Cancel</button>
+      <button class="btn btn-primary" id="save-book-btn" onclick="saveBook()">Save</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ Modal: New Lesson ═══ -->
+<!-- ═══ Modal: Add Unit ═══ -->
+<div id="modal-subunit" class="modal-backdrop" style="display:none;">
+  <div class="modal-card">
+    <div class="modal-title">Add Unit</div>
+    <input type="hidden" id="subunit-bookId">
+    <input type="hidden" id="subunit-classId">
+    <div class="form-row">
+      <div class="form-group" style="flex:0 0 90px;">
+        <label class="form-label">Unit No.</label>
+        <input type="number" id="subunit-number" class="form-input" min="1" step="1" placeholder="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Unit Name</label>
+        <input type="text" id="subunit-name" class="form-input" placeholder="e.g. Blends">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <textarea id="subunit-notes" class="form-input" placeholder="e.g. Students weak on sh/ch digraphs"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-subunit')">Cancel</button>
+      <button class="btn btn-primary" id="save-subunit-btn" onclick="saveSubunit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Modal: Add Lesson ═══ -->
 <div id="modal-lesson" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
-    <div class="modal-title">New Lesson</div>
-    <input type="hidden" id="lesson-unitId">
+    <div class="modal-title">Add Lesson</div>
+    <input type="hidden" id="lesson-subunitId">
+    <input type="hidden" id="lesson-bookId">
     <input type="hidden" id="lesson-classId">
     <div class="form-group">
       <label class="form-label">Lesson Title</label>
-      <input type="text" id="lesson-name" class="form-input" placeholder="e.g. Lesson 1 — Intro to blends">
+      <input type="text" id="lesson-name" class="form-input" placeholder="e.g. Intro to blends">
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -306,11 +324,11 @@
     </div>
     <div class="form-group">
       <label class="form-label">What to Teach / Cover</label>
-      <textarea id="lesson-plan" class="form-input" placeholder="e.g. Phonics drill p.18, Stars &amp; Heroes Unit 2 reading"></textarea>
+      <textarea id="lesson-plan" class="form-input" placeholder="e.g. Phonics drill p.18, reading activity"></textarea>
     </div>
     <div class="form-group">
       <label class="form-label">Starting Position in Book</label>
-      <input type="text" id="lesson-pos" class="form-input" placeholder="e.g. Super Phonics p.18">
+      <input type="text" id="lesson-pos" class="form-input" placeholder="e.g. p.18">
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-lesson')">Cancel</button>
@@ -323,36 +341,38 @@
 // ════════════════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════════════════
-let DB = { classes: [], units: [], lessons: [], logs: [] };
-let expandedClasses    = {};
-let expandedUnits      = {};
+let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [] };
+let expandedClasses  = {};
+let expandedBooks    = {};   // keyed by unit/book ID
+let expandedSubunits = {};   // keyed by subunit ID
 let pendingLogLessonId = null;
 
 // ════════════════════════════════════════════════════
-// API HELPER
+// API
 // ════════════════════════════════════════════════════
 async function api(method, path, body) {
   const opts = { method, headers: {} };
-  if (body) {
-    opts.headers['Content-Type'] = 'application/json';
-    opts.body = JSON.stringify(body);
-  }
+  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
   const res = await fetch(path, opts);
   if (!res.ok) throw new Error(`Request failed: ${res.status}`);
   return res.json();
 }
 
-// ════════════════════════════════════════════════════
-// LOAD ALL DATA
-// ════════════════════════════════════════════════════
 async function loadData() {
-  const [classes, units, lessons, logs] = await Promise.all([
+  const [classes, units, subunits, lessons, logs] = await Promise.all([
     api('GET', '/api/classes'),
     api('GET', '/api/units'),
+    api('GET', '/api/subunits'),
     api('GET', '/api/lessons'),
     api('GET', '/api/logs'),
   ]);
-  DB = { classes, units, lessons, logs };
+  DB = {
+    classes:  classes  || [],
+    units:    units    || [],
+    subunits: subunits || [],
+    lessons:  lessons  || [],
+    logs:     logs     || []
+  };
 }
 
 // ════════════════════════════════════════════════════
@@ -398,18 +418,66 @@ function esc(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+function parsePositiveInt(val) {
+  const n = Number.parseInt(val, 10);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+// ─── Display names ───────────────────────────────────────────────────────────
+function subunitDisplayName(su) {
+  const num  = su.number ? `Unit ${su.number}` : '';
+  const name = su.name   ? su.name              : '';
+  if (num && name) return `${num} — ${name}`;
+  return num || name || 'Untitled Unit';
+}
+
+function lessonDisplayName(lesson) {
+  return lesson.name || 'Untitled Lesson';
+}
+
+// ─── Sort helpers ─────────────────────────────────────────────────────────────
+function sortBooks(books) {
+  return books.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+}
+
+function sortSubunits(subs) {
+  return subs.slice().sort((a, b) => {
+    const an = a.number ?? Number.MAX_SAFE_INTEGER;
+    const bn = b.number ?? Number.MAX_SAFE_INTEGER;
+    if (an !== bn) return an - bn;
+    return (a.name || '').localeCompare(b.name || '');
+  });
+}
+
+function sortLessons(lessons, descending = false) {
+  const sorted = lessons.slice().sort((a, b) =>
+    (a.date || '').localeCompare(b.date || '') ||
+    (a.tstart || '').localeCompare(b.tstart || '') ||
+    (a.name || '').localeCompare(b.name || '')
+  );
+  return descending ? sorted.reverse() : sorted;
+}
+
+// ─── Date ranges ─────────────────────────────────────────────────────────────
 function classEndDate(classId) {
   const dates = DB.lessons.filter(l => l.classId === classId).map(l => l.date);
   if (!dates.length) { const c = DB.classes.find(c => c.id === classId); return c ? c.start : ''; }
   return dates.sort().at(-1);
 }
 
-function unitDateRange(unitId) {
-  const dates = DB.lessons.filter(l => l.unitId === unitId).map(l => l.date).sort();
+function bookDateRange(bookId) {
+  const dates = DB.lessons.filter(l => l.bookId === bookId).map(l => l.date).sort();
   if (!dates.length) return { start: null, end: null };
   return { start: dates[0], end: dates.at(-1) };
 }
 
+function subunitDateRange(subunitId) {
+  const dates = DB.lessons.filter(l => l.subunitId === subunitId).map(l => l.date).sort();
+  if (!dates.length) return { start: null, end: null };
+  return { start: dates[0], end: dates.at(-1) };
+}
+
+// ─── UI helpers ──────────────────────────────────────────────────────────────
 function teacherBadge(teacher) {
   const cls = teacher === 'Alba' ? 'badge-alba' : 'badge-tani';
   return `<span class="badge ${cls}">${esc(teacher)}</span>`;
@@ -417,12 +485,38 @@ function teacherBadge(teacher) {
 
 function dotClass(dateStr) {
   const t = todayStr();
-  return dateStr < t ? 'dot-past' : dateStr === t ? 'dot-today' : 'dot-future';
+  return !dateStr ? 'dot-future' : dateStr < t ? 'dot-past' : dateStr === t ? 'dot-today' : 'dot-future';
 }
 
 function chevronSvg(open) {
   return `<svg class="chevron${open ? ' open' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
     <polyline points="9 18 15 12 9 6"></polyline></svg>`;
+}
+
+// ─── Class timeline (shown inside expanded class card) ────────────────────────
+function renderClassTimeline(classId) {
+  const lessons = sortLessons(DB.lessons.filter(l => l.classId === classId));
+  if (!lessons.length) return `<div style="color:#ccc;font-size:12px;padding:4px 0;">No lessons scheduled yet.</div>`;
+  const today = todayStr();
+  return lessons.map(lesson => {
+    const su   = DB.subunits.find(s => s.id === lesson.subunitId);
+    const book = su ? DB.units.find(u => u.id === su.bookId) : null;
+    const meta = [
+      lesson.date   ? friendlyDate(lesson.date)   : '',
+      lesson.tstart ? friendlyTime(lesson.tstart)  : '',
+      book  ? book.name                : '',
+      su    ? subunitDisplayName(su)   : ''
+    ].filter(Boolean).join(' · ');
+    return `
+      <div class="lesson-row">
+        <div class="lesson-dot ${dotClass(lesson.date)}"></div>
+        <div class="lesson-row-name">
+          ${esc(lessonDisplayName(lesson))}
+          ${lesson.date === today ? `<span class="badge badge-today" style="font-size:10px;margin-left:4px;">Today</span>` : ''}
+        </div>
+        <div class="lesson-row-meta">${esc(meta)}</div>
+      </div>`;
+  }).join('');
 }
 
 // ════════════════════════════════════════════════════
@@ -447,36 +541,34 @@ document.querySelectorAll('.tab-btn').forEach(btn =>
 // ════════════════════════════════════════════════════
 function renderToday() {
   const today = todayStr();
-  const todayLessons = DB.lessons
-    .filter(l => l.date === today)
-    .sort((a, b) => (a.tstart || '').localeCompare(b.tstart || ''));
-
+  const todayLessons = sortLessons(DB.lessons.filter(l => l.date === today));
   let html = `<div class="today-date">${friendlyDateLong(today)}</div>`;
 
   if (todayLessons.length === 0) {
     html += `<div class="no-lessons-card">No lessons today</div>`;
-    const upcoming = DB.lessons
-      .filter(l => l.date > today)
-      .sort((a, b) => a.date.localeCompare(b.date) || (a.tstart || '').localeCompare(b.tstart || ''));
+    const upcoming = sortLessons(DB.lessons.filter(l => l.date > today));
     if (upcoming.length > 0) {
       const next = upcoming[0];
       const cls  = DB.classes.find(c => c.id === next.classId);
-      const unit = DB.units.find(u => u.id === next.unitId);
+      const su   = DB.subunits.find(s => s.id === next.subunitId);
+      const book = su ? DB.units.find(u => u.id === su.bookId) : null;
       html += `
         <div class="next-preview">
           <span class="label">Next Lesson</span>
-          <div style="font-weight:600;margin-bottom:4px;">${esc(next.name)}</div>
+          <div style="font-weight:600;margin-bottom:4px;">${esc(lessonDisplayName(next))}</div>
           <div style="font-size:12px;color:#555;">
             ${friendlyDate(next.date)}${next.tstart ? ' at ' + friendlyTime(next.tstart) : ''}
-            ${cls  ? ' · ' + esc(cls.name)  : ''}
-            ${unit ? ' · ' + esc(unit.name) : ''}
+            ${cls  ? ' · ' + esc(cls.name)               : ''}
+            ${book ? ' · ' + esc(book.name)              : ''}
+            ${su   ? ' · ' + esc(subunitDisplayName(su)) : ''}
           </div>
         </div>`;
     }
   } else {
     todayLessons.forEach(lesson => {
       const cls  = DB.classes.find(c => c.id === lesson.classId);
-      const unit = DB.units.find(u => u.id === lesson.unitId);
+      const su   = DB.subunits.find(s => s.id === lesson.subunitId);
+      const book = su ? DB.units.find(u => u.id === su.bookId) : null;
       const log  = DB.logs.find(g => g.lessonId === lesson.id);
       const timeBadge = lesson.tstart
         ? `<span class="badge badge-grey">${friendlyTime(lesson.tstart)}${cls && cls.tend ? ' – ' + friendlyTime(cls.tend) : ''}</span>`
@@ -487,12 +579,13 @@ function renderToday() {
             ${cls  ? `<span class="badge ${cls.teacher === 'Alba' ? 'badge-amber' : 'badge-blue'}">${esc(cls.name)}</span>` : ''}
             ${cls  ? teacherBadge(cls.teacher) : ''}
             ${timeBadge}
-            ${unit ? `<span class="badge badge-grey">${esc(unit.name)}</span>` : ''}
+            ${book ? `<span class="badge badge-grey">${esc(book.name)}</span>` : ''}
+            ${su   ? `<span class="badge badge-grey">${esc(subunitDisplayName(su))}</span>` : ''}
           </div>
-          <div class="lesson-card-title">${esc(lesson.name)}</div>
+          <div class="lesson-card-title">${esc(lessonDisplayName(lesson))}</div>
           ${lesson.plan ? `<div class="lesson-card-field"><strong>Teach:</strong> ${esc(lesson.plan)}</div>` : ''}
           ${lesson.pos  ? `<div class="lesson-card-field"><strong>Start at:</strong> ${esc(lesson.pos)}</div>` : ''}
-          ${unit && unit.notes ? `<div class="unit-notes-strip">&#9888; ${esc(unit.notes)}</div>` : ''}
+          ${su && su.notes ? `<div class="unit-notes-strip">&#9888; ${esc(su.notes)}</div>` : ''}
           ${log
             ? `<div class="log-notes-inline">Logged: ${esc(log.notes)}</div>`
             : `<button class="btn btn-primary" style="margin-top:10px;font-size:12px;" onclick="logFromToday('${lesson.id}')">Log this lesson</button>`
@@ -526,7 +619,7 @@ function renderClasses() {
     DB.classes.forEach(cls => {
       const isOpen     = !!expandedClasses[cls.id];
       const clsLessons = DB.lessons.filter(l => l.classId === cls.id);
-      const clsUnits   = DB.units.filter(u => u.classId === cls.id);
+      const clsBooks   = sortBooks(DB.units.filter(u => u.classId === cls.id));
       const endDate    = classEndDate(cls.id);
 
       html += `
@@ -545,22 +638,26 @@ function renderClasses() {
         html += `
           <div class="card-body">
             <div class="class-meta">
-              <div class="info-row"><span><span class="label">Curriculum</span> ${esc(cls.curriculum) || '—'}</span></div>
               <div class="info-row">
                 <span><span class="label">Start</span> ${friendlyDate(cls.start)}</span>
                 <span><span class="label">Time</span> ${friendlyTime(cls.tstart)}${cls.tend ? ' – ' + friendlyTime(cls.tend) : ''}</span>
               </div>
             </div>
-            <div class="units-container">`;
+            <div style="margin-bottom:14px;">
+              <div class="label" style="margin-bottom:8px;">Lesson Timeline</div>
+              <div>${renderClassTimeline(cls.id)}</div>
+            </div>
+            <div class="units-container">
+              <div class="label" style="margin-bottom:8px;">Books</div>`;
 
-        if (clsUnits.length === 0) {
-          html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No units yet.</div>`;
+        if (clsBooks.length === 0) {
+          html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No books yet.</div>`;
         } else {
-          clsUnits.forEach(unit => { html += renderUnitCard(unit); });
+          clsBooks.forEach(book => { html += renderBookCard(book); });
         }
 
         html += `
-              <button class="btn btn-add" onclick="openUnitModal('${cls.id}')">+ Add Unit</button>
+              <button class="btn btn-add" onclick="openBookModal('${cls.id}')">+ Add Book</button>
             </div>
           </div>`;
       }
@@ -570,75 +667,115 @@ function renderClasses() {
   el.innerHTML = html;
 }
 
-function renderUnitCard(unit) {
-  const isOpen      = !!expandedUnits[unit.id];
-  const unitLessons = DB.lessons
-    .filter(l => l.unitId === unit.id)
-    .sort((a, b) => a.date.localeCompare(b.date));
-  const range = unitDateRange(unit.id);
-  const today = todayStr();
+// ─── Book card (Level 2) ──────────────────────────────────────────────────────
+function renderBookCard(book) {
+  const isOpen      = !!expandedBooks[book.id];
+  const bookSubs    = sortSubunits(DB.subunits.filter(s => s.bookId === book.id));
+  const bookLessons = DB.lessons.filter(l => l.bookId === book.id);
+  const range       = bookDateRange(book.id);
 
   let html = `
     <div class="unit-card">
-      <div class="card-header" onclick="toggleUnit('${unit.id}')">
+      <div class="card-header" onclick="toggleBook('${book.id}')">
         ${chevronSvg(isOpen)}
-        <div class="card-title">${esc(unit.name)}</div>
-        ${unit.program ? `<span class="badge badge-grey" style="font-size:10px;">${esc(unit.program)}</span>` : ''}
-        <span class="badge badge-grey" style="font-size:10px;">${unitLessons.length} lesson${unitLessons.length !== 1 ? 's' : ''}</span>
+        <div class="card-title">${esc(book.name || 'Untitled Book')}</div>
+        <span class="badge badge-grey" style="font-size:10px;">${bookLessons.length} lesson${bookLessons.length !== 1 ? 's' : ''}</span>
         ${range.start ? `<span style="font-size:11px;color:#aaa;white-space:nowrap;">${friendlyDate(range.start)} → ${friendlyDate(range.end)}</span>` : ''}
-        <button class="btn-ghost" onclick="event.stopPropagation();deleteUnit('${unit.id}')" title="Delete">&#10005;</button>
+        <button class="btn-ghost" onclick="event.stopPropagation();deleteBook('${book.id}')" title="Delete">&#10005;</button>
       </div>`;
 
   if (isOpen) {
     html += `<div class="card-body">`;
-    if (unit.notes) {
-      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;">&#9888; ${esc(unit.notes)}</div>`;
+    if (book.notes) {
+      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;">&#9888; ${esc(book.notes)}</div>`;
     }
-    if (unitLessons.length === 0) {
+    if (bookSubs.length === 0) {
+      html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No units yet.</div>`;
+    } else {
+      bookSubs.forEach(su => { html += renderSubunitCard(su); });
+    }
+    html += `
+        <button class="btn btn-add" onclick="openSubunitModal('${book.id}','${book.classId}')">+ Add Unit</button>
+      </div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+// ─── Subunit card (Level 3) ───────────────────────────────────────────────────
+function renderSubunitCard(su) {
+  const isOpen     = !!expandedSubunits[su.id];
+  const suLessons  = sortLessons(DB.lessons.filter(l => l.subunitId === su.id));
+  const range      = subunitDateRange(su.id);
+  const today      = todayStr();
+
+  let html = `
+    <div class="subunit-card">
+      <div class="card-header" onclick="toggleSubunit('${su.id}')">
+        ${chevronSvg(isOpen)}
+        <div class="card-title">${esc(subunitDisplayName(su))}</div>
+        <span class="badge badge-grey" style="font-size:10px;">${suLessons.length} lesson${suLessons.length !== 1 ? 's' : ''}</span>
+        ${range.start ? `<span style="font-size:11px;color:#aaa;white-space:nowrap;">${friendlyDate(range.start)} → ${friendlyDate(range.end)}</span>` : ''}
+        <button class="btn-ghost" onclick="event.stopPropagation();deleteSubunit('${su.id}')" title="Delete">&#10005;</button>
+      </div>`;
+
+  if (isOpen) {
+    html += `<div class="card-body">`;
+    if (su.notes) {
+      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;">&#9888; ${esc(su.notes)}</div>`;
+    }
+    if (suLessons.length === 0) {
       html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No lessons yet.</div>`;
     } else {
-      html += `<div>`;
-      unitLessons.forEach(lesson => {
+      suLessons.forEach(lesson => {
         const isToday = lesson.date === today;
         html += `
           <div class="lesson-row">
             <div class="lesson-dot ${dotClass(lesson.date)}"></div>
             <div class="lesson-row-name">
-              ${esc(lesson.name)}
+              ${esc(lessonDisplayName(lesson))}
               ${isToday ? `<span class="badge badge-today" style="font-size:10px;margin-left:4px;">Today</span>` : ''}
             </div>
-            <div class="lesson-row-meta">${friendlyDate(lesson.date)}${lesson.tstart ? ' ' + friendlyTime(lesson.tstart) : ''}</div>
+            <div class="lesson-row-meta">${lesson.date ? friendlyDate(lesson.date) : ''}${lesson.tstart ? ' ' + friendlyTime(lesson.tstart) : ''}</div>
             <button class="btn-ghost" onclick="deleteLesson('${lesson.id}')" title="Delete">&#10005;</button>
           </div>`;
       });
-      html += `</div>`;
     }
     html += `
-        <button class="btn btn-add" onclick="openLessonModal('${unit.id}','${unit.classId}')">+ Add Lesson</button>
+        <button class="btn btn-add" onclick="openLessonModal('${su.id}','${su.bookId}','${su.classId}')">+ Add Lesson</button>
       </div>`;
   }
+
   html += `</div>`;
   return html;
 }
 
-function toggleClass(id) { expandedClasses[id] = !expandedClasses[id]; renderClasses(); }
-function toggleUnit(id)  { expandedUnits[id]   = !expandedUnits[id];   renderClasses(); }
+function toggleClass(id)   { expandedClasses[id]  = !expandedClasses[id];  renderClasses(); }
+function toggleBook(id)    { expandedBooks[id]     = !expandedBooks[id];    renderClasses(); }
+function toggleSubunit(id) { expandedSubunits[id]  = !expandedSubunits[id]; renderClasses(); }
 
 // ════════════════════════════════════════════════════
 // LOG TAB
 // ════════════════════════════════════════════════════
 function renderLog() {
-  const sortedLessons = DB.lessons.slice()
-    .sort((a, b) => b.date.localeCompare(a.date) || (b.tstart || '').localeCompare(a.tstart || ''));
+  const sortedLessons = sortLessons(DB.lessons, true);
 
   let optionsHtml = '<option value="">— Select a lesson —</option>';
   sortedLessons.forEach(l => {
-    const cls = DB.classes.find(c => c.id === l.classId);
-    optionsHtml += `<option value="${l.id}">${esc(`${friendlyDate(l.date)} — ${cls ? cls.name : 'Unknown'} — ${l.name}`)}</option>`;
+    const cls  = DB.classes.find(c => c.id === l.classId);
+    const su   = DB.subunits.find(s => s.id === l.subunitId);
+    const book = su ? DB.units.find(u => u.id === su.bookId) : null;
+    const context = [
+      cls  ? cls.name              : 'Unknown',
+      book ? book.name             : '',
+      su   ? subunitDisplayName(su): ''
+    ].filter(Boolean).join(' — ');
+    optionsHtml += `<option value="${l.id}">${esc(`${friendlyDate(l.date)} — ${context} — ${lessonDisplayName(l)}`)}</option>`;
   });
 
   const sortedLogs = DB.logs.slice().sort((a, b) => b.date.localeCompare(a.date));
-  let logsHtml = sortedLogs.length === 0
+  const logsHtml = sortedLogs.length === 0
     ? `<div style="color:#aaa;font-size:12px;padding:16px 0;">No logs yet.</div>`
     : sortedLogs.map(g => `
         <div class="log-item">
@@ -681,11 +818,10 @@ async function saveLog() {
   const cls = DB.classes.find(c => c.id === lesson.classId);
 
   const log = {
-    id:         'g_' + Date.now(),
-    lessonId,
+    id: 'g_' + Date.now(), lessonId,
     classId:    lesson.classId,
     className:  cls ? cls.name : '',
-    lessonName: lesson.name,
+    lessonName: lessonDisplayName(lesson),
     date:       lesson.date,
     notes
   };
@@ -712,9 +848,9 @@ function renderSettings() {
       <div class="settings-section-title">Stats</div>
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-number">${DB.classes.length}</div><div class="stat-label">Classes</div></div>
-        <div class="stat-card"><div class="stat-number">${DB.units.length}</div><div class="stat-label">Units</div></div>
+        <div class="stat-card"><div class="stat-number">${DB.units.length}</div><div class="stat-label">Books</div></div>
+        <div class="stat-card"><div class="stat-number">${DB.subunits.length}</div><div class="stat-label">Units</div></div>
         <div class="stat-card"><div class="stat-number">${DB.lessons.length}</div><div class="stat-label">Lessons</div></div>
-        <div class="stat-card"><div class="stat-number">${DB.logs.length}</div><div class="stat-label">Logs</div></div>
       </div>
     </div>
     <div class="settings-section">
@@ -733,30 +869,28 @@ function renderSettings() {
 
 async function exportData() {
   try {
-    const data     = await api('GET', '/api/export');
+    const data = await api('GET', '/api/export');
     const filename = `lesson-engine-${todayStr()}.json`;
-    const blob     = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url      = URL.createObjectURL(blob);
-    const a        = document.createElement('a');
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
     a.href = url; a.download = filename; a.click();
     URL.revokeObjectURL(url);
-  } catch(e) {
-    alert('Export failed.');
-  }
+  } catch(e) { alert('Export failed.'); }
 }
 
 async function importData(e) {
   const file = e.target.files[0];
   if (!file) return;
   try {
-    const text = await file.text();
-    const data = JSON.parse(text);
+    const data = JSON.parse(await file.text());
     await api('POST', '/api/import', data);
     DB = {
-      classes: data.classes || [],
-      units:   data.units   || [],
-      lessons: data.lessons || [],
-      logs:    data.logs    || []
+      classes:  data.classes  || [],
+      units:    data.units    || [],
+      subunits: data.subunits || [],
+      lessons:  data.lessons  || [],
+      logs:     data.logs     || []
     };
     renderSettings();
     alert('Import successful!');
@@ -768,58 +902,60 @@ async function importData(e) {
 
 async function clearAllData() {
   if (!confirm('Are you sure you want to clear all data? This cannot be undone.')) return;
-  if (!confirm('Final confirmation: permanently delete all classes, units, lessons, and logs?')) return;
+  if (!confirm('Final confirmation: permanently delete all classes, books, units, lessons, and logs?')) return;
   try {
     await api('DELETE', '/api/clear');
-    DB = { classes: [], units: [], lessons: [], logs: [] };
+    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [] };
     renderSettings();
-  } catch(e) {
-    alert('Failed to clear data.');
-  }
+  } catch(e) { alert('Failed to clear data.'); }
 }
 
 // ════════════════════════════════════════════════════
 // MODALS
 // ════════════════════════════════════════════════════
 function openClassModal() {
-  document.getElementById('cls-name').value       = '';
-  document.getElementById('cls-teacher').value    = 'Tani';
-  document.getElementById('cls-curriculum').value = '';
-  document.getElementById('cls-start').value      = '';
-  document.getElementById('cls-tstart').value     = '';
-  document.getElementById('cls-tend').value       = '';
+  document.getElementById('cls-name').value    = '';
+  document.getElementById('cls-teacher').value = 'Tani';
+  document.getElementById('cls-start').value   = '';
+  document.getElementById('cls-tstart').value  = '';
+  document.getElementById('cls-tend').value    = '';
   document.querySelectorAll('#cls-days .day-toggle').forEach(b => b.classList.remove('active'));
   document.getElementById('modal-class').style.display = 'flex';
 }
 
-function openUnitModal(classId) {
-  document.getElementById('unit-classId').value = classId;
-  document.getElementById('unit-name').value    = '';
-  document.getElementById('unit-program').value = '';
-  document.getElementById('unit-notes').value   = '';
-  document.getElementById('modal-unit').style.display = 'flex';
+function openBookModal(classId) {
+  document.getElementById('book-classId').value = classId;
+  document.getElementById('book-name').value    = '';
+  document.getElementById('book-notes').value   = '';
+  document.getElementById('modal-book').style.display = 'flex';
 }
 
-function openLessonModal(unitId, classId) {
-  document.getElementById('lesson-unitId').value  = unitId;
-  document.getElementById('lesson-classId').value = classId;
-  document.getElementById('lesson-name').value    = '';
-  document.getElementById('lesson-date').value    = '';
-  document.getElementById('lesson-plan').value    = '';
-  document.getElementById('lesson-pos').value     = '';
+function openSubunitModal(bookId, classId) {
+  document.getElementById('subunit-bookId').value  = bookId;
+  document.getElementById('subunit-classId').value = classId;
+  document.getElementById('subunit-number').value  = '';
+  document.getElementById('subunit-name').value    = '';
+  document.getElementById('subunit-notes').value   = '';
+  document.getElementById('modal-subunit').style.display = 'flex';
+}
+
+function openLessonModal(subunitId, bookId, classId) {
+  document.getElementById('lesson-subunitId').value = subunitId;
+  document.getElementById('lesson-bookId').value    = bookId;
+  document.getElementById('lesson-classId').value   = classId;
+  document.getElementById('lesson-name').value      = '';
+  document.getElementById('lesson-date').value      = '';
+  document.getElementById('lesson-plan').value      = '';
+  document.getElementById('lesson-pos').value       = '';
   const cls = DB.classes.find(c => c.id === classId);
-  document.getElementById('lesson-tstart').value  = cls ? (cls.tstart || '') : '';
+  document.getElementById('lesson-tstart').value = cls ? (cls.tstart || '') : '';
   document.getElementById('modal-lesson').style.display = 'flex';
 }
 
-function closeModal(id) {
-  document.getElementById(id).style.display = 'none';
-}
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
 document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-  backdrop.addEventListener('click', e => {
-    if (e.target === backdrop) closeModal(backdrop.id);
-  });
+  backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(backdrop.id); });
 });
 
 document.querySelectorAll('#cls-days .day-toggle').forEach(btn => {
@@ -827,80 +963,90 @@ document.querySelectorAll('#cls-days .day-toggle').forEach(btn => {
 });
 
 // ════════════════════════════════════════════════════
-// SAVE (modals)
+// SAVE
 // ════════════════════════════════════════════════════
 async function saveClass() {
-  const name       = document.getElementById('cls-name').value.trim();
-  const teacher    = document.getElementById('cls-teacher').value;
-  const curriculum = document.getElementById('cls-curriculum').value.trim();
-  const start      = document.getElementById('cls-start').value;
-  const tstart     = document.getElementById('cls-tstart').value;
-  const tend       = document.getElementById('cls-tend').value;
-  const days       = Array.from(document.querySelectorAll('#cls-days .day-toggle.active')).map(b => b.dataset.day);
+  const name    = document.getElementById('cls-name').value.trim();
+  const teacher = document.getElementById('cls-teacher').value;
+  const start   = document.getElementById('cls-start').value;
+  const tstart  = document.getElementById('cls-tstart').value;
+  const tend    = document.getElementById('cls-tend').value;
+  const days    = Array.from(document.querySelectorAll('#cls-days .day-toggle.active')).map(b => b.dataset.day);
 
   if (!name)  { alert('Please enter a class name.'); return; }
   if (!start) { alert('Please enter a start date.'); return; }
 
-  const cls = { id: 'c_' + Date.now(), name, teacher, curriculum, start, tstart, tend, days };
+  const cls = { id: 'c_' + Date.now(), name, teacher, start, tstart, tend, days };
   setBusy('save-class-btn', true);
   try {
     await api('POST', '/api/classes', cls);
     DB.classes.push(cls);
     closeModal('modal-class');
     renderClasses();
-  } catch(e) {
-    alert('Failed to save class.');
-  } finally {
-    setBusy('save-class-btn', false);
-  }
+  } catch(e) { alert('Failed to save class.'); }
+  finally { setBusy('save-class-btn', false); }
 }
 
-async function saveUnit() {
-  const classId = document.getElementById('unit-classId').value;
-  const name    = document.getElementById('unit-name').value.trim();
-  const program = document.getElementById('unit-program').value.trim();
-  const notes   = document.getElementById('unit-notes').value.trim();
+async function saveBook() {
+  const classId = document.getElementById('book-classId').value;
+  const name    = document.getElementById('book-name').value.trim();
+  const notes   = document.getElementById('book-notes').value.trim();
+
+  if (!name) { alert('Please enter a book name.'); return; }
+
+  const book = { id: 'u_' + Date.now(), classId, name, notes };
+  setBusy('save-book-btn', true);
+  try {
+    await api('POST', '/api/units', book);
+    DB.units.push(book);
+    closeModal('modal-book');
+    renderClasses();
+  } catch(e) { alert('Failed to save book.'); }
+  finally { setBusy('save-book-btn', false); }
+}
+
+async function saveSubunit() {
+  const bookId  = document.getElementById('subunit-bookId').value;
+  const classId = document.getElementById('subunit-classId').value;
+  const number  = parsePositiveInt(document.getElementById('subunit-number').value);
+  const name    = document.getElementById('subunit-name').value.trim();
+  const notes   = document.getElementById('subunit-notes').value.trim();
 
   if (!name) { alert('Please enter a unit name.'); return; }
 
-  const unit = { id: 'u_' + Date.now(), classId, name, program, notes };
-  setBusy('save-unit-btn', true);
+  const su = { id: 'su_' + Date.now(), bookId, classId, number, name, notes };
+  setBusy('save-subunit-btn', true);
   try {
-    await api('POST', '/api/units', unit);
-    DB.units.push(unit);
-    closeModal('modal-unit');
+    await api('POST', '/api/subunits', su);
+    DB.subunits.push(su);
+    closeModal('modal-subunit');
     renderClasses();
-  } catch(e) {
-    alert('Failed to save unit.');
-  } finally {
-    setBusy('save-unit-btn', false);
-  }
+  } catch(e) { alert('Failed to save unit.'); }
+  finally { setBusy('save-subunit-btn', false); }
 }
 
 async function saveLesson() {
-  const unitId  = document.getElementById('lesson-unitId').value;
-  const classId = document.getElementById('lesson-classId').value;
-  const name    = document.getElementById('lesson-name').value.trim();
-  const date    = document.getElementById('lesson-date').value;
-  const tstart  = document.getElementById('lesson-tstart').value;
-  const plan    = document.getElementById('lesson-plan').value.trim();
-  const pos     = document.getElementById('lesson-pos').value.trim();
+  const subunitId = document.getElementById('lesson-subunitId').value;
+  const bookId    = document.getElementById('lesson-bookId').value;
+  const classId   = document.getElementById('lesson-classId').value;
+  const name      = document.getElementById('lesson-name').value.trim();
+  const date      = document.getElementById('lesson-date').value;
+  const tstart    = document.getElementById('lesson-tstart').value;
+  const plan      = document.getElementById('lesson-plan').value.trim();
+  const pos       = document.getElementById('lesson-pos').value.trim();
 
   if (!name) { alert('Please enter a lesson title.'); return; }
   if (!date) { alert('Please enter a date.'); return; }
 
-  const lesson = { id: 'l_' + Date.now(), unitId, classId, name, date, tstart, plan, pos };
+  const lesson = { id: 'l_' + Date.now(), subunitId, bookId, classId, name, date, tstart, plan, pos };
   setBusy('save-lesson-btn', true);
   try {
     await api('POST', '/api/lessons', lesson);
     DB.lessons.push(lesson);
     closeModal('modal-lesson');
     renderClasses();
-  } catch(e) {
-    alert('Failed to save lesson.');
-  } finally {
-    setBusy('save-lesson-btn', false);
-  }
+  } catch(e) { alert('Failed to save lesson.'); }
+  finally { setBusy('save-lesson-btn', false); }
 }
 
 // ════════════════════════════════════════════════════
@@ -909,55 +1055,67 @@ async function saveLesson() {
 async function deleteClass(classId) {
   const cls = DB.classes.find(c => c.id === classId);
   if (!cls) return;
-  if (!confirm(`Delete class "${cls.name}" and all its units, lessons, and logs?`)) return;
-
+  if (!confirm(`Delete class "${cls.name}" and all its books, units, lessons, and logs?`)) return;
   try {
     await api('DELETE', `/api/classes/${classId}`);
-    const unitIds   = DB.units.filter(u => u.classId === classId).map(u => u.id);
-    const lessonIds = DB.lessons.filter(l => l.classId === classId).map(l => l.id);
-    DB.logs    = DB.logs.filter(g => !lessonIds.includes(g.lessonId));
-    DB.lessons = DB.lessons.filter(l => l.classId !== classId);
-    DB.units   = DB.units.filter(u => u.classId !== classId);
-    DB.classes = DB.classes.filter(c => c.id !== classId);
+    const bookIds    = DB.units.filter(u => u.classId === classId).map(u => u.id);
+    const subIds     = DB.subunits.filter(s => s.classId === classId).map(s => s.id);
+    const lessonIds  = DB.lessons.filter(l => l.classId === classId).map(l => l.id);
+    DB.logs     = DB.logs.filter(g => !lessonIds.includes(g.lessonId));
+    DB.lessons  = DB.lessons.filter(l => l.classId !== classId);
+    DB.subunits = DB.subunits.filter(s => s.classId !== classId);
+    DB.units    = DB.units.filter(u => u.classId !== classId);
+    DB.classes  = DB.classes.filter(c => c.id !== classId);
+    bookIds.forEach(id => delete expandedBooks[id]);
+    subIds.forEach(id  => delete expandedSubunits[id]);
     delete expandedClasses[classId];
-    unitIds.forEach(uid => delete expandedUnits[uid]);
     renderClasses();
-  } catch(e) {
-    alert('Failed to delete class.');
-  }
+  } catch(e) { alert('Failed to delete class.'); }
 }
 
-async function deleteUnit(unitId) {
-  const unit = DB.units.find(u => u.id === unitId);
-  if (!unit) return;
-  if (!confirm(`Delete unit "${unit.name}" and all its lessons?`)) return;
-
+async function deleteBook(bookId) {
+  const book = DB.units.find(u => u.id === bookId);
+  if (!book) return;
+  if (!confirm(`Delete book "${book.name}" and all its units and lessons?`)) return;
   try {
-    await api('DELETE', `/api/units/${unitId}`);
-    const lessonIds = DB.lessons.filter(l => l.unitId === unitId).map(l => l.id);
-    DB.logs    = DB.logs.filter(g => !lessonIds.includes(g.lessonId));
-    DB.lessons = DB.lessons.filter(l => l.unitId !== unitId);
-    DB.units   = DB.units.filter(u => u.id !== unitId);
-    delete expandedUnits[unitId];
+    await api('DELETE', `/api/units/${bookId}`);
+    const subIds    = DB.subunits.filter(s => s.bookId === bookId).map(s => s.id);
+    const lessonIds = DB.lessons.filter(l => l.bookId === bookId).map(l => l.id);
+    DB.logs     = DB.logs.filter(g => !lessonIds.includes(g.lessonId));
+    DB.lessons  = DB.lessons.filter(l => l.bookId !== bookId);
+    DB.subunits = DB.subunits.filter(s => s.bookId !== bookId);
+    DB.units    = DB.units.filter(u => u.id !== bookId);
+    subIds.forEach(id => delete expandedSubunits[id]);
+    delete expandedBooks[bookId];
     renderClasses();
-  } catch(e) {
-    alert('Failed to delete unit.');
-  }
+  } catch(e) { alert('Failed to delete book.'); }
+}
+
+async function deleteSubunit(subunitId) {
+  const su = DB.subunits.find(s => s.id === subunitId);
+  if (!su) return;
+  if (!confirm(`Delete unit "${subunitDisplayName(su)}" and all its lessons?`)) return;
+  try {
+    await api('DELETE', `/api/subunits/${subunitId}`);
+    const lessonIds = DB.lessons.filter(l => l.subunitId === subunitId).map(l => l.id);
+    DB.logs     = DB.logs.filter(g => !lessonIds.includes(g.lessonId));
+    DB.lessons  = DB.lessons.filter(l => l.subunitId !== subunitId);
+    DB.subunits = DB.subunits.filter(s => s.id !== subunitId);
+    delete expandedSubunits[subunitId];
+    renderClasses();
+  } catch(e) { alert('Failed to delete unit.'); }
 }
 
 async function deleteLesson(lessonId) {
   const lesson = DB.lessons.find(l => l.id === lessonId);
   if (!lesson) return;
-  if (!confirm(`Delete lesson "${lesson.name}"?`)) return;
-
+  if (!confirm(`Delete lesson "${lessonDisplayName(lesson)}"?`)) return;
   try {
     await api('DELETE', `/api/lessons/${lessonId}`);
     DB.logs    = DB.logs.filter(g => g.lessonId !== lessonId);
     DB.lessons = DB.lessons.filter(l => l.id !== lessonId);
     renderClasses();
-  } catch(e) {
-    alert('Failed to delete lesson.');
-  }
+  } catch(e) { alert('Failed to delete lesson.'); }
 }
 
 // ════════════════════════════════════════════════════
@@ -966,7 +1124,7 @@ async function deleteLesson(lessonId) {
 function setBusy(btnId, busy) {
   const btn = document.getElementById(btnId);
   if (!btn) return;
-  btn.disabled  = busy;
+  btn.disabled = busy;
   btn.textContent = busy ? 'Saving…' : 'Save';
 }
 
@@ -974,8 +1132,7 @@ function setBusy(btnId, busy) {
 // INIT
 // ════════════════════════════════════════════════════
 async function init() {
-  document.getElementById('tab-today').innerHTML =
-    `<div class="loading-state">Loading…</div>`;
+  document.getElementById('tab-today').innerHTML = `<div class="loading-state">Loading…</div>`;
   try {
     await loadData();
     renderToday();

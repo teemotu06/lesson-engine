@@ -105,7 +105,7 @@
 
     .app-header {
       position: relative;
-      padding: 28px 28px 18px;
+      padding: 20px 24px 14px;
     }
 
     .app-header-top {
@@ -181,16 +181,9 @@
     }
 
     .app-title {
-      font-size: clamp(2.4rem, 5vw, 4.4rem);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
       line-height: 0.95;
-      max-width: 9ch;
-    }
-
-    .app-subtitle {
-      max-width: 42ch;
-      margin-top: 12px;
-      font-size: 15px;
-      color: var(--muted);
+      max-width: 12ch;
     }
 
     .app-hero-card {
@@ -350,6 +343,81 @@
       font-size: 12px;
     }
 
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin: 14px 0 18px;
+    }
+
+    .overview-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.48);
+      border: 1px solid rgba(116, 99, 79, 0.1);
+    }
+
+    .overview-value {
+      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .overview-note {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .status-complete { background: var(--green-dim); color: var(--green); border-color: rgba(17,122,101,0.14); }
+    .status-progress { background: var(--accent-dim); color: var(--accent); border-color: rgba(21,112,239,0.14); }
+    .status-planned { background: var(--elevated); color: var(--muted); border-color: var(--border); }
+
+    .progress-block { margin-top: 10px; }
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(116, 99, 79, 0.12);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, var(--accent), #45a2ff);
+    }
+
+    .progress-fill.complete {
+      background: linear-gradient(135deg, #117a65, #38b99a);
+    }
+
+    .progress-meta {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
     .badge {
       display: inline-block;
       padding: 4px 10px;
@@ -397,6 +465,7 @@
     }
 
     .card-header:hover { background: rgba(255,255,255,0.55); }
+
     .card-title { font-weight: 800; font-size: 15px; flex: 1; min-width: 80px; }
     .card-body {
       padding: 8px 18px 18px;
@@ -480,6 +549,8 @@
     .btn-primary:hover { background: linear-gradient(135deg, var(--accent-hov), #2d91f5); color: #fff; }
     .btn-ghost { border: none; background: none; box-shadow: none; color: var(--dim); padding: 3px 6px; font-size: 13px; cursor: pointer; transition: color 0.12s; border-radius: 6px; }
     .btn-ghost:hover { color: var(--red); background: #fff5f5; }
+    .btn-edit { border:none; background:none; box-shadow:none; color:var(--dim); padding:3px 6px; font-size:12px; cursor:pointer; transition:color .12s, background .12s; border-radius:6px; }
+    .btn-edit:hover { color:var(--accent); background:var(--accent-dim); }
     .btn-add {
       border: 1px dashed rgba(90, 71, 49, 0.25);
       color: var(--muted);
@@ -597,6 +668,7 @@
       background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(234,243,255,0.76));
       box-shadow: var(--shadow-sm);
     }
+
     .next-preview .label { display: block; margin-bottom: 10px; }
 
     .tab-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -656,6 +728,13 @@
     .report-lesson-note { font-size: 12px; color: var(--text); background: var(--accent-dim); border-left: 3px solid var(--accent); padding: 6px 10px; border-radius: 0 5px 5px 0; line-height: 1.6; }
     .report-no-note { font-size: 11px; color: var(--dim); font-style: italic; }
 
+    .toast-shelf { position:fixed; bottom:24px; right:24px; z-index:9999; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
+    .toast { padding:12px 16px; border-radius:14px; font-size:13px; font-weight:600; pointer-events:auto; box-shadow:0 16px 40px rgba(28,24,10,.15); animation:toast-in .22s ease both; max-width:320px; line-height:1.4; }
+    .toast-success { background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(232,250,243,.97)); border:1px solid rgba(17,122,101,.18); color:var(--green); }
+    .toast-error   { background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(255,245,245,.97)); border:1px solid rgba(197,61,61,.18); color:var(--red); }
+    .toast-info    { background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(234,243,255,.97)); border:1px solid rgba(21,112,239,.18); color:var(--accent); }
+    @keyframes toast-in { from{opacity:0;transform:translateY(8px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+
     @media print {
       .tab-bar, .modal-actions { display: none !important; }
       .modal-backdrop { position: static; background: none; padding: 0; backdrop-filter: none; }
@@ -706,8 +785,7 @@
       </div>
       <div class="app-hero">
         <div>
-          <div class="app-title">Education can look sharp.</div>
-          <div class="app-subtitle">A brighter planning space for lessons, books, students, and progress. Clean enough to last, styled enough to feel current.</div>
+          <div class="app-title">Lesson Engine</div>
         </div>
         <div class="app-hero-card">
           <div class="app-hero-kicker">Today</div>
@@ -738,7 +816,8 @@
 <!-- ═══ Modal: New Class ═══ -->
 <div id="modal-class" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
-    <div class="modal-title">New Class</div>
+    <div class="modal-title" id="modal-class-title">New Class</div>
+    <input type="hidden" id="cls-id">
     <div class="form-group">
       <label class="form-label">Class Name</label>
       <input type="text" id="cls-name" class="form-input" placeholder="e.g. Starters B">
@@ -772,6 +851,7 @@
         <button class="day-toggle" data-day="Wed">Wed</button>
         <button class="day-toggle" data-day="Thu">Thu</button>
         <button class="day-toggle" data-day="Fri">Fri</button>
+        <button class="day-toggle" data-day="Sat">Sat</button>
       </div>
     </div>
     <div class="modal-actions">
@@ -784,7 +864,8 @@
 <!-- ═══ Modal: Add Book ═══ -->
 <div id="modal-book" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
-    <div class="modal-title">Add Book</div>
+    <div class="modal-title" id="modal-book-title">Add Book</div>
+    <input type="hidden" id="book-id">
     <input type="hidden" id="book-classId">
     <div class="form-group">
       <label class="form-label">Book Name</label>
@@ -804,7 +885,8 @@
 <!-- ═══ Modal: Add Unit ═══ -->
 <div id="modal-subunit" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
-    <div class="modal-title">Add Unit</div>
+    <div class="modal-title" id="modal-subunit-title">Add Unit</div>
+    <input type="hidden" id="subunit-id">
     <input type="hidden" id="subunit-bookId">
     <input type="hidden" id="subunit-classId">
     <div class="form-row">
@@ -831,7 +913,8 @@
 <!-- ═══ Modal: Add Lesson ═══ -->
 <div id="modal-lesson" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
-    <div class="modal-title">Add Lesson</div>
+    <div class="modal-title" id="modal-lesson-title">Add Lesson</div>
+    <input type="hidden" id="lesson-id">
     <input type="hidden" id="lesson-subunitId">
     <input type="hidden" id="lesson-bookId">
     <input type="hidden" id="lesson-classId">
@@ -910,6 +993,8 @@
   </div>
 </div>
 
+<div id="toast-shelf" class="toast-shelf"></div>
+
 <script>
 // ════════════════════════════════════════════════════
 // STATE
@@ -920,6 +1005,23 @@ let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
 let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
+
+// ════════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════════
+function showToast(msg, type = 'info', duration = 3200) {
+  const shelf = document.getElementById('toast-shelf');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = msg;
+  shelf.appendChild(t);
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateY(8px)';
+    t.style.transition = 'opacity .2s,transform .2s';
+    setTimeout(() => t.remove(), 220);
+  }, duration);
+}
 
 // ════════════════════════════════════════════════════
 // API
@@ -1071,6 +1173,10 @@ function chevronSvg(open) {
     <polyline points="9 18 15 12 9 6"></polyline></svg>`;
 }
 
+function editSvg() {
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;pointer-events:none;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+}
+
 function pageIntro(eyebrow, title, copy, actions = '') {
   return `
     <div class="page-intro">
@@ -1106,6 +1212,58 @@ function updateHeroSummary() {
         ? `Next lesson: ${friendlyDate(nextLesson.date)}${nextLesson.tstart ? ` at ${friendlyTime(nextLesson.tstart)}` : ''}.`
         : 'No lessons scheduled yet.';
   }
+}
+
+function logForLesson(lessonId) {
+  return DB.logs.find(g => g.lessonId === lessonId) || null;
+}
+
+function completedLessonCount(lessons) {
+  return lessons.filter(lesson => logForLesson(lesson.id)).length;
+}
+
+function completionSummary(lessons) {
+  const total = lessons.length;
+  const completed = completedLessonCount(lessons);
+  const percent = total ? Math.round((completed / total) * 100) : 0;
+
+  if (!total) {
+    return { key: 'planned', label: 'Planned', completed, total, percent };
+  }
+  if (completed === 0) {
+    return { key: 'planned', label: 'Planned', completed, total, percent };
+  }
+  if (completed === total) {
+    return { key: 'complete', label: 'Complete', completed, total, percent };
+  }
+  return { key: 'progress', label: 'In Progress', completed, total, percent };
+}
+
+function statusBadge(summary, suffix = '') {
+  return `<span class="status-badge status-${summary.key}">${esc(summary.label)}${suffix ? ` ${esc(suffix)}` : ''}</span>`;
+}
+
+function progressMarkup(summary, noun) {
+  return `
+    <div class="progress-block">
+      <div class="progress-track">
+        <div class="progress-fill${summary.key === 'complete' ? ' complete' : ''}" style="width:${summary.percent}%"></div>
+      </div>
+      <div class="progress-meta">
+        <span>${summary.completed}/${summary.total} ${esc(noun)} logged</span>
+        <span>${summary.percent}% complete</span>
+      </div>
+    </div>`;
+}
+
+function nextPendingLesson(lessons) {
+  const pending = sortLessons(lessons.filter(lesson => !logForLesson(lesson.id)));
+  return pending[0] || null;
+}
+
+function mostRecentCompletedLesson(lessons) {
+  const completed = sortLessons(lessons.filter(lesson => logForLesson(lesson.id)), true);
+  return completed[0] || null;
 }
 
 // ─── Class timeline (shown inside expanded class card) ────────────────────────
@@ -1200,6 +1358,7 @@ function renderToday() {
           <div class="lesson-card-badges">
             ${cls  ? `<span class="badge ${cls.teacher === 'Alba' ? 'badge-amber' : 'badge-blue'}">${esc(cls.name)}</span>` : ''}
             ${cls  ? teacherBadge(cls.teacher) : ''}
+            ${log ? statusBadge({ key: 'complete', label: 'Complete' }) : statusBadge({ key: 'planned', label: 'Needs Log' })}
             ${timeBadge}
             ${book ? `<span class="badge badge-grey">${esc(book.name)}</span>` : ''}
             ${su   ? `<span class="badge badge-grey">${esc(subunitDisplayName(su))}</span>` : ''}
@@ -1210,7 +1369,7 @@ function renderToday() {
           ${su && su.notes ? `<div class="unit-notes-strip">&#9888; ${esc(su.notes)}</div>` : ''}
           ${log
             ? `<div class="log-notes-inline">Logged: ${esc(log.notes)}</div>`
-            : `<button class="btn btn-primary" style="margin-top:10px;font-size:12px;" onclick="logFromToday('${lesson.id}')">Log this lesson</button>`
+            : `<button class="btn btn-primary" style="margin-top:10px;font-size:12px;" onclick="logFromToday('${lesson.id}')">Mark complete</button>`
           }
         </div>`;
     });
@@ -1248,6 +1407,9 @@ function renderClasses() {
       const clsLessons = DB.lessons.filter(l => l.classId === cls.id);
       const clsBooks   = sortBooks(DB.units.filter(u => u.classId === cls.id));
       const endDate    = classEndDate(cls.id);
+      const summary    = completionSummary(clsLessons);
+      const nextLesson = nextPendingLesson(clsLessons);
+      const lastDone   = mostRecentCompletedLesson(clsLessons);
 
       html += `
         <div class="card">
@@ -1255,9 +1417,11 @@ function renderClasses() {
             ${chevronSvg(isOpen)}
             <div class="card-title">${esc(cls.name)}</div>
             ${teacherBadge(cls.teacher)}
+            ${statusBadge(summary)}
             ${(cls.days || []).map(d => `<span class="badge badge-day">${esc(d)}</span>`).join('')}
             <span class="badge badge-grey">${clsLessons.length} lesson${clsLessons.length !== 1 ? 's' : ''}</span>
             <span style="font-size:11px;color:#aaa;white-space:nowrap;">ends ${friendlyDate(endDate)}</span>
+            <button class="btn-edit" onclick="event.stopPropagation();openClassModal('${cls.id}')" title="Edit">${editSvg()}</button>
             <button class="btn-ghost" onclick="event.stopPropagation();deleteClass('${cls.id}')" title="Delete">&#10005;</button>
           </div>`;
 
@@ -1270,9 +1434,23 @@ function renderClasses() {
                 <span><span class="label">Time</span> ${friendlyTime(cls.tstart)}${cls.tend ? ' – ' + friendlyTime(cls.tend) : ''}</span>
               </div>
             </div>
-            <div style="margin-bottom:14px;">
-              <div class="label" style="margin-bottom:8px;">Lesson Timeline</div>
-              <div>${renderClassTimeline(cls.id)}</div>
+            <div class="overview-grid">
+              <div class="overview-card">
+                <div class="label">Completion</div>
+                <div class="overview-value">${summary.label}</div>
+                <div class="overview-note">Teachers complete lessons by saving a log.</div>
+                ${progressMarkup(summary, 'lessons')}
+              </div>
+              <div class="overview-card">
+                <div class="label">Next To Log</div>
+                <div class="overview-value">${nextLesson ? esc(lessonDisplayName(nextLesson)) : 'All logged'}</div>
+                <div class="overview-note">${nextLesson ? `${friendlyDate(nextLesson.date)}${nextLesson.tstart ? ` at ${friendlyTime(nextLesson.tstart)}` : ''}` : 'This class is fully completed for now.'}</div>
+              </div>
+              <div class="overview-card">
+                <div class="label">Last Completed</div>
+                <div class="overview-value">${lastDone ? esc(lessonDisplayName(lastDone)) : 'Nothing logged yet'}</div>
+                <div class="overview-note">${lastDone ? friendlyDate(lastDone.date) : 'Status will move once teachers start logging.'}</div>
+              </div>
             </div>
             <div class="units-container">
               <div class="label" style="margin-bottom:8px;">Books</div>`;
@@ -1300,14 +1478,17 @@ function renderBookCard(book) {
   const bookSubs    = sortSubunits(DB.subunits.filter(s => s.bookId === book.id));
   const bookLessons = DB.lessons.filter(l => l.bookId === book.id);
   const range       = bookDateRange(book.id);
+  const summary     = completionSummary(bookLessons);
 
   let html = `
     <div class="unit-card">
       <div class="card-header" onclick="toggleBook('${book.id}')">
         ${chevronSvg(isOpen)}
         <div class="card-title">${esc(book.name || 'Untitled Book')}</div>
+        ${statusBadge(summary)}
         <span class="badge badge-grey" style="font-size:10px;">${bookLessons.length} lesson${bookLessons.length !== 1 ? 's' : ''}</span>
         ${range.start ? `<span style="font-size:11px;color:#aaa;white-space:nowrap;">${friendlyDate(range.start)} → ${friendlyDate(range.end)}</span>` : ''}
+        <button class="btn-edit" onclick="event.stopPropagation();openBookModal('${book.id}')" title="Edit">${editSvg()}</button>
         <button class="btn-ghost" onclick="event.stopPropagation();deleteBook('${book.id}')" title="Delete">&#10005;</button>
       </div>`;
 
@@ -1315,6 +1496,9 @@ function renderBookCard(book) {
     html += `<div class="card-body">`;
     if (book.notes) {
       html += `<div class="unit-notes-strip" style="margin:8px 0 10px;">&#9888; ${esc(book.notes)}</div>`;
+    }
+    if (bookLessons.length > 0) {
+      html += progressMarkup(summary, 'lessons');
     }
     if (bookSubs.length === 0) {
       html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No units yet.</div>`;
@@ -1336,14 +1520,17 @@ function renderSubunitCard(su) {
   const suLessons  = sortLessons(DB.lessons.filter(l => l.subunitId === su.id));
   const range      = subunitDateRange(su.id);
   const today      = todayStr();
+  const summary    = completionSummary(suLessons);
 
   let html = `
     <div class="subunit-card">
       <div class="card-header" onclick="toggleSubunit('${su.id}')">
         ${chevronSvg(isOpen)}
         <div class="card-title">${esc(subunitDisplayName(su))}</div>
+        ${statusBadge(summary)}
         <span class="badge badge-grey" style="font-size:10px;">${suLessons.length} lesson${suLessons.length !== 1 ? 's' : ''}</span>
         ${range.start ? `<span style="font-size:11px;color:#aaa;white-space:nowrap;">${friendlyDate(range.start)} → ${friendlyDate(range.end)}</span>` : ''}
+        <button class="btn-edit" onclick="event.stopPropagation();openSubunitModal('${su.id}')" title="Edit">${editSvg()}</button>
         <button class="btn-ghost" onclick="event.stopPropagation();deleteSubunit('${su.id}')" title="Delete">&#10005;</button>
       </div>`;
 
@@ -1352,12 +1539,16 @@ function renderSubunitCard(su) {
     if (su.notes) {
       html += `<div class="unit-notes-strip" style="margin:8px 0 10px;">&#9888; ${esc(su.notes)}</div>`;
     }
+    if (suLessons.length > 0) {
+      html += progressMarkup(summary, 'lessons');
+    }
     if (suLessons.length === 0) {
       html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No lessons yet.</div>`;
     } else {
       suLessons.forEach(lesson => {
         const isToday    = lesson.date === today;
         const isLessonOpen = !!expandedLessons[lesson.id];
+        const isComplete = !!logForLesson(lesson.id);
         const detailRows = [
           lesson.date   ? `<div class="lesson-detail-row"><span class="label">Date</span><span>${friendlyDate(lesson.date)}${lesson.tstart ? ' at ' + friendlyTime(lesson.tstart) : ''}</span></div>` : '',
           lesson.plan   ? `<div class="lesson-detail-row"><span class="label">Teach</span><span>${esc(lesson.plan)}</span></div>` : '',
@@ -1389,7 +1580,9 @@ function renderSubunitCard(su) {
                 ${esc(lessonDisplayName(lesson))}
                 ${isToday ? `<span class="badge badge-today" style="font-size:10px;margin-left:4px;">Today</span>` : ''}
               </div>
+              ${isComplete ? statusBadge({ key: 'complete', label: 'Complete' }) : statusBadge({ key: 'planned', label: 'Needs Log' })}
               <div class="lesson-row-meta">${lesson.date ? friendlyDate(lesson.date) : ''}${lesson.tstart ? ' ' + friendlyTime(lesson.tstart) : ''}</div>
+              <button class="btn-edit" onclick="event.stopPropagation();openLessonModal(null,null,null,'${lesson.id}')" title="Edit">${editSvg()}</button>
               <button class="btn-ghost" onclick="event.stopPropagation();deleteLesson('${lesson.id}')" title="Delete">&#10005;</button>
             </div>
             ${isLessonOpen ? `<div class="lesson-detail">${detailRows || '<span style="color:#ccc;">No details recorded.</span>'}${snRows}</div>` : ''}
@@ -1443,9 +1636,10 @@ function renderLog() {
   document.getElementById('tab-log').innerHTML = `
     ${pageIntro('Reflection', 'Lesson Log', 'Capture what happened while the details are fresh so planning gets smarter over time.')}
     <div class="log-form">
+      <div class="overview-note" style="margin-bottom:14px;">A lesson counts as completed once it has a log. Updating the log keeps the lesson completed.</div>
       <div class="form-group">
         <label class="form-label">Lesson</label>
-        <select id="log-lesson-select" class="form-input">${optionsHtml}</select>
+        <select id="log-lesson-select" class="form-input" onchange="syncLogFormSelection()">${optionsHtml}</select>
       </div>
       <div class="form-group">
         <label class="form-label">Notes</label>
@@ -1458,23 +1652,39 @@ function renderLog() {
 
   if (pendingLogLessonId) {
     const sel = document.getElementById('log-lesson-select');
-    if (sel) sel.value = pendingLogLessonId;
+    if (sel) {
+      sel.value = pendingLogLessonId;
+      syncLogFormSelection();
+      document.querySelector('.log-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     pendingLogLessonId = null;
   }
+}
+
+function syncLogFormSelection() {
+  const select = document.getElementById('log-lesson-select');
+  const notesField = document.getElementById('log-notes');
+  const saveBtn = document.getElementById('save-log-btn');
+  if (!select || !notesField || !saveBtn) return;
+
+  const existing = DB.logs.find(g => g.lessonId === select.value);
+  notesField.value = existing ? existing.notes : '';
+  saveBtn.textContent = existing ? 'Update Log' : 'Save Log';
 }
 
 async function saveLog() {
   const lessonId = document.getElementById('log-lesson-select').value;
   const notes    = document.getElementById('log-notes').value.trim();
-  if (!lessonId) { alert('Please select a lesson.'); return; }
-  if (!notes)    { alert('Please enter some notes.'); return; }
+  if (!lessonId) { showToast('Please select a lesson.', 'error'); return; }
+  if (!notes)    { showToast('Please enter some notes.', 'error'); return; }
 
   const lesson = DB.lessons.find(l => l.id === lessonId);
   if (!lesson) return;
   const cls = DB.classes.find(c => c.id === lesson.classId);
+  const existingLog = DB.logs.find(g => g.lessonId === lessonId);
 
   const log = {
-    id: 'g_' + Date.now(), lessonId,
+    id: existingLog ? existingLog.id : 'g_' + Date.now(), lessonId,
     classId:    lesson.classId,
     className:  cls ? cls.name : '',
     lessonName: lessonDisplayName(lesson),
@@ -1485,10 +1695,15 @@ async function saveLog() {
   setBusy('save-log-btn', true);
   try {
     await api('POST', '/api/logs', log);
-    DB.logs.push(log);
+    const existingIndex = DB.logs.findIndex(g => g.id === log.id);
+    if (existingIndex >= 0) DB.logs[existingIndex] = log;
+    else DB.logs.push(log);
+    document.getElementById('log-notes').value = '';
+    document.getElementById('log-lesson-select').value = '';
     renderLog();
+    showToast(existingLog ? 'Log updated.' : 'Log saved.', 'success');
   } catch(e) {
-    alert('Failed to save log. Please try again.');
+    showToast('Failed to save log. Please try again.', 'error');
   } finally {
     setBusy('save-log-btn', false);
   }
@@ -1583,7 +1798,7 @@ async function exportData() {
     const a    = document.createElement('a');
     a.href = url; a.download = filename; a.click();
     URL.revokeObjectURL(url);
-  } catch(e) { alert('Export failed.'); }
+  } catch(e) { showToast('Export failed.', 'error'); }
 }
 
 async function importData(e) {
@@ -1602,9 +1817,9 @@ async function importData(e) {
       studentnotes: data.studentnotes || []
     };
     renderSettings();
-    alert('Import successful!');
+    showToast('Import successful!', 'success');
   } catch(e) {
-    alert('Import failed. Make sure the file is a valid Lesson Engine backup.');
+    showToast('Import failed. Make sure the file is a valid Lesson Engine backup.', 'error');
   }
   e.target.value = '';
 }
@@ -1616,7 +1831,7 @@ async function clearAllData() {
     await api('DELETE', '/api/clear');
     DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], studentnotes: [] };
     renderSettings();
-  } catch(e) { alert('Failed to clear data.'); }
+  } catch(e) { showToast('Failed to clear data.', 'error'); }
 }
 
 // ════════════════════════════════════════════════════
@@ -1634,7 +1849,7 @@ function openStudentModal(classId) {
 async function saveStudent() {
   const classId = document.getElementById('student-classId').value;
   const name    = document.getElementById('student-name').value.trim();
-  if (!name) { alert('Please enter a student name.'); return; }
+  if (!name) { showToast('Please enter a student name.', 'error'); return; }
   const student = { id: 'st_' + Date.now(), classId, name };
   setBusy('save-student-btn', true);
   try {
@@ -1642,7 +1857,7 @@ async function saveStudent() {
     DB.students.push(student);
     closeModal('modal-student');
     renderStudents();
-  } catch(e) { alert('Failed to save student.'); }
+  } catch(e) { showToast('Failed to save student.', 'error'); }
   finally { setBusy('save-student-btn', false); }
 }
 
@@ -1655,7 +1870,7 @@ async function deleteStudent(studentId) {
     DB.studentnotes = DB.studentnotes.filter(n => n.studentId !== studentId);
     DB.students     = DB.students.filter(s => s.id !== studentId);
     renderStudents();
-  } catch(e) { alert('Failed to delete student.'); }
+  } catch(e) { showToast('Failed to delete student.', 'error'); }
 }
 
 function openStudentNoteModal(studentId, lessonId, classId, existingNoteId) {
@@ -1676,7 +1891,7 @@ async function saveStudentNote() {
   const classId    = document.getElementById('sn-classId').value;
   const existingId = document.getElementById('sn-existingId').value;
   const note       = document.getElementById('sn-note').value.trim();
-  if (!note) { alert('Please enter a note.'); return; }
+  if (!note) { showToast('Please enter a note.', 'error'); return; }
 
   // check if a note already exists for this student+lesson (may differ from existingId if opened via "+ Add")
   const existing = DB.studentnotes.find(n => n.studentId === studentId && n.lessonId === lessonId);
@@ -1692,7 +1907,7 @@ async function saveStudentNote() {
     else DB.studentnotes.push(entry);
     closeModal('modal-student-note');
     renderClasses();
-  } catch(e) { alert('Failed to save note.'); }
+  } catch(e) { showToast('Failed to save note.', 'error'); }
   finally { setBusy('save-sn-btn', false); }
 }
 
@@ -1701,7 +1916,7 @@ async function deleteStudentNote(noteId) {
     await api('DELETE', `/api/studentnotes/${noteId}`);
     DB.studentnotes = DB.studentnotes.filter(n => n.id !== noteId);
     renderClasses();
-  } catch(e) { alert('Failed to delete note.'); }
+  } catch(e) { showToast('Failed to delete note.', 'error'); }
 }
 
 function openReport(studentId) {
@@ -1758,42 +1973,61 @@ function openReport(studentId) {
   document.getElementById('modal-report').style.display = 'flex';
 }
 
-function openClassModal() {
-  document.getElementById('cls-name').value    = '';
-  document.getElementById('cls-teacher').value = 'Tani';
-  document.getElementById('cls-start').value   = '';
-  document.getElementById('cls-tstart').value  = '';
-  document.getElementById('cls-tend').value    = '';
-  document.querySelectorAll('#cls-days .day-toggle').forEach(b => b.classList.remove('active'));
+function openClassModal(existingId) {
+  const cls = existingId ? DB.classes.find(c => c.id === existingId) : null;
+  document.getElementById('modal-class-title').textContent = cls ? 'Edit Class' : 'New Class';
+  document.getElementById('cls-id').value         = existingId || '';
+  document.getElementById('cls-name').value       = cls ? cls.name : '';
+  document.getElementById('cls-teacher').value    = cls ? cls.teacher : 'Tani';
+  document.getElementById('cls-start').value      = cls ? cls.start : '';
+  document.getElementById('cls-tstart').value     = cls ? (cls.tstart || '') : '';
+  document.getElementById('cls-tend').value       = cls ? (cls.tend || '') : '';
+  document.querySelectorAll('#cls-days .day-toggle').forEach(b =>
+    b.classList.toggle('active', cls ? (cls.days || []).includes(b.dataset.day) : false));
   document.getElementById('modal-class').style.display = 'flex';
 }
 
-function openBookModal(classId) {
-  document.getElementById('book-classId').value = classId;
-  document.getElementById('book-name').value    = '';
-  document.getElementById('book-notes').value   = '';
+function openBookModal(existingId_or_classId, isClassId) {
+  // If called with a classId string (new), or with existing book id (edit)
+  // Distinguish: new = openBookModal(classId) where classId starts with 'c_'
+  //              edit = openBookModal(bookId) where bookId starts with 'u_'
+  const isEdit = existingId_or_classId && existingId_or_classId.startsWith('u_');
+  const book = isEdit ? DB.units.find(u => u.id === existingId_or_classId) : null;
+  document.getElementById('modal-book-title').textContent = book ? 'Edit Book' : 'Add Book';
+  document.getElementById('book-id').value    = book ? book.id : '';
+  document.getElementById('book-classId').value = book ? book.classId : existingId_or_classId;
+  document.getElementById('book-name').value  = book ? book.name : '';
+  document.getElementById('book-notes').value = book ? (book.notes || '') : '';
   document.getElementById('modal-book').style.display = 'flex';
 }
 
-function openSubunitModal(bookId, classId) {
-  document.getElementById('subunit-bookId').value  = bookId;
-  document.getElementById('subunit-classId').value = classId;
-  document.getElementById('subunit-number').value  = '';
-  document.getElementById('subunit-name').value    = '';
-  document.getElementById('subunit-notes').value   = '';
+function openSubunitModal(bookId_or_subId, classId) {
+  const isEdit = bookId_or_subId && bookId_or_subId.startsWith('su_');
+  const su = isEdit ? DB.subunits.find(s => s.id === bookId_or_subId) : null;
+  document.getElementById('modal-subunit-title').textContent = su ? 'Edit Unit' : 'Add Unit';
+  document.getElementById('subunit-id').value      = su ? su.id : '';
+  document.getElementById('subunit-bookId').value  = su ? su.bookId : bookId_or_subId;
+  document.getElementById('subunit-classId').value = su ? su.classId : classId;
+  document.getElementById('subunit-number').value  = su ? (su.number || '') : '';
+  document.getElementById('subunit-name').value    = su ? su.name : '';
+  document.getElementById('subunit-notes').value   = su ? (su.notes || '') : '';
   document.getElementById('modal-subunit').style.display = 'flex';
 }
 
-function openLessonModal(subunitId, bookId, classId) {
-  document.getElementById('lesson-subunitId').value = subunitId;
-  document.getElementById('lesson-bookId').value    = bookId;
-  document.getElementById('lesson-classId').value   = classId;
-  document.getElementById('lesson-name').value      = '';
-  document.getElementById('lesson-date').value      = '';
-  document.getElementById('lesson-plan').value      = '';
-  document.getElementById('lesson-pos').value       = '';
-  const cls = DB.classes.find(c => c.id === classId);
-  document.getElementById('lesson-tstart').value = cls ? (cls.tstart || '') : '';
+function openLessonModal(subunitId, bookId, classId, existingLessonId) {
+  const lesson = existingLessonId ? DB.lessons.find(l => l.id === existingLessonId) : null;
+  document.getElementById('modal-lesson-title').textContent = lesson ? 'Edit Lesson' : 'Add Lesson';
+  document.getElementById('lesson-id').value       = lesson ? lesson.id : '';
+  document.getElementById('lesson-subunitId').value = lesson ? lesson.subunitId : subunitId;
+  document.getElementById('lesson-bookId').value   = lesson ? lesson.bookId : bookId;
+  document.getElementById('lesson-classId').value  = lesson ? lesson.classId : classId;
+  document.getElementById('lesson-name').value     = lesson ? lesson.name : '';
+  document.getElementById('lesson-date').value     = lesson ? lesson.date : '';
+  document.getElementById('lesson-plan').value     = lesson ? (lesson.plan || '') : '';
+  document.getElementById('lesson-pos').value      = lesson ? (lesson.pos || '') : '';
+  const clsId = lesson ? lesson.classId : classId;
+  const cls = DB.classes.find(c => c.id === clsId);
+  document.getElementById('lesson-tstart').value  = lesson ? (lesson.tstart || '') : (cls ? (cls.tstart || '') : '');
   document.getElementById('modal-lesson').style.display = 'flex';
 }
 
@@ -1807,10 +2041,19 @@ document.querySelectorAll('#cls-days .day-toggle').forEach(btn => {
   btn.addEventListener('click', () => btn.classList.toggle('active'));
 });
 
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-backdrop').forEach(m => {
+      if (m.style.display !== 'none') closeModal(m.id);
+    });
+  }
+});
+
 // ════════════════════════════════════════════════════
 // SAVE
 // ════════════════════════════════════════════════════
 async function saveClass() {
+  const existingId = document.getElementById('cls-id').value;
   const name    = document.getElementById('cls-name').value.trim();
   const teacher = document.getElementById('cls-teacher').value;
   const start   = document.getElementById('cls-start').value;
@@ -1818,59 +2061,68 @@ async function saveClass() {
   const tend    = document.getElementById('cls-tend').value;
   const days    = Array.from(document.querySelectorAll('#cls-days .day-toggle.active')).map(b => b.dataset.day);
 
-  if (!name)  { alert('Please enter a class name.'); return; }
-  if (!start) { alert('Please enter a start date.'); return; }
+  if (!name)  { showToast('Please enter a class name.', 'error'); return; }
+  if (!start) { showToast('Please enter a start date.', 'error'); return; }
 
-  const cls = { id: 'c_' + Date.now(), name, teacher, start, tstart, tend, days };
+  const cls = { id: existingId || ('c_' + Date.now()), name, teacher, start, tstart, tend, days };
   setBusy('save-class-btn', true);
   try {
     await api('POST', '/api/classes', cls);
-    DB.classes.push(cls);
+    if (existingId) { DB.classes = DB.classes.map(c => c.id === existingId ? cls : c); }
+    else { DB.classes.push(cls); }
     closeModal('modal-class');
     renderClasses();
-  } catch(e) { alert('Failed to save class.'); }
+    showToast(existingId ? 'Class updated.' : 'Class created.', 'success');
+  } catch(e) { showToast('Failed to save class.', 'error'); }
   finally { setBusy('save-class-btn', false); }
 }
 
 async function saveBook() {
+  const existingId = document.getElementById('book-id').value;
   const classId = document.getElementById('book-classId').value;
   const name    = document.getElementById('book-name').value.trim();
   const notes   = document.getElementById('book-notes').value.trim();
 
-  if (!name) { alert('Please enter a book name.'); return; }
+  if (!name) { showToast('Please enter a book name.', 'error'); return; }
 
-  const book = { id: 'u_' + Date.now(), classId, name, notes };
+  const book = { id: existingId || ('u_' + Date.now()), classId, name, notes };
   setBusy('save-book-btn', true);
   try {
     await api('POST', '/api/units', book);
-    DB.units.push(book);
+    if (existingId) { DB.units = DB.units.map(u => u.id === existingId ? book : u); }
+    else { DB.units.push(book); }
     closeModal('modal-book');
     renderClasses();
-  } catch(e) { alert('Failed to save book.'); }
+    showToast(existingId ? 'Book updated.' : 'Book added.', 'success');
+  } catch(e) { showToast('Failed to save book.', 'error'); }
   finally { setBusy('save-book-btn', false); }
 }
 
 async function saveSubunit() {
+  const existingId = document.getElementById('subunit-id').value;
   const bookId  = document.getElementById('subunit-bookId').value;
   const classId = document.getElementById('subunit-classId').value;
   const number  = parsePositiveInt(document.getElementById('subunit-number').value);
   const name    = document.getElementById('subunit-name').value.trim();
   const notes   = document.getElementById('subunit-notes').value.trim();
 
-  if (!name) { alert('Please enter a unit name.'); return; }
+  if (!name) { showToast('Please enter a unit name.', 'error'); return; }
 
-  const su = { id: 'su_' + Date.now(), bookId, classId, number, name, notes };
+  const su = { id: existingId || ('su_' + Date.now()), bookId, classId, number, name, notes };
   setBusy('save-subunit-btn', true);
   try {
     await api('POST', '/api/subunits', su);
-    DB.subunits.push(su);
+    if (existingId) { DB.subunits = DB.subunits.map(s => s.id === existingId ? su : s); }
+    else { DB.subunits.push(su); }
     closeModal('modal-subunit');
     renderClasses();
-  } catch(e) { alert('Failed to save unit.'); }
+    showToast(existingId ? 'Unit updated.' : 'Unit added.', 'success');
+  } catch(e) { showToast('Failed to save unit.', 'error'); }
   finally { setBusy('save-subunit-btn', false); }
 }
 
 async function saveLesson() {
+  const existingId = document.getElementById('lesson-id').value;
   const subunitId = document.getElementById('lesson-subunitId').value;
   const bookId    = document.getElementById('lesson-bookId').value;
   const classId   = document.getElementById('lesson-classId').value;
@@ -1880,17 +2132,19 @@ async function saveLesson() {
   const plan      = document.getElementById('lesson-plan').value.trim();
   const pos       = document.getElementById('lesson-pos').value.trim();
 
-  if (!name) { alert('Please enter a lesson title.'); return; }
-  if (!date) { alert('Please enter a date.'); return; }
+  if (!name) { showToast('Please enter a lesson title.', 'error'); return; }
+  if (!date) { showToast('Please enter a date.', 'error'); return; }
 
-  const lesson = { id: 'l_' + Date.now(), subunitId, bookId, classId, name, date, tstart, plan, pos };
+  const lesson = { id: existingId || ('l_' + Date.now()), subunitId, bookId, classId, name, date, tstart, plan, pos };
   setBusy('save-lesson-btn', true);
   try {
     await api('POST', '/api/lessons', lesson);
-    DB.lessons.push(lesson);
+    if (existingId) { DB.lessons = DB.lessons.map(l => l.id === existingId ? lesson : l); }
+    else { DB.lessons.push(lesson); }
     closeModal('modal-lesson');
     renderClasses();
-  } catch(e) { alert('Failed to save lesson.'); }
+    showToast(existingId ? 'Lesson updated.' : 'Lesson added.', 'success');
+  } catch(e) { showToast('Failed to save lesson.', 'error'); }
   finally { setBusy('save-lesson-btn', false); }
 }
 
@@ -1917,7 +2171,7 @@ async function deleteClass(classId) {
     subIds.forEach(id  => delete expandedSubunits[id]);
     delete expandedClasses[classId];
     renderClasses();
-  } catch(e) { alert('Failed to delete class.'); }
+  } catch(e) { showToast('Failed to delete class.', 'error'); }
 }
 
 async function deleteBook(bookId) {
@@ -1935,7 +2189,7 @@ async function deleteBook(bookId) {
     subIds.forEach(id => delete expandedSubunits[id]);
     delete expandedBooks[bookId];
     renderClasses();
-  } catch(e) { alert('Failed to delete book.'); }
+  } catch(e) { showToast('Failed to delete book.', 'error'); }
 }
 
 async function deleteSubunit(subunitId) {
@@ -1950,7 +2204,7 @@ async function deleteSubunit(subunitId) {
     DB.subunits = DB.subunits.filter(s => s.id !== subunitId);
     delete expandedSubunits[subunitId];
     renderClasses();
-  } catch(e) { alert('Failed to delete unit.'); }
+  } catch(e) { showToast('Failed to delete unit.', 'error'); }
 }
 
 async function deleteLesson(lessonId) {
@@ -1963,17 +2217,18 @@ async function deleteLesson(lessonId) {
     DB.studentnotes = DB.studentnotes.filter(n => n.lessonId !== lessonId);
     DB.lessons      = DB.lessons.filter(l => l.id !== lessonId);
     renderClasses();
-  } catch(e) { alert('Failed to delete lesson.'); }
+  } catch(e) { showToast('Failed to delete lesson.', 'error'); }
 }
 
 // ════════════════════════════════════════════════════
 // UTILITY
 // ════════════════════════════════════════════════════
-function setBusy(btnId, busy) {
+function setBusy(btnId, busy, originalText) {
   const btn = document.getElementById(btnId);
   if (!btn) return;
   btn.disabled = busy;
-  btn.textContent = busy ? 'Saving…' : 'Save';
+  if (busy) { btn._origText = btn.textContent; btn.textContent = 'Saving…'; }
+  else { btn.textContent = btn._origText || (originalText || 'Save'); }
 }
 
 // ════════════════════════════════════════════════════

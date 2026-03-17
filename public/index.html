@@ -956,7 +956,8 @@
     <input type="hidden" id="student-classId">
     <div class="form-group">
       <label class="form-label">Student Name</label>
-      <input type="text" id="student-name" class="form-input" placeholder="e.g. Maria Garcia">
+      <input type="text" id="student-name" class="form-input" list="student-options" placeholder="Type a name or pick an existing student">
+      <datalist id="student-options"></datalist>
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-student')">Cancel</button>
@@ -1001,7 +1002,7 @@
 // ════════════════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════════════════
-let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], studentnotes: [] };
+let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [] };
 let expandedClasses  = {};
 let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
@@ -1037,13 +1038,14 @@ async function api(method, path, body) {
 }
 
 async function loadData() {
-  const [classes, units, subunits, lessons, logs, students, studentnotes] = await Promise.all([
+  const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes] = await Promise.all([
     api('GET', '/api/classes'),
     api('GET', '/api/units'),
     api('GET', '/api/subunits'),
     api('GET', '/api/lessons'),
     api('GET', '/api/logs'),
     api('GET', '/api/students'),
+    api('GET', '/api/enrollments'),
     api('GET', '/api/studentnotes'),
   ]);
   DB = {
@@ -1053,6 +1055,7 @@ async function loadData() {
     lessons:      lessons      || [],
     logs:         logs         || [],
     students:     students     || [],
+    enrollments:  enrollments  || [],
     studentnotes: studentnotes || []
   };
 }
@@ -1187,6 +1190,46 @@ function refreshTeacherOptions(extra = []) {
   el.innerHTML = uniqueTeacherNames(extra).map(name => `<option value="${esc(name)}"></option>`).join('');
 }
 
+function uniqueStudentNames(extra = []) {
+  return [...new Set(
+    [...DB.students.map(student => student.name).filter(Boolean), ...extra.filter(Boolean)]
+      .map(name => String(name).trim())
+      .filter(Boolean)
+  )].sort((a, b) => a.localeCompare(b));
+}
+
+function refreshStudentOptions(extra = []) {
+  const el = document.getElementById('student-options');
+  if (!el) return;
+  el.innerHTML = uniqueStudentNames(extra).map(name => `<option value="${esc(name)}"></option>`).join('');
+}
+
+function getStudent(studentId) {
+  return DB.students.find(student => student.id === studentId) || null;
+}
+
+function enrollmentsForClass(classId) {
+  return DB.enrollments.filter(enrollment => enrollment.classId === classId);
+}
+
+function classesForStudent(studentId) {
+  return DB.enrollments
+    .filter(enrollment => enrollment.studentId === studentId)
+    .map(enrollment => DB.classes.find(cls => cls.id === enrollment.classId))
+    .filter(Boolean);
+}
+
+function studentsForClass(classId) {
+  return enrollmentsForClass(classId)
+    .map(enrollment => getStudent(enrollment.studentId))
+    .filter(Boolean)
+    .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+}
+
+function enrollmentForStudentInClass(studentId, classId) {
+  return DB.enrollments.find(enrollment => enrollment.studentId === studentId && enrollment.classId === classId) || null;
+}
+
 function dotClass(dateStr) {
   const t = todayStr();
   return !dateStr ? 'dot-future' : dateStr < t ? 'dot-past' : dateStr === t ? 'dot-today' : 'dot-future';
@@ -1295,9 +1338,7 @@ function renderLogStudentNotes(lessonId) {
   const lesson = DB.lessons.find(l => l.id === lessonId);
   if (!lesson) return '';
 
-  const classStudents = DB.students
-    .filter(student => student.classId === lesson.classId)
-    .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  const classStudents = studentsForClass(lesson.classId);
 
   if (!classStudents.length) {
     return `
@@ -1617,7 +1658,7 @@ function renderSubunitCard(su) {
           lesson.plan   ? `<div class="lesson-detail-row"><span class="label">Teach</span><span>${esc(lesson.plan)}</span></div>` : '',
           lesson.pos    ? `<div class="lesson-detail-row"><span class="label">Start at</span><span>${esc(lesson.pos)}</span></div>` : ''
         ].filter(Boolean).join('');
-        const classStudents = DB.students.filter(s => s.classId === su.classId).sort((a,b) => (a.name||'').localeCompare(b.name||''));
+        const classStudents = studentsForClass(su.classId);
         const snRows = classStudents.length === 0 ? '' : `
           <div class="sn-section">
             <div class="sn-section-label">Student Notes</div>
@@ -1812,15 +1853,14 @@ function renderStudents() {
     <div class="hero-stats">
       ${heroStat(String(DB.students.length), 'Students', DB.students.length ? 'Across all classes.' : 'No students added yet.')}
       ${heroStat(String(DB.studentnotes.length), 'Notes', DB.studentnotes.length ? 'Individual observations saved.' : 'No student notes yet.')}
-      ${heroStat(String(DB.classes.length), 'Classes', DB.classes.length ? 'Teaching groups connected.' : 'No classes yet.')}
+      ${heroStat(String(DB.enrollments.length), 'Enrollments', DB.enrollments.length ? 'Student-class links active.' : 'No enrollments yet.')}
     </div>`;
 
   if (DB.classes.length === 0) {
     html += `<div style="text-align:center;padding:40px 16px;color:#aaa;">No classes yet. Add a class first.</div>`;
   } else {
     DB.classes.forEach(cls => {
-      const clsStudents = DB.students.filter(s => s.classId === cls.id)
-        .sort((a,b) => (a.name||'').localeCompare(b.name||''));
+      const clsStudents = studentsForClass(cls.id);
       html += `
         <div class="student-class-section">
           <div class="student-class-heading">
@@ -1832,12 +1872,14 @@ function renderStudents() {
       } else {
         clsStudents.forEach(st => {
           const noteCount = DB.studentnotes.filter(n => n.studentId === st.id).length;
+          const classCount = classesForStudent(st.id).length;
           html += `
             <div class="student-row">
               <div class="student-row-name">${esc(st.name)}</div>
               <span class="badge badge-grey" style="font-size:10px;">${noteCount} note${noteCount !== 1 ? 's' : ''}</span>
-              <button class="btn" style="font-size:11px;padding:4px 10px;" onclick="openReport('${st.id}')">Report</button>
-              <button class="btn-ghost" onclick="deleteStudent('${st.id}')" title="Remove">&#10005;</button>
+              <span class="badge badge-grey" style="font-size:10px;">${classCount} class${classCount !== 1 ? 'es' : ''}</span>
+              <button class="btn" style="font-size:11px;padding:4px 10px;" onclick="openReport('${st.id}','${cls.id}')">Report</button>
+              <button class="btn-ghost" onclick="deleteStudent('${st.id}','${cls.id}')" title="Remove from class">&#10005;</button>
             </div>`;
         });
       }
@@ -1862,6 +1904,7 @@ function renderSettings() {
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-number">${DB.classes.length}</div><div class="stat-label">Classes</div></div>
         <div class="stat-card"><div class="stat-number">${DB.students.length}</div><div class="stat-label">Students</div></div>
+        <div class="stat-card"><div class="stat-number">${DB.enrollments.length}</div><div class="stat-label">Enrollments</div></div>
         <div class="stat-card"><div class="stat-number">${DB.units.length}</div><div class="stat-label">Books</div></div>
         <div class="stat-card"><div class="stat-number">${DB.subunits.length}</div><div class="stat-label">Units</div></div>
         <div class="stat-card"><div class="stat-number">${DB.lessons.length}</div><div class="stat-label">Lessons</div></div>
@@ -1899,15 +1942,9 @@ async function importData(e) {
   try {
     const data = JSON.parse(await file.text());
     await api('POST', '/api/import', data);
-    DB = {
-      classes:      data.classes      || [],
-      units:        data.units        || [],
-      subunits:     data.subunits     || [],
-      lessons:      data.lessons      || [],
-      logs:         data.logs         || [],
-      students:     data.students     || [],
-      studentnotes: data.studentnotes || []
-    };
+    await loadData();
+    refreshTeacherOptions();
+    refreshStudentOptions();
     renderSettings();
     showToast('Import successful!', 'success');
   } catch(e) {
@@ -1921,7 +1958,9 @@ async function clearAllData() {
   if (!confirm('Final confirmation: permanently delete all classes, books, units, lessons, students, and logs?')) return;
   try {
     await api('DELETE', '/api/clear');
-    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], studentnotes: [] };
+    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [] };
+    refreshTeacherOptions();
+    refreshStudentOptions();
     renderSettings();
   } catch(e) { showToast('Failed to clear data.', 'error'); }
 }
@@ -1935,6 +1974,7 @@ async function clearAllData() {
 function openStudentModal(classId) {
   document.getElementById('student-classId').value = classId;
   document.getElementById('student-name').value    = '';
+  refreshStudentOptions();
   document.getElementById('modal-student').style.display = 'flex';
 }
 
@@ -1942,31 +1982,54 @@ async function saveStudent() {
   const classId = document.getElementById('student-classId').value;
   const name    = document.getElementById('student-name').value.trim();
   if (!name) { showToast('Please enter a student name.', 'error'); return; }
-  const student = { id: 'st_' + Date.now(), classId, name };
+  const normalizedName = name.toLocaleLowerCase();
+  let student = DB.students.find(entry => (entry.name || '').trim().toLocaleLowerCase() === normalizedName) || null;
+  const createdNew = !student;
+
+  if (!student) {
+    student = { id: 'st_' + Date.now(), name };
+    try {
+      await api('POST', '/api/students', student);
+      DB.students.push(student);
+      refreshStudentOptions([student.name]);
+    } catch (e) {
+      showToast('Failed to save student.', 'error');
+      return;
+    }
+  }
+
+  if (enrollmentForStudentInClass(student.id, classId)) {
+    showToast('That student is already in this class.', 'info');
+    return;
+  }
+
+  const enrollment = { id: `en_${student.id}_${classId}`, studentId: student.id, classId };
   setBusy('save-student-btn', true);
   try {
-    await api('POST', '/api/students', student);
-    DB.students.push(student);
+    await api('POST', '/api/enrollments', enrollment);
+    DB.enrollments.push(enrollment);
     closeModal('modal-student');
     renderStudents();
-  } catch(e) { showToast('Failed to save student.', 'error'); }
+    showToast(createdNew ? 'Student created and added to class.' : 'Student added to class.', 'success');
+  } catch(e) { showToast('Failed to enroll student.', 'error'); }
   finally { setBusy('save-student-btn', false); }
 }
 
-async function deleteStudent(studentId) {
-  const st = DB.students.find(s => s.id === studentId);
-  if (!st) return;
-  if (!confirm(`Remove student "${st.name}" and all their notes?`)) return;
+async function deleteStudent(studentId, classId) {
+  const st = getStudent(studentId);
+  const enrollment = enrollmentForStudentInClass(studentId, classId);
+  if (!st || !enrollment) return;
+  if (!confirm(`Remove student "${st.name}" from this class?`)) return;
   try {
-    await api('DELETE', `/api/students/${studentId}`);
-    DB.studentnotes = DB.studentnotes.filter(n => n.studentId !== studentId);
-    DB.students     = DB.students.filter(s => s.id !== studentId);
+    await api('DELETE', `/api/enrollments/${enrollment.id}`);
+    DB.enrollments = DB.enrollments.filter(entry => entry.id !== enrollment.id);
     renderStudents();
-  } catch(e) { showToast('Failed to delete student.', 'error'); }
+    showToast('Student removed from class.', 'success');
+  } catch(e) { showToast('Failed to remove student from class.', 'error'); }
 }
 
 function openStudentNoteModal(studentId, lessonId, classId, existingNoteId) {
-  const st   = DB.students.find(s => s.id === studentId);
+  const st   = getStudent(studentId);
   const existing = existingNoteId ? DB.studentnotes.find(n => n.id === existingNoteId) : null;
   document.getElementById('student-note-modal-title').textContent = `Note for ${st ? st.name : 'Student'}`;
   document.getElementById('sn-studentId').value   = studentId;
@@ -2011,11 +2074,11 @@ async function deleteStudentNote(noteId) {
   } catch(e) { showToast('Failed to delete note.', 'error'); }
 }
 
-function openReport(studentId) {
-  const st  = DB.students.find(s => s.id === studentId);
+function openReport(studentId, classId) {
+  const st  = getStudent(studentId);
   if (!st) return;
-  const cls = DB.classes.find(c => c.id === st.classId);
-  const clsLessons = sortLessons(DB.lessons.filter(l => l.classId === st.classId));
+  const cls = DB.classes.find(c => c.id === classId);
+  const clsLessons = sortLessons(DB.lessons.filter(l => l.classId === classId));
   const notes = DB.studentnotes.filter(n => n.studentId === studentId);
   const notedCount = notes.length;
   const unitIds  = [...new Set(clsLessons.map(l => l.subunitId).filter(Boolean))];
@@ -2260,7 +2323,7 @@ async function deleteClass(classId) {
     DB.lessons       = DB.lessons.filter(l => l.classId !== classId);
     DB.subunits      = DB.subunits.filter(s => s.classId !== classId);
     DB.units         = DB.units.filter(u => u.classId !== classId);
-    DB.students      = DB.students.filter(s => s.classId !== classId);
+    DB.enrollments   = DB.enrollments.filter(enrollment => enrollment.classId !== classId);
     DB.classes       = DB.classes.filter(c => c.id !== classId);
     bookIds.forEach(id => delete expandedBooks[id]);
     subIds.forEach(id  => delete expandedSubunits[id]);
@@ -2335,6 +2398,7 @@ async function init() {
   try {
     await loadData();
     refreshTeacherOptions();
+    refreshStudentOptions();
     renderToday();
   } catch(e) {
     document.getElementById('tab-today').innerHTML =

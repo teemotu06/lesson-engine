@@ -9,6 +9,41 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data.local.json');
 
+function normalizeDataShape(data) {
+  const classes = Array.isArray(data.classes) ? data.classes : [];
+  const units = Array.isArray(data.units) ? data.units : [];
+  const subunits = Array.isArray(data.subunits) ? data.subunits : [];
+  const lessons = Array.isArray(data.lessons) ? data.lessons : [];
+  const logs = Array.isArray(data.logs) ? data.logs : [];
+  const studentnotes = Array.isArray(data.studentnotes) ? data.studentnotes : [];
+  const rawStudents = Array.isArray(data.students) ? data.students : [];
+  const explicitEnrollments = Array.isArray(data.enrollments) ? data.enrollments : [];
+
+  const students = rawStudents.map(student => {
+    const { classId, ...rest } = student || {};
+    return rest;
+  }).filter(student => student && student.id);
+
+  const seenEnrollmentIds = new Set();
+  const enrollments = [];
+
+  for (const enrollment of explicitEnrollments) {
+    if (!enrollment || !enrollment.id || !enrollment.studentId || !enrollment.classId || seenEnrollmentIds.has(enrollment.id)) continue;
+    seenEnrollmentIds.add(enrollment.id);
+    enrollments.push(enrollment);
+  }
+
+  for (const student of rawStudents) {
+    if (!student || !student.id || !student.classId) continue;
+    const enrollmentId = `en_${student.id}_${student.classId}`;
+    if (seenEnrollmentIds.has(enrollmentId)) continue;
+    seenEnrollmentIds.add(enrollmentId);
+    enrollments.push({ id: enrollmentId, studentId: student.id, classId: student.classId });
+  }
+
+  return { classes, units, subunits, lessons, logs, students, enrollments, studentnotes };
+}
+
 function createPostgresStore(pool) {
   return {
     async init() {
@@ -19,6 +54,7 @@ function createPostgresStore(pool) {
         CREATE TABLE IF NOT EXISTS lessons  (id TEXT PRIMARY KEY, data JSONB NOT NULL);
         CREATE TABLE IF NOT EXISTS logs         (id TEXT PRIMARY KEY, data JSONB NOT NULL);
         CREATE TABLE IF NOT EXISTS students     (id TEXT PRIMARY KEY, data JSONB NOT NULL);
+        CREATE TABLE IF NOT EXISTS enrollments  (id TEXT PRIMARY KEY, data JSONB NOT NULL);
         CREATE TABLE IF NOT EXISTS studentnotes (id TEXT PRIMARY KEY, data JSONB NOT NULL);
       `);
     },
@@ -50,6 +86,7 @@ function createPostgresStore(pool) {
       await pool.query('BEGIN');
       try {
         await pool.query('DELETE FROM studentnotes');
+        await pool.query('DELETE FROM enrollments');
         await pool.query('DELETE FROM students');
         await pool.query('DELETE FROM logs');
         await pool.query('DELETE FROM lessons');
@@ -63,6 +100,7 @@ function createPostgresStore(pool) {
         for (const entry of data.lessons)      await this.upsert('lessons',      entry);
         for (const entry of data.logs)         await this.upsert('logs',         entry);
         for (const entry of (data.students     || [])) await this.upsert('students',     entry);
+        for (const entry of (data.enrollments  || [])) await this.upsert('enrollments',  entry);
         for (const entry of (data.studentnotes || [])) await this.upsert('studentnotes', entry);
 
         await pool.query('COMMIT');
@@ -73,6 +111,7 @@ function createPostgresStore(pool) {
     },
     async clearAll() {
       await pool.query('DELETE FROM studentnotes');
+      await pool.query('DELETE FROM enrollments');
       await pool.query('DELETE FROM students');
       await pool.query('DELETE FROM logs');
       await pool.query('DELETE FROM lessons');
@@ -84,22 +123,13 @@ function createPostgresStore(pool) {
 }
 
 function createFileStore(filename) {
-  let state = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], studentnotes: [] };
+  let state = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [] };
   let writeQueue = Promise.resolve();
 
   async function ensureFile() {
     try {
       const raw = await fs.readFile(filename, 'utf8');
-      const parsed = JSON.parse(raw);
-      state = {
-        classes:      Array.isArray(parsed.classes)      ? parsed.classes      : [],
-        units:        Array.isArray(parsed.units)        ? parsed.units        : [],
-        subunits:     Array.isArray(parsed.subunits)     ? parsed.subunits     : [],
-        lessons:      Array.isArray(parsed.lessons)      ? parsed.lessons      : [],
-        logs:         Array.isArray(parsed.logs)         ? parsed.logs         : [],
-        students:     Array.isArray(parsed.students)     ? parsed.students     : [],
-        studentnotes: Array.isArray(parsed.studentnotes) ? parsed.studentnotes : []
-      };
+      state = normalizeDataShape(JSON.parse(raw));
     } catch (error) {
       if (error.code !== 'ENOENT') throw error;
       await fs.writeFile(filename, JSON.stringify(state, null, 2));
@@ -135,19 +165,11 @@ function createFileStore(filename) {
       return state[table].filter(entry => entry[field] === value).map(entry => entry.id);
     },
     async replaceAll(data) {
-      state = {
-        classes:      Array.isArray(data.classes)      ? data.classes      : [],
-        units:        Array.isArray(data.units)        ? data.units        : [],
-        subunits:     Array.isArray(data.subunits)     ? data.subunits     : [],
-        lessons:      Array.isArray(data.lessons)      ? data.lessons      : [],
-        logs:         Array.isArray(data.logs)         ? data.logs         : [],
-        students:     Array.isArray(data.students)     ? data.students     : [],
-        studentnotes: Array.isArray(data.studentnotes) ? data.studentnotes : []
-      };
+      state = normalizeDataShape(data);
       await queueWrite();
     },
     async clearAll() {
-      state = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], studentnotes: [] };
+      state = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [] };
       await queueWrite();
     }
   };
@@ -182,6 +204,28 @@ async function createStore() {
   }
 }
 
+async function migrateLegacyStudentAssignments(activeStore) {
+  const [students, enrollments] = await Promise.all([
+    activeStore.list('students'),
+    activeStore.list('enrollments').catch(() => [])
+  ]);
+
+  if (enrollments.length > 0) return;
+
+  const legacyStudents = students.filter(student => student && student.classId);
+  if (!legacyStudents.length) return;
+
+  for (const student of legacyStudents) {
+    const { classId, ...cleanStudent } = student;
+    await activeStore.upsert('students', cleanStudent);
+    await activeStore.upsert('enrollments', {
+      id: `en_${student.id}_${classId}`,
+      studentId: student.id,
+      classId
+    });
+  }
+}
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -205,14 +249,10 @@ app.delete('/api/classes/:id', async (req, res, next) => {
       await store.removeByField('logs', 'lessonId', lessonId);
       await store.removeByField('studentnotes', 'lessonId', lessonId);
     }
-    const studentIds = await store.findIdsByField('students', 'classId', id);
-    for (const studentId of studentIds) {
-      await store.removeByField('studentnotes', 'studentId', studentId);
-    }
     await store.removeByField('lessons', 'classId', id);
     await store.removeByField('subunits', 'classId', id);
     await store.removeByField('units', 'classId', id);
-    await store.removeByField('students', 'classId', id);
+    await store.removeByField('enrollments', 'classId', id);
     await store.remove('classes', id);
     res.json({ ok: true });
   } catch (e) { next(e); }
@@ -306,9 +346,23 @@ app.delete('/api/students/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     await store.removeByField('studentnotes', 'studentId', id);
+    await store.removeByField('enrollments', 'studentId', id);
     await store.remove('students', id);
     res.json({ ok: true });
   } catch (e) { next(e); }
+});
+
+// ─── Enrollments ───────────────────────────────────────────────────────────
+app.get('/api/enrollments', async (req, res, next) => {
+  try { res.json(await store.list('enrollments')); } catch (e) { next(e); }
+});
+
+app.post('/api/enrollments', async (req, res, next) => {
+  try { await store.upsert('enrollments', req.body); res.json({ ok: true }); } catch (e) { next(e); }
+});
+
+app.delete('/api/enrollments/:id', async (req, res, next) => {
+  try { await store.remove('enrollments', req.params.id); res.json({ ok: true }); } catch (e) { next(e); }
 });
 
 // ─── Student Notes ─────────────────────────────────────────────────────────
@@ -327,24 +381,25 @@ app.delete('/api/studentnotes/:id', async (req, res, next) => {
 // ─── Export ────────────────────────────────────────────────────────────────
 app.get('/api/export', async (req, res, next) => {
   try {
-    const [classes, units, subunits, lessons, logs, students, studentnotes] = await Promise.all([
+    const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes] = await Promise.all([
       store.list('classes'),
       store.list('units'),
       store.list('subunits'),
       store.list('lessons'),
       store.list('logs'),
       store.list('students'),
+      store.list('enrollments'),
       store.list('studentnotes')
     ]);
-    res.json({ classes, units, subunits, lessons, logs, students, studentnotes });
+    res.json({ classes, units, subunits, lessons, logs, students, enrollments, studentnotes });
   } catch (e) { next(e); }
 });
 
 // ─── Import ────────────────────────────────────────────────────────────────
 app.post('/api/import', async (req, res, next) => {
   try {
-    const { classes = [], units = [], subunits = [], lessons = [], logs = [], students = [], studentnotes = [] } = req.body;
-    await store.replaceAll({ classes, units, subunits, lessons, logs, students, studentnotes });
+    const { classes = [], units = [], subunits = [], lessons = [], logs = [], students = [], enrollments = [], studentnotes = [] } = req.body;
+    await store.replaceAll({ classes, units, subunits, lessons, logs, students, enrollments, studentnotes });
     res.json({ ok: true });
   } catch (e) { next(e); }
 });
@@ -362,6 +417,9 @@ app.use((error, req, res, next) => {
 createStore()
   .then(activeStore => {
     store = activeStore;
+    return migrateLegacyStudentAssignments(store).then(() => store);
+  })
+  .then(() => {
     app.listen(PORT, () => console.log(`Lesson Engine running on port ${PORT}`));
   })
   .catch(error => {

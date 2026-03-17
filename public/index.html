@@ -625,12 +625,12 @@
     .lesson-card-field { font-size: 13px; margin-bottom: 5px; color: var(--muted); }
     .lesson-card-field strong { color: var(--text); font-weight: 700; }
     .unit-notes-strip {
-      background: linear-gradient(90deg, rgba(255,244,217,0.9), rgba(255,250,241,0.7));
-      border-left: 3px solid #f59e0b;
-      border-radius: 0 6px 6px 0;
+      background: linear-gradient(90deg, rgba(234,243,255,0.88), rgba(255,255,255,0.72));
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
       padding: 8px 12px;
       font-size: 12px;
-      color: var(--amber);
+      color: var(--muted);
       margin: 12px 0 4px;
     }
     .log-notes-inline { font-size: 12px; color: var(--dim); font-style: italic; margin-top: 12px; }
@@ -2073,7 +2073,7 @@ function renderToday() {
           <div class="lesson-card-title">${esc(lessonDisplayName(lesson))}</div>
           ${lesson.plan ? `<div class="lesson-card-field"><strong>Teach:</strong> ${esc(lesson.plan)}</div>` : ''}
           ${lesson.pos  ? `<div class="lesson-card-field"><strong>Start at:</strong> ${esc(lesson.pos)}</div>` : ''}
-          ${su && su.notes ? `<div class="unit-notes-strip">&#9888; ${esc(su.notes)}</div>` : ''}
+          ${su && su.notes ? `<div class="unit-notes-strip"><strong>Focus:</strong> ${esc(su.notes)}</div>` : ''}
           ${log
             ? `<div class="log-notes-inline">Logged: ${esc(log.notes)}</div>`
             : `<button class="btn btn-primary" style="margin-top:10px;font-size:12px;" onclick="logFromToday('${lesson.id}')">Mark complete</button>`
@@ -2202,7 +2202,7 @@ function renderBookCard(book) {
   if (isOpen) {
     html += `<div class="card-body">`;
     if (book.notes) {
-      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;">&#9888; ${esc(book.notes)}</div>`;
+      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;"><strong>Focus:</strong> ${esc(book.notes)}</div>`;
     }
     if (bookLessons.length > 0) {
       html += progressMarkup(summary, 'lessons');
@@ -2244,7 +2244,7 @@ function renderSubunitCard(su) {
   if (isOpen) {
     html += `<div class="card-body">`;
     if (su.notes) {
-      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;">&#9888; ${esc(su.notes)}</div>`;
+      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;"><strong>Focus:</strong> ${esc(su.notes)}</div>`;
     }
     if (suLessons.length > 0) {
       html += progressMarkup(summary, 'lessons');

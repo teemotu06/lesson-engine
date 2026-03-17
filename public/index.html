@@ -1051,6 +1051,8 @@
     .student-row { display: flex; align-items: center; gap: 8px; padding: 11px 4px; border-bottom: 1px solid var(--border); font-size: 13px; }
     .student-row:last-child { border-bottom: none; }
     .student-row-name { flex: 1; font-weight: 700; }
+    .student-row-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; min-width:0; }
+    .student-row-actions { display:flex; align-items:center; gap:6px; margin-left:auto; flex-shrink:0; }
 
     .sn-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
     .sn-row { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; font-size: 12px; }
@@ -1113,6 +1115,10 @@
       .form-row .form-group { flex: none; }
       .hero-stats,
       .stats-grid { grid-template-columns: 1fr; }
+      .student-row { flex-wrap: wrap; align-items: flex-start; }
+      .student-row-name { flex: 1 1 auto; min-width: 0; }
+      .student-row-meta { flex: 1 1 100%; }
+      .student-row-actions { width: 100%; margin-left: 0; justify-content: flex-end; }
     }
   </style>
 </head>
@@ -2499,13 +2505,17 @@ function renderStudents() {
           html += `
             <div class="student-row">
               <div class="student-row-name">${esc(st.name)}</div>
-              <span class="badge badge-grey" style="font-size:10px;">Phonics ${esc(assessment.phonics.current)}</span>
-              <span class="badge badge-grey" style="font-size:10px;">General ${esc(assessment.general.current)}</span>
-              <span class="badge badge-grey" style="font-size:10px;">${noteCount} note${noteCount !== 1 ? 's' : ''}</span>
-              <span class="badge badge-grey" style="font-size:10px;">${attendanceCount} attendance</span>
-              <span class="badge badge-grey" style="font-size:10px;">${classCount} class${classCount !== 1 ? 'es' : ''}</span>
-              <button class="btn" style="font-size:11px;padding:4px 10px;" onclick="openReport('${st.id}','${cls.id}')">Profile</button>
-              <button class="btn-ghost" onclick="deleteStudent('${st.id}','${cls.id}')" title="Remove from class">&#10005;</button>
+              <div class="student-row-meta">
+                <span class="badge badge-grey" style="font-size:10px;">Phonics ${esc(assessment.phonics.current)}</span>
+                <span class="badge badge-grey" style="font-size:10px;">General ${esc(assessment.general.current)}</span>
+                <span class="badge badge-grey" style="font-size:10px;">${noteCount} note${noteCount !== 1 ? 's' : ''}</span>
+                <span class="badge badge-grey" style="font-size:10px;">${attendanceCount} attendance</span>
+                <span class="badge badge-grey" style="font-size:10px;">${classCount} class${classCount !== 1 ? 'es' : ''}</span>
+              </div>
+              <div class="student-row-actions">
+                <button class="btn" style="font-size:11px;padding:4px 10px;" onclick="openReport('${st.id}','${cls.id}')">Profile</button>
+                <button class="btn-ghost" onclick="deleteStudent('${st.id}','${cls.id}')" title="Remove from class">&#10005;</button>
+              </div>
             </div>`;
         });
       }

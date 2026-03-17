@@ -3158,7 +3158,7 @@ function renderStudentReportPage() {
         </div>
         <div class="page-actions">
           <button class="btn" onclick="openReport('${student.id}','${classId}')">Back to Profile</button>
-          <button class="btn" onclick="window.print()">Print</button>
+          <button class="btn" onclick="printStudentReport()">Print</button>
           <button class="btn btn-primary" id="save-report-btn" onclick="saveStudentReportPage()">Save Report</button>
         </div>
       </div>
@@ -3343,24 +3343,397 @@ function renderStudentReportPagePreviewLevel(level) {
   if (overallValue) overallValue.textContent = level;
 }
 
+function reportFormData(student) {
+  const reportCard = student.reportCard || {};
+  return {
+    institution: document.getElementById('report-institution')?.value.trim() || reportCard.institution || 'Lesson Engine',
+    course: document.getElementById('report-course')?.value.trim() || reportCard.course || '',
+    reportDate: document.getElementById('report-date')?.value || reportCard.reportDate || todayStr(),
+    overallLevel: normalizeLevelValue(document.getElementById('report-overall-level')?.value || reportCard.overallLevel || student.assessment.general.current, 'Pre-A1'),
+    strengths: document.getElementById('report-strengths')?.value.trim() || reportCard.strengths || '',
+    growthSummary: document.getElementById('report-growth-summary')?.value.trim() || reportCard.growthSummary || '',
+    teacherComment: document.getElementById('report-teacher-comment')?.value.trim() || reportCard.teacherComment || '',
+    nextSteps: document.getElementById('report-next-steps')?.value.trim() || reportCard.nextSteps || '',
+    homeSupport: document.getElementById('report-home-support')?.value.trim() || reportCard.homeSupport || '',
+    speakingComment: document.getElementById('report-speaking-comment')?.value.trim() || reportCard.speakingComment || '',
+    attendanceComment: document.getElementById('report-attendance-comment')?.value.trim() || reportCard.attendanceComment || '',
+    diagnosticComment: document.getElementById('report-diagnostic-comment')?.value.trim() || reportCard.diagnosticComment || ''
+  };
+}
+
+function multilineHtml(text, empty = '—') {
+  const value = (text || '').trim();
+  return value ? esc(value).replace(/\n/g, '<br>') : `<span style="color:#8a857c;">${esc(empty)}</span>`;
+}
+
+function printableSkillCard(title, level, descriptor, start) {
+  return `
+    <div class="print-skill-card">
+      <div class="print-mini-label">${esc(title)}</div>
+      <div class="print-skill-level">${esc(level)}</div>
+      <div class="print-copy">${esc(descriptor)}</div>
+      <div class="print-micro">Start ${esc(start)} · Current ${esc(level)}</div>
+    </div>`;
+}
+
+function buildPrintableReportDocument(student, focusClass, reportData) {
+  const classes = classesForStudent(student.id);
+  const leadTeacher = focusClass?.teacher || classes[0]?.teacher || 'Teacher not set';
+  const attendances = DB.attendances.filter(entry => entry.studentId === student.id);
+  const presentCount = attendances.filter(entry => entry.status === 'present').length;
+  const attendanceRate = attendances.length ? Math.round((presentCount / attendances.length) * 100) : 0;
+  const latestDiagnostic = student.diagnostics.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')).at(0);
+  const latestSpeaking = student.speakingLog.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '') || (b.id || '').localeCompare(a.id || '')).at(0);
+  const latestNotes = DB.studentnotes.filter(entry => entry.studentId === student.id).slice().reverse().slice(0, 5);
+  const scoreGuide = scoreGuideRow(reportData.overallLevel);
+  const descriptor = skillDescriptor('general', reportData.overallLevel);
+
+  const skillsHtml = [
+    { key: 'listening', title: 'Listening' },
+    { key: 'reading', title: 'Reading' },
+    { key: 'general', title: 'Language Use' }
+  ].map(item => printableSkillCard(
+    item.title,
+    student.assessment[item.key].current,
+    skillDescriptor(item.key, student.assessment[item.key].current),
+    student.assessment[item.key].start
+  )).join('');
+
+  return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${esc(student.name)} Report Card</title>
+    <style>
+      :root {
+        --ink:#1d222b;
+        --muted:#666155;
+        --soft:#8f887d;
+        --line:#d9d1c6;
+        --paper:#fffdfa;
+        --accent:#f2c24f;
+        --accent-2:#eef4fb;
+      }
+      * { box-sizing:border-box; }
+      body {
+        margin:0;
+        font-family: "Plus Jakarta Sans", Arial, sans-serif;
+        color:var(--ink);
+        background:#e9e1d3;
+      }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        background: var(--paper);
+        padding: 15mm 14mm 14mm;
+      }
+      .masthead {
+        display:flex;
+        justify-content:space-between;
+        gap:16px;
+        align-items:flex-start;
+        padding-bottom:12px;
+        border-bottom:2px solid #1d222b;
+      }
+      .kicker {
+        font-size:11px;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        color:#796b45;
+        font-weight:800;
+        margin-bottom:6px;
+      }
+      .title {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size:30px;
+        font-weight:700;
+        letter-spacing:-.03em;
+      }
+      .subtitle {
+        margin-top:8px;
+        color:var(--muted);
+        font-size:12px;
+        line-height:1.6;
+        max-width:90mm;
+      }
+      .meta-pills {
+        display:grid;
+        gap:6px;
+        justify-items:end;
+      }
+      .pill {
+        border:1px solid var(--line);
+        border-radius:999px;
+        padding:6px 10px;
+        font-size:10px;
+        text-transform:uppercase;
+        letter-spacing:.08em;
+        color:var(--soft);
+        font-weight:800;
+      }
+      .meta-grid, .two-col, .skills, .footer-grid {
+        display:grid;
+        grid-template-columns:repeat(2, minmax(0,1fr));
+        gap:10px;
+        margin-top:12px;
+      }
+      .meta-grid { grid-template-columns:1.2fr 1.2fr 1fr 1fr; }
+      .field, .panel, .overall-level {
+        border:1px solid var(--line);
+        border-radius:14px;
+        padding:10px 12px;
+        background:#fff;
+      }
+      .label, .section-name, .print-mini-label {
+        font-size:10px;
+        text-transform:uppercase;
+        letter-spacing:.1em;
+        color:var(--soft);
+        font-weight:800;
+      }
+      .field-value {
+        margin-top:4px;
+        font-size:15px;
+        font-weight:700;
+      }
+      .overall {
+        display:grid;
+        grid-template-columns:58mm 1fr;
+        gap:10px;
+        margin-top:12px;
+      }
+      .overall-level {
+        background:linear-gradient(135deg, rgba(242,194,79,.35), rgba(255,255,255,.95));
+      }
+      .overall-value {
+        margin-top:10px;
+        font-size:38px;
+        line-height:1;
+        font-weight:900;
+        letter-spacing:-.04em;
+      }
+      .copy, .print-copy {
+        margin-top:6px;
+        font-size:12px;
+        line-height:1.65;
+        color:var(--ink);
+      }
+      .micro, .print-micro {
+        margin-top:8px;
+        font-size:10px;
+        color:var(--soft);
+        line-height:1.5;
+      }
+      .section {
+        margin-top:14px;
+      }
+      .section-head {
+        display:flex;
+        justify-content:space-between;
+        gap:12px;
+        align-items:baseline;
+        margin-bottom:8px;
+      }
+      .section-name {
+        color:var(--ink);
+      }
+      .section-note {
+        font-size:11px;
+        color:var(--muted);
+      }
+      .skills { grid-template-columns:repeat(3, minmax(0,1fr)); }
+      .print-skill-level {
+        margin-top:8px;
+        font-size:24px;
+        font-weight:900;
+        letter-spacing:-.03em;
+      }
+      .block {
+        min-height:34mm;
+      }
+      .score-guide { margin-top:8px; }
+      .report-score-bands, .report-score-levels {
+        display:grid;
+        grid-template-columns:repeat(14, minmax(0,1fr));
+        gap:3px;
+      }
+      .report-score-band, .report-score-level {
+        border:1px solid var(--line);
+        border-radius:8px;
+        padding:6px 4px;
+        text-align:center;
+        font-size:10px;
+        font-weight:700;
+        color:var(--muted);
+        background:#fff;
+      }
+      .report-score-band { color:var(--ink); }
+      .report-score-band:first-child { grid-column:span 1; }
+      .report-score-band:nth-child(2),
+      .report-score-band:nth-child(3),
+      .report-score-band:nth-child(4),
+      .report-score-band:nth-child(5) { grid-column:span 3; }
+      .report-score-band:last-child { grid-column:span 1; }
+      .report-score-level.active {
+        background:var(--accent);
+        color:#5d4500;
+        border-color:#d3a22f;
+      }
+      .divider {
+        height:1px;
+        background:var(--line);
+        margin-top:14px;
+      }
+      .signoff {
+        padding-top:18px;
+      }
+      .signoff-line {
+        height:1px;
+        background:#bfb5a7;
+        margin-bottom:6px;
+      }
+      .footer-grid { margin-top:14px; grid-template-columns:repeat(3, minmax(0,1fr)); }
+      @media print {
+        body { background:#fff; }
+        .page { margin:0; width:auto; min-height:auto; padding:0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="masthead">
+        <div>
+          <div class="kicker">Online Placement</div>
+          <div class="title">Student Report Card</div>
+          <div class="subtitle">A parent-facing summary of CEFR placement, classroom evidence, diagnostic review, and next-step learning priorities.</div>
+        </div>
+        <div class="meta-pills">
+          <div class="pill">${esc(focusClass ? focusClass.name : 'Global Record')}</div>
+          <div class="pill">${esc(leadTeacher)}</div>
+          <div class="pill">Confidential Learner Progress Record</div>
+        </div>
+      </div>
+
+      <div class="meta-grid">
+        <div class="field"><div class="label">Institution</div><div class="field-value">${esc(reportData.institution)}</div></div>
+        <div class="field"><div class="label">Course</div><div class="field-value">${esc(reportData.course || focusClass?.name || '—')}</div></div>
+        <div class="field"><div class="label">Student</div><div class="field-value">${esc(student.name)}</div></div>
+        <div class="field"><div class="label">Report Date</div><div class="field-value">${esc(friendlyDate(reportData.reportDate))}</div></div>
+      </div>
+
+      <div class="overall">
+        <div class="overall-level">
+          <div class="label">Overall CEFR Level</div>
+          <div class="overall-value">${esc(reportData.overallLevel)}</div>
+          <div class="micro">Headline level for parent communication based on current classroom performance and review evidence.</div>
+        </div>
+        <div class="panel">
+          <div class="label">Achievement Descriptor</div>
+          <div class="copy">${esc(descriptor)}</div>
+          <div class="score-guide">${scoreGuide}</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <div class="section-name">Language Skill Profile</div>
+          <div class="section-note">Descriptor-backed current performance</div>
+        </div>
+        <div class="skills">${skillsHtml}</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="two-col">
+        <div class="panel block">
+          <div class="label">Speaking and Participation</div>
+          <div class="copy">${multilineHtml(reportData.speakingComment || latestSpeaking?.note, 'No speaking observation yet.')}</div>
+          <div class="micro">${esc(latestSpeaking ? friendlyDateTime(latestSpeaking.createdAt) : 'Speaking is tracked through teacher observations.')}</div>
+        </div>
+        <div class="panel block">
+          <div class="label">Attendance and Reliability</div>
+          <div class="field-value">${attendanceRate}%</div>
+          <div class="micro">${presentCount}/${attendances.length} present records across enrolled classes.</div>
+          <div class="copy">${multilineHtml(reportData.attendanceComment, 'No attendance comment added.')}</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel block"><div class="label">Strengths</div><div class="copy">${multilineHtml(reportData.strengths, 'No strengths summary added.')}</div></div>
+        <div class="panel block"><div class="label">Growth Summary</div><div class="copy">${multilineHtml(reportData.growthSummary, 'No growth summary added.')}</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel block"><div class="label">Teacher Comment</div><div class="copy">${multilineHtml(reportData.teacherComment, 'No teacher comment added.')}</div></div>
+        <div class="panel block"><div class="label">Next Steps</div><div class="copy">${multilineHtml(reportData.nextSteps, 'No next steps added.')}</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel block"><div class="label">Home Support</div><div class="copy">${multilineHtml(reportData.homeSupport, 'No home support guidance added.')}</div></div>
+        <div class="panel block"><div class="label">Diagnostic Evidence</div><div class="copy">${multilineHtml(reportData.diagnosticComment || (latestDiagnostic ? `${latestDiagnostic.title || 'Diagnostic review'} on ${friendlyDate(latestDiagnostic.date)}. ${latestDiagnostic.comments || ''}`.trim() : ''), 'No diagnostic summary added.')}</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel block">
+          <div class="label">Evidence Snapshot</div>
+          <div class="copy">${multilineHtml(summarizeRecentNote(latestNotes, ''), 'No recent lesson evidence yet.')}</div>
+        </div>
+        <div class="panel block">
+          <div class="label">Class Context</div>
+          <div class="copy">${multilineHtml(classes.map(cls => cls.name).join(', '), 'No enrolled classes yet.')}</div>
+          <div class="micro">${esc(classes.map(cls => classVitalInfo(cls)).join(' • '))}</div>
+        </div>
+      </div>
+
+      <div class="footer-grid">
+        <div class="signoff">
+          <div class="signoff-line"></div>
+          <div class="label">Teacher</div>
+          <div class="micro">${esc(leadTeacher)}</div>
+        </div>
+        <div class="signoff">
+          <div class="signoff-line"></div>
+          <div class="label">Report Date</div>
+          <div class="micro">${esc(friendlyDate(reportData.reportDate))}</div>
+        </div>
+        <div class="signoff">
+          <div class="signoff-line"></div>
+          <div class="label">Parent / Guardian Review</div>
+          <div class="micro">For acknowledgement after discussing the student's current level, evidence, and next-step goals.</div>
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>`;
+}
+
+function printStudentReport() {
+  const student = normalizeStudentRecord(getStudent(currentStudentReport.studentId));
+  if (!student) return;
+  const classId = currentStudentReport.classId || classesForStudent(student.id)[0]?.id || '';
+  const focusClass = DB.classes.find(cls => cls.id === classId);
+  const reportData = reportFormData(student);
+  const popup = window.open('', '_blank', 'noopener,noreferrer,width=980,height=1200');
+  if (!popup) {
+    showToast('Allow pop-ups to print the report card.', 'error');
+    return;
+  }
+  popup.document.open();
+  popup.document.write(buildPrintableReportDocument(student, focusClass, reportData));
+  popup.document.close();
+  popup.focus();
+  setTimeout(() => {
+    popup.print();
+    popup.onafterprint = () => popup.close();
+  }, 250);
+}
+
 async function saveStudentReportPage() {
   const student = normalizeStudentRecord(getStudent(currentStudentReport.studentId));
   if (!student) return;
-  const reportCard = {
-    ...student.reportCard,
-    institution: document.getElementById('report-institution')?.value.trim() || 'Lesson Engine',
-    course: document.getElementById('report-course')?.value.trim() || '',
-    reportDate: document.getElementById('report-date')?.value || todayStr(),
-    overallLevel: normalizeLevelValue(document.getElementById('report-overall-level')?.value || student.assessment.general.current, 'Pre-A1'),
-    strengths: document.getElementById('report-strengths')?.value.trim() || '',
-    growthSummary: document.getElementById('report-growth-summary')?.value.trim() || '',
-    teacherComment: document.getElementById('report-teacher-comment')?.value.trim() || '',
-    nextSteps: document.getElementById('report-next-steps')?.value.trim() || '',
-    homeSupport: document.getElementById('report-home-support')?.value.trim() || '',
-    speakingComment: document.getElementById('report-speaking-comment')?.value.trim() || '',
-    attendanceComment: document.getElementById('report-attendance-comment')?.value.trim() || '',
-    diagnosticComment: document.getElementById('report-diagnostic-comment')?.value.trim() || ''
-  };
+  const reportCard = { ...student.reportCard, ...reportFormData(student) };
   const updated = { ...student, reportCard, diagnostics: student.diagnostics, speakingLog: student.speakingLog };
   setBusy('save-report-btn', true);
   try {

@@ -741,6 +741,85 @@
     .attendance-absent { background: rgba(255,245,245,0.92); color: var(--red); border-color: rgba(197,61,61,0.14); }
     .attendance-late { background: var(--amber-dim); color: var(--amber); border-color: rgba(154,91,0,0.14); }
     .attendance-excused { background: var(--accent-dim); color: var(--accent); border-color: rgba(21,112,239,0.14); }
+    .profile-shell { display:grid; gap:20px; }
+    .profile-header {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .profile-subtitle { margin-top:8px; color:var(--muted); font-size:14px; max-width:60ch; }
+    .profile-section {
+      padding: 22px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,250,241,0.88));
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: var(--shadow-sm);
+    }
+    .profile-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--dim);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .profile-hero {
+      display:grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+      gap:16px;
+    }
+    .profile-hero-story {
+      padding:18px;
+      border-radius:20px;
+      background: linear-gradient(135deg, rgba(234,243,255,0.9), rgba(255,255,255,0.92));
+      border:1px solid rgba(21,112,239,0.12);
+    }
+    .profile-story-title { font-size:18px; font-weight:800; color:var(--text); margin-bottom:10px; }
+    .profile-story-body { font-size:14px; color:var(--muted); line-height:1.7; }
+    .profile-story-list { display:grid; gap:10px; margin-top:12px; }
+    .profile-story-item {
+      padding:12px 14px;
+      border-radius:16px;
+      background: rgba(255,255,255,0.58);
+      border:1px solid rgba(116,99,79,0.1);
+    }
+    .profile-story-skill { font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--dim); font-weight:800; margin-bottom:6px; }
+    .profile-story-text { font-size:13px; color:var(--text); line-height:1.6; }
+    .profile-skill-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+    .profile-note-feed { display:grid; gap:10px; margin-top:12px; }
+    .profile-note-item {
+      padding:12px 14px;
+      border-radius:16px;
+      background: rgba(255,255,255,0.42);
+      border:1px solid rgba(116,99,79,0.1);
+    }
+    .profile-note-meta { font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+    .profile-note-text { font-size:13px; color:var(--text); line-height:1.6; }
+    .diagnostic-grid { display:grid; gap:12px; margin-top:14px; }
+    .diagnostic-item {
+      padding:14px;
+      border-radius:18px;
+      background: rgba(255,255,255,0.42);
+      border:1px solid rgba(116,99,79,0.1);
+    }
+    .diagnostic-title { font-size:14px; font-weight:800; color:var(--text); margin-bottom:4px; }
+    .diagnostic-meta { font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+    .diagnostic-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .class-detail-list { display:grid; gap:10px; margin-top:12px; }
+    .class-detail-item {
+      padding:14px;
+      border-radius:18px;
+      background: rgba(255,255,255,0.42);
+      border:1px solid rgba(116,99,79,0.1);
+    }
+    .class-detail-name { font-size:14px; font-weight:800; color:var(--text); margin-bottom:4px; }
+    .class-detail-meta { font-size:12px; color:var(--muted); line-height:1.6; }
+    @media (max-width: 860px) {
+      .profile-hero { grid-template-columns:1fr; }
+    }
     .log-history { max-height: 420px; overflow-y: auto; }
     .log-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
     .log-item:last-child { border-bottom: none; }
@@ -866,6 +945,7 @@
       <div id="tab-classes"  class="tab-content"></div>
       <div id="tab-log"      class="tab-content"></div>
       <div id="tab-students" class="tab-content"></div>
+      <div id="tab-student-profile" class="tab-content"></div>
       <div id="tab-settings" class="tab-content"></div>
     </div>
   </div>
@@ -1043,17 +1123,6 @@
   </div>
 </div>
 
-<!-- ═══ Modal: Student Profile ═══ -->
-<div id="modal-report" class="modal-backdrop" style="display:none;">
-  <div class="modal-card" style="max-width:560px;">
-    <div id="report-content"></div>
-    <div class="modal-actions">
-      <button class="btn" id="save-profile-btn" onclick="saveStudentProfile()">Save Profile</button>
-      <button class="btn btn-primary" onclick="closeModal('modal-report')">Close</button>
-    </div>
-  </div>
-</div>
-
 <div id="toast-shelf" class="toast-shelf"></div>
 
 <script>
@@ -1066,6 +1135,7 @@ let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
 let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
+let currentStudentProfile = { studentId: null, classId: null };
 const LEVEL_OPTIONS = ['Pre-CEFR', 'Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'];
 const SKILL_LEVEL_FIELDS = ['phonics', 'general', 'reading', 'listening'];
 const SKILL_LABELS = {
@@ -1184,6 +1254,16 @@ function friendlyDateLong(str) {
   if (!str) return '—';
   const d = parseLocalDate(str);
   return `${DAYS_LONG[d.getDay()]}, ${d.getDate()} ${MONTHS_LONG[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function friendlyDateTime(value) {
+  if (!value) return '—';
+  const dt = new Date(value);
+  if (Number.isNaN(dt.getTime())) return '—';
+  const date = `${dt.getDate()} ${MONTHS_SHORT[dt.getMonth()]} ${dt.getFullYear()}`;
+  const hours = dt.getHours();
+  const minutes = String(dt.getMinutes()).padStart(2, '0');
+  return `${date} · ${hours % 12 || 12}:${minutes}${hours >= 12 ? 'pm' : 'am'}`;
 }
 
 function friendlyTime(str) {
@@ -1368,6 +1448,17 @@ function buildAssessmentPayload(student, assessment) {
   };
 }
 
+function normalizeStudentRecord(student) {
+  if (!student) return null;
+  const assessment = normalizeStudentAssessment(student);
+  return {
+    ...student,
+    assessment,
+    diagnostics: Array.isArray(student.diagnostics) ? student.diagnostics : [],
+    speakingLog: Array.isArray(student.speakingLog) ? student.speakingLog : []
+  };
+}
+
 function levelRank(level) {
   const idx = LEVEL_OPTIONS.indexOf(level);
   return idx >= 0 ? idx : 0;
@@ -1384,7 +1475,64 @@ function progressNarrative(skill, assessment) {
 }
 
 function skillDescriptor(skill, level) {
+  if (level === 'Pre-CEFR') {
+    return 'Working below formal CEFR banding and building the foundations needed to enter Pre-A1 securely.';
+  }
   return SKILL_DESCRIPTORS[skill]?.[level] || 'Descriptor not set for this level yet.';
+}
+
+function classVitalInfo(cls) {
+  if (!cls) return 'Unknown class';
+  const days = (cls.days || []).join(', ') || 'No days set';
+  const time = cls.tstart ? `${friendlyTime(cls.tstart)}${cls.tend ? ` - ${friendlyTime(cls.tend)}` : ''}` : 'No time set';
+  return `${days} · ${time} · Started ${friendlyDate(cls.start)}`;
+}
+
+function levelShiftLabel(start, current) {
+  if (start === current) return `holding at ${current}`;
+  return levelRank(current) >= levelRank(start) ? `moved from ${start} to ${current}` : `recalibrated from ${start} to ${current}`;
+}
+
+function buildParentStory(student) {
+  const record = normalizeStudentRecord(student);
+  const assessment = record.assessment;
+  const latestSpeaking = record.speakingLog.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '') || (b.id || '').localeCompare(a.id || '')).at(0);
+  const latestDiagnostic = record.diagnostics.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')).at(0);
+  const stories = [
+    {
+      skill: 'Foundations',
+      text: `Phonics has ${levelShiftLabel(assessment.phonics.start, assessment.phonics.current)}. This gives the baseline for later CEFR growth and should be read alongside class notes and teacher observations.`
+    },
+    {
+      skill: 'General English',
+      text: `General English has ${levelShiftLabel(assessment.general.start, assessment.general.current)}. Current descriptor: ${skillDescriptor('general', assessment.general.current)}`
+    },
+    {
+      skill: 'Reading',
+      text: `Reading has ${levelShiftLabel(assessment.reading.start, assessment.reading.current)}. Current descriptor: ${skillDescriptor('reading', assessment.reading.current)}`
+    },
+    {
+      skill: 'Listening',
+      text: `Listening has ${levelShiftLabel(assessment.listening.start, assessment.listening.current)}. Current descriptor: ${skillDescriptor('listening', assessment.listening.current)}`
+    },
+    {
+      skill: 'Speaking',
+      text: latestSpeaking
+        ? `Speaking is tracked through timestamped observations rather than CEFR bands here. Latest note from ${friendlyDateTime(latestSpeaking.createdAt)}: ${latestSpeaking.note}`
+        : 'Speaking is tracked through timestamped teacher observations. No speaking note has been added yet.'
+    },
+    {
+      skill: 'Diagnostic Testing',
+      text: latestDiagnostic
+        ? `Latest diagnostic: ${latestDiagnostic.title || 'Diagnostic review'} on ${friendlyDate(latestDiagnostic.date)}.${latestDiagnostic.comments ? ` ${latestDiagnostic.comments}` : ''}`
+        : 'No diagnostic testing record has been uploaded yet.'
+    }
+  ];
+  return stories;
+}
+
+function safeDownloadName(name) {
+  return (name || 'diagnostic').replace(/[^a-z0-9._-]+/gi, '-');
 }
 
 function dotClass(dateStr) {
@@ -1567,14 +1715,16 @@ function renderClassTimeline(classId) {
 // TABS
 // ════════════════════════════════════════════════════
 function switchTab(name) {
+  const activeTopTab = name === 'student-profile' ? 'students' : name;
   document.querySelectorAll('.tab-btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.tab === name));
+    b.classList.toggle('active', b.dataset.tab === activeTopTab));
   document.querySelectorAll('.tab-content').forEach(c =>
     c.classList.toggle('active', c.id === 'tab-' + name));
   if (name === 'today')    renderToday();
   if (name === 'classes')  renderClasses();
   if (name === 'log')      renderLog();
   if (name === 'students') renderStudents();
+  if (name === 'student-profile') renderStudentProfilePage();
   if (name === 'settings') renderSettings();
 }
 
@@ -2292,26 +2442,60 @@ async function deleteStudentNote(noteId) {
 }
 
 function openReport(studentId, classId) {
-  const st  = getStudent(studentId);
-  if (!st) return;
-  const cls = DB.classes.find(c => c.id === classId);
-  const assessment = normalizeStudentAssessment(st);
-  const studentClasses = classesForStudent(studentId);
+  currentStudentProfile = { studentId, classId };
+  switchTab('student-profile');
+}
+
+function renderStudentProfilePage() {
+  const container = document.getElementById('tab-student-profile');
+  const student = normalizeStudentRecord(getStudent(currentStudentProfile.studentId));
+  if (!student) {
+    container.innerHTML = `
+      ${pageIntro('Student Profile', 'Student Not Found', 'The selected student record is no longer available.',
+        `<button class="btn" onclick="switchTab('students')">Back to Students</button>`)}
+      <div class="no-lessons-card">Select a student from the Students tab.</div>`;
+    return;
+  }
+
+  const classId = currentStudentProfile.classId || classesForStudent(student.id)[0]?.id || '';
+  const focusClass = DB.classes.find(c => c.id === classId);
+  const studentClasses = classesForStudent(student.id);
   const studentLessons = sortLessons(DB.lessons.filter(lesson => studentClasses.some(group => group.id === lesson.classId)), true);
-  const notes = DB.studentnotes.filter(n => n.studentId === studentId);
-  const attendances = DB.attendances.filter(entry => entry.studentId === studentId).sort((a, b) =>
+  const notes = DB.studentnotes.filter(n => n.studentId === student.id);
+  const attendances = DB.attendances.filter(entry => entry.studentId === student.id).sort((a, b) =>
     (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')
   );
   const presentCount = attendances.filter(entry => entry.status === 'present').length;
   const attendanceRate = attendances.length ? Math.round((presentCount / attendances.length) * 100) : 0;
+  const parentStory = buildParentStory(student);
+  const latestDiagnostic = student.diagnostics.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')).at(0);
+  const latestSpeaking = student.speakingLog.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '') || (b.id || '').localeCompare(a.id || '')).at(0);
 
   const classHistoryHtml = studentClasses.length === 0
     ? `<div class="report-no-note">No class enrollments yet.</div>`
-    : `<div class="profile-list">${studentClasses.map(group => `<span class="badge badge-grey">${esc(group.name)}</span>`).join('')}</div>`;
+    : `<div class="class-detail-list">${studentClasses.map(group => {
+        const classLessons = DB.lessons.filter(lesson => lesson.classId === group.id);
+        const done = completedLessonCount(classLessons);
+        const next = nextPendingLesson(classLessons);
+        const unitCount = DB.units.filter(unit => unit.classId === group.id).length;
+        const attendanceEntries = attendances.filter(entry => entry.classId === group.id);
+        const attendanceSummary = attendanceEntries.length
+          ? `${attendanceEntries.filter(entry => entry.status === 'present').length}/${attendanceEntries.length} present`
+          : 'No attendance yet';
+        const completionRate = classLessons.length ? Math.round((done / classLessons.length) * 100) : 0;
+        return `
+          <div class="class-detail-item">
+            <div class="class-detail-name">${esc(group.name)}</div>
+            <div class="class-detail-meta">${esc(classVitalInfo(group))}</div>
+            <div class="class-detail-meta">Teacher ${esc(group.teacher || 'Unassigned')} · ${unitCount} book${unitCount === 1 ? '' : 's'} · ${classLessons.length} lessons</div>
+            <div class="class-detail-meta">${done} logged · ${completionRate}% completed · ${attendanceSummary}</div>
+            <div class="class-detail-meta">${next ? `Next lesson to log: ${esc(lessonDisplayName(next))}` : 'All current lessons are logged.'}</div>
+          </div>`;
+      }).join('')}</div>`;
 
   const attendanceHistoryHtml = attendances.length === 0
     ? `<div class="report-no-note">No attendance recorded yet.</div>`
-    : `<div class="history-list">${attendances.slice(0, 40).map(entry => {
+    : `<div class="history-list">${attendances.slice(0, 60).map(entry => {
         const lesson = DB.lessons.find(item => item.id === entry.lessonId);
         const classRef = DB.classes.find(group => group.id === entry.classId);
         return `
@@ -2324,7 +2508,7 @@ function openReport(studentId, classId) {
 
   const lessonHistoryHtml = studentLessons.length === 0
     ? `<div class="report-no-note">No lessons recorded yet.</div>`
-    : `<div class="history-list">${studentLessons.slice(0, 50).map(lesson => {
+    : `<div class="history-list">${studentLessons.slice(0, 60).map(lesson => {
         const classRef = DB.classes.find(group => group.id === lesson.classId);
         const note = notes.find(entry => entry.lessonId === lesson.id);
         return `
@@ -2341,75 +2525,170 @@ function openReport(studentId, classId) {
       <div class="form-row" style="margin-top:10px;">
         <div class="form-group" style="margin-bottom:0;">
           <label class="form-label">Start</label>
-          <select class="form-input profile-skill-start" data-skill="${skill}">${LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${assessment[skill].start === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
+          <select class="form-input profile-skill-start" data-skill="${skill}">${LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${student.assessment[skill].start === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
         </div>
         <div class="form-group" style="margin-bottom:0;">
           <label class="form-label">Current</label>
-          <select class="form-input profile-skill-current" data-skill="${skill}">${LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${assessment[skill].current === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
+          <select class="form-input profile-skill-current" data-skill="${skill}">${LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${student.assessment[skill].current === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
         </div>
       </div>
-      <div class="overview-note" style="margin-top:10px;">${esc(progressNarrative(skill, assessment))}</div>
+      <div class="overview-note" style="margin-top:10px;">${esc(progressNarrative(skill, student.assessment))}</div>
       ${skill === 'phonics'
-        ? `<div class="report-lesson-note" style="margin-top:10px;">Use phonics as the early-stage baseline when showing movement into CEFR bands.</div>`
-        : `<div class="report-lesson-note" style="margin-top:10px;">${esc(skillDescriptor(skill, assessment[skill].current))}</div>`}
+        ? `<div class="report-lesson-note" style="margin-top:10px;">Use phonics as the baseline stage before stronger CEFR-aligned progress is visible.</div>`
+        : `<div class="report-lesson-note" style="margin-top:10px;">${esc(skillDescriptor(skill, student.assessment[skill].current))}</div>`}
     </div>
   `).join('');
 
-  document.getElementById('report-content').innerHTML = `
-    <input type="hidden" id="profile-student-id" value="${esc(studentId)}">
-    <input type="hidden" id="profile-class-id" value="${esc(classId || '')}">
-    <div class="report-title">${esc(st.name)}</div>
-    <div class="report-meta">${cls ? esc(cls.name) + (cls.teacher ? ' · ' + esc(cls.teacher) : '') : 'Student profile'}</div>
-    <div class="profile-grid">
-      <div class="profile-card">
-        <div class="label">Parent Story</div>
-        <div class="profile-value">${esc(progressNarrative('general', assessment))}</div>
-        <div class="overview-note">Use this as the headline growth message for parents.</div>
-      </div>
-      <div class="profile-card">
-        <div class="label">Classes</div>
-        <div class="profile-value">${studentClasses.length}</div>
-        <div class="overview-note">Active enrollments across the school.</div>
-      </div>
-      <div class="profile-card">
-        <div class="label">Attendance</div>
-        <div class="profile-value">${attendanceRate}%</div>
-        <div class="overview-note">${presentCount}/${attendances.length} present records</div>
-      </div>
-      <div class="profile-card">
-        <div class="label">Notes</div>
-        <div class="profile-value">${notes.length}</div>
-        <div class="overview-note">Teacher observations saved across lessons.</div>
-      </div>
-    </div>
-    <div class="report-section">
-      <div class="report-section-title">Skills & Descriptors</div>
-      <div class="profile-grid">${growthCardsHtml}</div>
-    </div>
-    <div class="report-section">
-      <div class="report-section-title">Speaking Notes</div>
-      <textarea id="profile-speaking-notes" class="form-input" rows="4" placeholder="Use this space for speaking confidence, pronunciation, fluency, and oral interaction notes.">${esc(assessment.speakingNotes)}</textarea>
-    </div>
-    <div class="report-section">
-      <div class="report-section-title">Enrolled Classes</div>
-      ${classHistoryHtml}
-    </div>
-    <div class="report-section">
-      <div class="report-section-title">Attendance History</div>
-      ${attendanceHistoryHtml}
-    </div>
-    <div class="report-section">
-      <div class="report-section-title">Lesson Notes</div>
-      ${lessonHistoryHtml}
-    </div>`;
+  const speakingFeedHtml = student.speakingLog.length === 0
+    ? `<div class="report-no-note">No speaking notes yet.</div>`
+    : `<div class="profile-note-feed">${student.speakingLog.slice().sort((a,b) => (b.createdAt || '').localeCompare(a.createdAt || '')).map(note => `
+        <div class="profile-note-item">
+          <div class="profile-note-meta">${friendlyDateTime(note.createdAt)}</div>
+          <div class="profile-note-text">${esc(note.note)}</div>
+        </div>`).join('')}</div>`;
 
-  document.getElementById('modal-report').style.display = 'flex';
+  const diagnosticsHtml = student.diagnostics.length === 0
+    ? `<div class="report-no-note">No diagnostic testing records yet.</div>`
+    : `<div class="diagnostic-grid">${student.diagnostics.slice().sort((a,b) => (b.date || '').localeCompare(a.date || '')).map(item => `
+        <div class="diagnostic-item">
+          <div class="diagnostic-title">${esc(item.title || 'Diagnostic Record')}</div>
+          <div class="diagnostic-meta">${item.date ? friendlyDate(item.date) : 'No date'}${item.fileName ? ` · ${esc(item.fileName)}` : ''}</div>
+          <div class="profile-note-text">${esc(item.comments || 'No comments added.')}</div>
+          <div class="diagnostic-actions">
+            ${item.fileDataUrl ? `<a class="btn" href="${item.fileDataUrl}" download="${esc(safeDownloadName(item.fileName || 'diagnostic.pdf'))}">Download PDF</a>` : ''}
+            <button class="btn btn-danger" onclick="removeDiagnostic('${student.id}','${item.id}')">Delete</button>
+          </div>
+        </div>`).join('')}</div>`;
+
+  container.innerHTML = `
+    <div class="profile-shell">
+      <div class="profile-header">
+        <div>
+          <div class="page-eyebrow">Student Profile</div>
+          <div class="page-title">${esc(student.name)}</div>
+          <div class="profile-subtitle">${focusClass ? `Focused from ${esc(focusClass.name)}.` : 'Global student record with progress, diagnostics, and history.'}</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn" onclick="switchTab('students')">Back to Students</button>
+          <button class="btn btn-primary" id="save-profile-btn" onclick="saveStudentProfilePage()">Save Profile</button>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-hero">
+          <div class="profile-hero-story">
+            <div class="profile-story-title">Parent Story</div>
+            <div class="profile-story-body">This view is built to explain baseline, current level, and observed evidence in a way that is easier to share with parents after months or years of study.</div>
+            <div class="profile-story-list">
+              ${parentStory.map(item => `
+                <div class="profile-story-item">
+                  <div class="profile-story-skill">${esc(item.skill)}</div>
+                  <div class="profile-story-text">${esc(item.text)}</div>
+                </div>`).join('')}
+            </div>
+          </div>
+          <div class="profile-grid">
+            <div class="profile-card">
+              <div class="label">Classes</div>
+              <div class="profile-value">${studentClasses.length}</div>
+              <div class="overview-note">Active enrollments across the school.</div>
+            </div>
+            <div class="profile-card">
+              <div class="label">Attendance</div>
+              <div class="profile-value">${attendanceRate}%</div>
+              <div class="overview-note">${presentCount}/${attendances.length} present records</div>
+            </div>
+            <div class="profile-card">
+              <div class="label">Lesson Notes</div>
+              <div class="profile-value">${notes.length}</div>
+              <div class="overview-note">Teacher observations saved across lessons.</div>
+            </div>
+            <div class="profile-card">
+              <div class="label">Current General</div>
+              <div class="profile-value">${esc(student.assessment.general.current)}</div>
+              <div class="overview-note">${esc(skillDescriptor('general', student.assessment.general.current))}</div>
+            </div>
+            <div class="profile-card">
+              <div class="label">Latest Diagnostic</div>
+              <div class="profile-value">${esc(latestDiagnostic ? friendlyDate(latestDiagnostic.date) : '—')}</div>
+              <div class="overview-note">${esc(latestDiagnostic ? (latestDiagnostic.title || 'Diagnostic review') : 'No diagnostic uploaded yet.')}</div>
+            </div>
+            <div class="profile-card">
+              <div class="label">Latest Speaking Note</div>
+              <div class="profile-value">${esc(latestSpeaking ? friendlyDate(latestSpeaking.createdAt.slice(0, 10)) : '—')}</div>
+              <div class="overview-note">${esc(latestSpeaking ? latestSpeaking.note : 'No speaking note recorded yet.')}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">Skills & Descriptors</div>
+        <div class="profile-skill-grid">${growthCardsHtml}</div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">Speaking Journal</div>
+        <div class="form-group">
+          <label class="form-label">New Speaking Note</label>
+          <textarea id="profile-speaking-note-input" class="form-input" rows="4" placeholder="Add a timestamped speaking observation about confidence, pronunciation, fluency, or interaction."></textarea>
+        </div>
+        <div class="page-actions">
+          <button class="btn" onclick="addSpeakingNote('${student.id}')">Add Speaking Note</button>
+        </div>
+        ${speakingFeedHtml}
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">Diagnostic Testing</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Test Date</label>
+            <input type="date" id="diagnostic-date" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Test Title</label>
+            <input type="text" id="diagnostic-title" class="form-input" placeholder="e.g. Mid-year placement review">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Upload PDF</label>
+          <input type="file" id="diagnostic-file" class="form-input" accept="application/pdf">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Comments</label>
+          <textarea id="diagnostic-comments" class="form-input" rows="4" placeholder="What was assessed, what changed, and what should be shared with parents?"></textarea>
+        </div>
+        <div class="page-actions">
+          <button class="btn" onclick="addDiagnosticRecord('${student.id}')">Add Diagnostic Record</button>
+        </div>
+        ${diagnosticsHtml}
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">Enrolled Classes</div>
+        ${classHistoryHtml}
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">Attendance History</div>
+        ${attendanceHistoryHtml}
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">Lesson Notes History</div>
+        ${lessonHistoryHtml}
+      </div>
+    </div>`;
 }
 
-async function saveStudentProfile() {
-  const studentId = document.getElementById('profile-student-id')?.value;
-  const classId = document.getElementById('profile-class-id')?.value || '';
-  const student = getStudent(studentId);
+async function persistStudentRecord(updated) {
+  await api('POST', '/api/students', updated);
+  DB.students = DB.students.map(entry => entry.id === updated.id ? updated : entry);
+}
+
+async function saveStudentProfilePage() {
+  const student = normalizeStudentRecord(getStudent(currentStudentProfile.studentId));
   if (!student) return;
   const assessment = normalizeStudentAssessment(student);
   document.querySelectorAll('.profile-skill-start').forEach(select => {
@@ -2418,19 +2697,119 @@ async function saveStudentProfile() {
   document.querySelectorAll('.profile-skill-current').forEach(select => {
     assessment[select.dataset.skill].current = select.value;
   });
-  assessment.speakingNotes = document.getElementById('profile-speaking-notes')?.value.trim() || '';
-  const updated = buildAssessmentPayload(student, assessment);
+  const updated = buildAssessmentPayload({ ...student, diagnostics: student.diagnostics, speakingLog: student.speakingLog }, assessment);
   setBusy('save-profile-btn', true);
   try {
-    await api('POST', '/api/students', updated);
-    DB.students = DB.students.map(entry => entry.id === studentId ? updated : entry);
+    await persistStudentRecord(updated);
     renderStudents();
-    openReport(studentId, classId || classesForStudent(studentId)[0]?.id || '');
+    renderStudentProfilePage();
     showToast('Student profile updated.', 'success');
   } catch (e) {
     showToast('Failed to update student profile.', 'error');
   } finally {
     setBusy('save-profile-btn', false);
+  }
+}
+
+async function addSpeakingNote(studentId) {
+  const input = document.getElementById('profile-speaking-note-input');
+  const note = input?.value.trim();
+  const student = normalizeStudentRecord(getStudent(studentId));
+  if (!student || !note) {
+    showToast('Please enter a speaking note.', 'error');
+    return;
+  }
+  const updated = {
+    ...student,
+    diagnostics: student.diagnostics,
+    speakingLog: [
+      ...(student.speakingLog || []),
+      { id: `sp_${Date.now()}`, createdAt: new Date().toISOString(), note }
+    ]
+  };
+  try {
+    await persistStudentRecord(updated);
+    renderStudents();
+    renderStudentProfilePage();
+    showToast('Speaking note added.', 'success');
+  } catch (e) {
+    showToast('Failed to save speaking note.', 'error');
+  }
+}
+
+async function addDiagnosticRecord(studentId) {
+  const student = normalizeStudentRecord(getStudent(studentId));
+  if (!student) return;
+  const date = document.getElementById('diagnostic-date')?.value || '';
+  const title = document.getElementById('diagnostic-title')?.value.trim() || '';
+  const comments = document.getElementById('diagnostic-comments')?.value.trim() || '';
+  const fileInput = document.getElementById('diagnostic-file');
+  const file = fileInput?.files?.[0];
+
+  if (!date || !title) {
+    showToast('Please add a diagnostic date and title.', 'error');
+    return;
+  }
+  if (file && file.type !== 'application/pdf') {
+    showToast('Diagnostic upload must be a PDF.', 'error');
+    return;
+  }
+
+  let fileDataUrl = '';
+  if (file) {
+    fileDataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    }).catch(() => '');
+    if (!fileDataUrl) {
+      showToast('Could not read the PDF file.', 'error');
+      return;
+    }
+  }
+
+  const updated = {
+    ...student,
+    diagnostics: [
+      ...(student.diagnostics || []),
+      {
+        id: `diag_${Date.now()}`,
+        date,
+        title,
+        comments,
+        fileName: file ? file.name : '',
+        fileDataUrl
+      }
+    ],
+    speakingLog: student.speakingLog || []
+  };
+
+  try {
+    await persistStudentRecord(updated);
+    renderStudents();
+    renderStudentProfilePage();
+    showToast('Diagnostic record added.', 'success');
+  } catch (e) {
+    showToast('Failed to save diagnostic record.', 'error');
+  }
+}
+
+async function removeDiagnostic(studentId, diagnosticId) {
+  const student = normalizeStudentRecord(getStudent(studentId));
+  if (!student) return;
+  const updated = {
+    ...student,
+    diagnostics: (student.diagnostics || []).filter(item => item.id !== diagnosticId),
+    speakingLog: student.speakingLog || []
+  };
+  try {
+    await persistStudentRecord(updated);
+    renderStudents();
+    renderStudentProfilePage();
+    showToast('Diagnostic record removed.', 'success');
+  } catch (e) {
+    showToast('Failed to remove diagnostic record.', 'error');
   }
 }
 

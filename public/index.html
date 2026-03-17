@@ -817,8 +817,100 @@
     }
     .class-detail-name { font-size:14px; font-weight:800; color:var(--text); margin-bottom:4px; }
     .class-detail-meta { font-size:12px; color:var(--muted); line-height:1.6; }
+    .report-shell { display:grid; gap:20px; }
+    .report-page {
+      padding: 24px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(253,248,240,0.95));
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: var(--shadow-md);
+      display: grid;
+      gap: 18px;
+    }
+    .report-header {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      padding-bottom:14px;
+      border-bottom:1px solid rgba(116,99,79,0.12);
+    }
+    .report-brand { font-size:26px; font-weight:800; letter-spacing:0.04em; color:var(--text); }
+    .report-kicker { font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); font-weight:800; margin-bottom:6px; }
+    .report-meta-grid, .report-summary-grid, .report-skill-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+    .report-field, .report-panel {
+      padding:14px;
+      border-radius:18px;
+      background: rgba(255,255,255,0.56);
+      border:1px solid rgba(116,99,79,0.1);
+    }
+    .report-field-label, .report-panel-title {
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:var(--dim);
+      font-weight:800;
+      margin-bottom:6px;
+    }
+    .report-field-value { font-size:16px; color:var(--text); font-weight:700; }
+    .report-overall {
+      display:grid;
+      grid-template-columns:minmax(160px, 220px) minmax(0, 1fr);
+      gap:14px;
+      align-items:stretch;
+    }
+    .report-overall-level {
+      padding:16px;
+      border-radius:20px;
+      background: linear-gradient(135deg, rgba(255,214,102,0.45), rgba(255,255,255,0.92));
+      border:1px solid rgba(191,147,18,0.18);
+    }
+    .report-overall-value { font-size:36px; font-weight:900; color:var(--text); line-height:1; margin-top:8px; }
+    .report-score-guide { display:grid; gap:6px; }
+    .report-score-bands, .report-score-levels {
+      display:grid;
+      grid-template-columns:repeat(14, minmax(0, 1fr));
+      gap:4px;
+    }
+    .report-score-band, .report-score-level {
+      padding:8px 6px;
+      border-radius:12px;
+      text-align:center;
+      font-size:11px;
+      background: rgba(255,255,255,0.56);
+      border:1px solid rgba(116,99,79,0.1);
+      color:var(--muted);
+      font-weight:700;
+    }
+    .report-score-band { font-size:12px; color:var(--text); }
+    .report-score-band:first-child { grid-column: span 1; }
+    .report-score-band:nth-child(2),
+    .report-score-band:nth-child(3),
+    .report-score-band:nth-child(4),
+    .report-score-band:nth-child(5) { grid-column: span 3; }
+    .report-score-band:last-child { grid-column: span 1; }
+    .report-score-level.active {
+      background: rgba(255,214,102,0.82);
+      color: #5c4300;
+      border-color: rgba(191,147,18,0.28);
+    }
+    .report-skill-card { display:grid; gap:10px; }
+    .report-skill-level { font-size:22px; font-weight:900; color:var(--text); }
+    .report-textarea { min-height:100px; resize:vertical; }
+    .report-actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    @media print {
+      body { background: #fff; }
+      .app-header, .tab-bar, .page-actions, .report-actions, .btn, .btn-primary { display:none !important; }
+      .content-shell, .tab-content, .report-page { padding:0; box-shadow:none; background:#fff; border:none; }
+    }
     @media (max-width: 860px) {
       .profile-hero { grid-template-columns:1fr; }
+      .report-overall { grid-template-columns:1fr; }
     }
     .log-history { max-height: 420px; overflow-y: auto; }
     .log-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
@@ -946,6 +1038,7 @@
       <div id="tab-log"      class="tab-content"></div>
       <div id="tab-students" class="tab-content"></div>
       <div id="tab-student-profile" class="tab-content"></div>
+      <div id="tab-student-report" class="tab-content"></div>
       <div id="tab-settings" class="tab-content"></div>
     </div>
   </div>
@@ -1136,7 +1229,23 @@ let expandedSubunits = {};   // keyed by subunit ID
 let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
 let currentStudentProfile = { studentId: null, classId: null };
-const LEVEL_OPTIONS = ['Pre-CEFR', 'Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'];
+let currentStudentReport = { studentId: null, classId: null };
+const LEVEL_OPTIONS = ['Pre-CEFR', 'Pre-A1', 'A1.1', 'A1.2', 'A1.3', 'A2.1', 'A2.2', 'A2.3', 'B1.1', 'B1.2', 'B1.3', 'B2.1', 'B2.2', 'B2.3', 'C1'];
+const REPORT_LEVEL_OPTIONS = LEVEL_OPTIONS.filter(level => level !== 'Pre-CEFR');
+const LEVEL_GROUPS = [
+  { band: 'Pre-A1', levels: ['Pre-A1'] },
+  { band: 'A1', levels: ['A1.1', 'A1.2', 'A1.3'] },
+  { band: 'A2', levels: ['A2.1', 'A2.2', 'A2.3'] },
+  { band: 'B1', levels: ['B1.1', 'B1.2', 'B1.3'] },
+  { band: 'B2', levels: ['B2.1', 'B2.2', 'B2.3'] },
+  { band: 'C1', levels: ['C1'] }
+];
+const LEGACY_LEVEL_MAP = {
+  'A1': 'A1.2',
+  'A2': 'A2.2',
+  'B1': 'B1.2',
+  'B2': 'B2.2'
+};
 const SKILL_LEVEL_FIELDS = ['phonics', 'general', 'reading', 'listening'];
 const SKILL_LABELS = {
   phonics: 'Phonics',
@@ -1146,27 +1255,54 @@ const SKILL_LABELS = {
 };
 const SKILL_DESCRIPTORS = {
   general: {
+    'Pre-CEFR': 'Working below formal CEFR banding and building the foundations needed to enter Pre-A1 securely.',
     'Pre-A1': 'Beginning to understand and use very basic classroom and everyday English with strong support.',
-    'A1': 'Can understand and use simple familiar expressions and short phrases about immediate needs.',
-    'A2': 'Can handle routine exchanges and understand short clear messages on familiar topics.',
-    'B1': 'Can deal with everyday situations and express main ideas on school, home, and interests.',
-    'B2': 'Can interact with growing independence and explain opinions with supporting detail.',
+    'A1.1': 'Understands and uses a limited range of words when managing concrete information to meet personal needs in familiar, everyday contexts.',
+    'A1.2': 'Understands and uses key words and phrases to manage concrete information to meet personal needs in familiar, everyday contexts.',
+    'A1.3': 'Understands and uses short sentences to manage concrete information to meet personal needs in familiar, everyday contexts.',
+    'A2.1': 'Understands concrete information to meet needs in everyday contexts.',
+    'A2.2': 'Understands key information and details to meet needs in everyday contexts.',
+    'A2.3': 'Understands key information and details in a wide range of everyday contexts.',
+    'B1.1': 'Understands main points, details and simple opinions in familiar contexts.',
+    'B1.2': 'Understands main points, simple ideas, details and opinions in familiar contexts.',
+    'B1.3': 'Understands line of argument and key information in familiar contexts.',
+    'B2.1': 'Understands main ideas, arguments and details in familiar and some unfamiliar contexts.',
+    'B2.2': 'Understands detailed information, arguments and some abstract concepts in familiar and some unfamiliar contexts.',
+    'B2.3': 'Understands points of view, detailed information and complex ideas in familiar, some unfamiliar, and specialist contexts.',
     'C1': 'Can use language flexibly and effectively across most academic and social situations.'
   },
   reading: {
+    'Pre-CEFR': 'Recognises sounds, letters, and a small bank of high-frequency print before full CEFR reading work begins.',
     'Pre-A1': 'Recognises basic words, simple classroom language, and highly supported print.',
-    'A1': 'Can read very short simple texts and find familiar names, words, and phrases.',
-    'A2': 'Can understand short straightforward texts and locate key information in simple passages.',
-    'B1': 'Can follow the main points in graded texts on familiar topics and infer some meaning from context.',
-    'B2': 'Can read extended texts with good independence and track argument, detail, and tone.',
+    'A1.1': 'Reads isolated familiar words and supported labels in predictable classroom contexts.',
+    'A1.2': 'Reads short phrases and simple prompts to identify key personal or classroom information.',
+    'A1.3': 'Reads short sentences and very short texts to locate clear concrete meaning.',
+    'A2.1': 'Reads short predictable texts and finds concrete information in everyday topics.',
+    'A2.2': 'Reads straightforward passages and identifies key points and supporting detail.',
+    'A2.3': 'Reads a wider range of everyday texts with growing independence and better detail tracking.',
+    'B1.1': 'Reads familiar texts for main points, details, and simple viewpoints.',
+    'B1.2': 'Reads connected texts with enough control to follow ideas, detail, and basic opinions.',
+    'B1.3': 'Reads familiar texts for line of argument and key information with moderate independence.',
+    'B2.1': 'Reads more complex texts, following main ideas, arguments, and supporting detail in some unfamiliar topics.',
+    'B2.2': 'Reads extended texts with confidence, handling detailed information and some abstract meaning.',
+    'B2.3': 'Reads complex texts with strong control of viewpoint, nuance, and specialist detail.',
     'C1': 'Can read complex texts confidently and interpret nuanced meaning with little support.'
   },
   listening: {
+    'Pre-CEFR': 'Responds to sound, rhythm, and a small amount of highly supported spoken language before formal CEFR listening bands apply.',
     'Pre-A1': 'Understands isolated words, classroom routines, and key cues when speech is very supported.',
-    'A1': 'Can understand slow clear speech about familiar personal and classroom topics.',
-    'A2': 'Can understand the main point of short clear messages and simple spoken instructions.',
-    'B1': 'Can follow the main ideas of longer speech on familiar topics in standard language.',
-    'B2': 'Can understand extended speech and discussion with limited repetition.',
+    'A1.1': 'Understands a narrow set of familiar words in slow, supported speech.',
+    'A1.2': 'Understands key words and short phrases in familiar personal and classroom situations.',
+    'A1.3': 'Understands short sentences in slow clear speech on familiar everyday topics.',
+    'A2.1': 'Understands concrete spoken information needed in everyday contexts.',
+    'A2.2': 'Understands key information and details in short clear spoken messages.',
+    'A2.3': 'Understands key information and details across a wider range of everyday listening tasks.',
+    'B1.1': 'Understands main points, details, and simple opinions in familiar spoken contexts.',
+    'B1.2': 'Understands main points, supporting ideas, details, and opinions in familiar spoken contexts.',
+    'B1.3': 'Understands line of argument and key information in familiar spoken language.',
+    'B2.1': 'Understands main ideas, arguments, and detail in familiar and some unfamiliar spoken contexts.',
+    'B2.2': 'Understands detailed information, arguments, and some abstract spoken meaning.',
+    'B2.3': 'Understands viewpoints, complex ideas, and specialist discussion with limited repetition.',
     'C1': 'Can follow complex spoken language and implied meaning across a wide range of contexts.'
   }
 };
@@ -1420,15 +1556,20 @@ function attendanceBadge(status) {
 function populateLevelOptions(selected = 'Pre-CEFR') {
   const select = document.getElementById('student-level');
   if (!select) return;
-  select.innerHTML = LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${level === selected ? ' selected' : ''}>${esc(level)}</option>`).join('');
+  select.innerHTML = LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${normalizeLevelValue(selected, 'Pre-CEFR') === level ? ' selected' : ''}>${esc(level)}</option>`).join('');
+}
+
+function normalizeLevelValue(value, fallback = 'Pre-A1') {
+  const candidate = LEGACY_LEVEL_MAP[value] || value;
+  return LEVEL_OPTIONS.includes(candidate) ? candidate : fallback;
 }
 
 function normalizeStudentAssessment(student) {
-  const baseLevel = student?.level || 'Pre-CEFR';
+  const baseLevel = normalizeLevelValue(student?.level || 'Pre-CEFR', 'Pre-CEFR');
   const existing = student?.assessment || {};
   const normalizeLevelPair = (skill, fallback) => ({
-    start: existing[skill]?.start || fallback,
-    current: existing[skill]?.current || fallback
+    start: normalizeLevelValue(existing[skill]?.start || fallback, fallback),
+    current: normalizeLevelValue(existing[skill]?.current || fallback, fallback)
   });
 
   return {
@@ -1448,6 +1589,25 @@ function buildAssessmentPayload(student, assessment) {
   };
 }
 
+function normalizeReportCard(student) {
+  const record = normalizeStudentAssessment(student);
+  const current = student?.reportCard || {};
+  return {
+    institution: current.institution || 'Lesson Engine',
+    course: current.course || classesForStudent(student?.id || '').map(cls => cls.name).join(', '),
+    reportDate: current.reportDate || todayStr(),
+    overallLevel: normalizeLevelValue(current.overallLevel || record.general.current, 'Pre-A1'),
+    teacherComment: current.teacherComment || '',
+    strengths: current.strengths || '',
+    growthSummary: current.growthSummary || '',
+    nextSteps: current.nextSteps || '',
+    homeSupport: current.homeSupport || '',
+    speakingComment: current.speakingComment || '',
+    attendanceComment: current.attendanceComment || '',
+    diagnosticComment: current.diagnosticComment || ''
+  };
+}
+
 function normalizeStudentRecord(student) {
   if (!student) return null;
   const assessment = normalizeStudentAssessment(student);
@@ -1455,7 +1615,8 @@ function normalizeStudentRecord(student) {
     ...student,
     assessment,
     diagnostics: Array.isArray(student.diagnostics) ? student.diagnostics : [],
-    speakingLog: Array.isArray(student.speakingLog) ? student.speakingLog : []
+    speakingLog: Array.isArray(student.speakingLog) ? student.speakingLog : [],
+    reportCard: normalizeReportCard({ ...student, assessment })
   };
 }
 
@@ -1475,10 +1636,7 @@ function progressNarrative(skill, assessment) {
 }
 
 function skillDescriptor(skill, level) {
-  if (level === 'Pre-CEFR') {
-    return 'Working below formal CEFR banding and building the foundations needed to enter Pre-A1 securely.';
-  }
-  return SKILL_DESCRIPTORS[skill]?.[level] || 'Descriptor not set for this level yet.';
+  return SKILL_DESCRIPTORS[skill]?.[normalizeLevelValue(level, 'Pre-A1')] || 'Descriptor not set for this level yet.';
 }
 
 function classVitalInfo(cls) {
@@ -1533,6 +1691,19 @@ function buildParentStory(student) {
 
 function safeDownloadName(name) {
   return (name || 'diagnostic').replace(/[^a-z0-9._-]+/gi, '-');
+}
+
+function scoreGuideRow(activeLevel) {
+  const normalized = normalizeLevelValue(activeLevel, 'Pre-A1');
+  return `
+    <div class="report-score-guide">
+      <div class="report-score-bands">${LEVEL_GROUPS.map(group => `<div class="report-score-band">${group.band}</div>`).join('')}</div>
+      <div class="report-score-levels">${LEVEL_GROUPS.flatMap(group => group.levels).map(level => `<div class="report-score-level${level === normalized ? ' active' : ''}">${level}</div>`).join('')}</div>
+    </div>`;
+}
+
+function summarizeRecentNote(entries, emptyText) {
+  return entries.length ? entries[0].note || emptyText : emptyText;
 }
 
 function dotClass(dateStr) {
@@ -1715,7 +1886,7 @@ function renderClassTimeline(classId) {
 // TABS
 // ════════════════════════════════════════════════════
 function switchTab(name) {
-  const activeTopTab = name === 'student-profile' ? 'students' : name;
+  const activeTopTab = (name === 'student-profile' || name === 'student-report') ? 'students' : name;
   document.querySelectorAll('.tab-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.tab === activeTopTab));
   document.querySelectorAll('.tab-content').forEach(c =>
@@ -1725,6 +1896,7 @@ function switchTab(name) {
   if (name === 'log')      renderLog();
   if (name === 'students') renderStudents();
   if (name === 'student-profile') renderStudentProfilePage();
+  if (name === 'student-report') renderStudentReportPage();
   if (name === 'settings') renderSettings();
 }
 
@@ -2323,7 +2495,7 @@ function syncStudentModalLevel() {
   const name = document.getElementById('student-name')?.value.trim().toLocaleLowerCase();
   if (!name) return;
   const existing = DB.students.find(entry => (entry.name || '').trim().toLocaleLowerCase() === name);
-  if (existing) populateLevelOptions(existing.level || 'Pre-CEFR');
+  if (existing) populateLevelOptions(normalizeLevelValue(existing.level || 'Pre-CEFR', 'Pre-CEFR'));
 }
 
 async function saveStudent() {
@@ -2343,7 +2515,7 @@ async function saveStudent() {
       listening: { start: 'Pre-A1', current: 'Pre-A1' },
       speakingNotes: ''
     };
-    student = { id: 'st_' + Date.now(), name, level, assessment };
+    student = { id: 'st_' + Date.now(), name, level, assessment, reportCard: normalizeReportCard({ id: 'temp', name, level, assessment }) };
     try {
       await api('POST', '/api/students', student);
       DB.students.push(student);
@@ -2444,6 +2616,11 @@ async function deleteStudentNote(noteId) {
 function openReport(studentId, classId) {
   currentStudentProfile = { studentId, classId };
   switchTab('student-profile');
+}
+
+function openStudentReport(studentId, classId) {
+  currentStudentReport = { studentId, classId };
+  switchTab('student-report');
 }
 
 function renderStudentProfilePage() {
@@ -2570,6 +2747,7 @@ function renderStudentProfilePage() {
         </div>
         <div class="page-actions">
           <button class="btn" onclick="switchTab('students')">Back to Students</button>
+          <button class="btn" onclick="openStudentReport('${student.id}','${classId}')">Report Card</button>
           <button class="btn btn-primary" id="save-profile-btn" onclick="saveStudentProfilePage()">Save Profile</button>
         </div>
       </div>
@@ -2810,6 +2988,233 @@ async function removeDiagnostic(studentId, diagnosticId) {
     showToast('Diagnostic record removed.', 'success');
   } catch (e) {
     showToast('Failed to remove diagnostic record.', 'error');
+  }
+}
+
+function renderStudentReportPage() {
+  const container = document.getElementById('tab-student-report');
+  const student = normalizeStudentRecord(getStudent(currentStudentReport.studentId));
+  if (!student) {
+    container.innerHTML = `
+      ${pageIntro('Report Card', 'Student Not Found', 'The selected student record is no longer available.',
+        `<button class="btn" onclick="switchTab('students')">Back to Students</button>`)}
+      <div class="no-lessons-card">Select a student from the Students tab.</div>`;
+    return;
+  }
+
+  const classId = currentStudentReport.classId || classesForStudent(student.id)[0]?.id || '';
+  const focusClass = DB.classes.find(cls => cls.id === classId);
+  const report = student.reportCard;
+  const overallLevel = normalizeLevelValue(report.overallLevel || student.assessment.general.current, 'Pre-A1');
+  const classes = classesForStudent(student.id);
+  const studentNotes = DB.studentnotes.filter(entry => entry.studentId === student.id);
+  const latestNotes = studentNotes.slice().reverse().slice(0, 5);
+  const attendances = DB.attendances.filter(entry => entry.studentId === student.id);
+  const presentCount = attendances.filter(entry => entry.status === 'present').length;
+  const attendanceRate = attendances.length ? Math.round((presentCount / attendances.length) * 100) : 0;
+  const latestDiagnostic = student.diagnostics.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')).at(0);
+  const latestSpeaking = student.speakingLog.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '') || (b.id || '').localeCompare(a.id || '')).at(0);
+
+  const autoGrowth = buildParentStory(student)
+    .filter(item => ['Foundations', 'General English', 'Reading', 'Listening'].includes(item.skill))
+    .map(item => `${item.skill}: ${item.text}`)
+    .join(' ');
+
+  const skillCards = [
+    { key: 'listening', title: 'Listening' },
+    { key: 'reading', title: 'Reading' },
+    { key: 'general', title: 'Language Use' }
+  ].map(item => `
+      <div class="report-panel report-skill-card">
+        <div class="report-panel-title">${item.title}</div>
+        <div class="report-skill-level">${esc(student.assessment[item.key].current)}</div>
+        <div class="profile-note-text">${esc(skillDescriptor(item.key, student.assessment[item.key].current))}</div>
+        <div class="overview-note">Start ${esc(student.assessment[item.key].start)} · Current ${esc(student.assessment[item.key].current)}</div>
+      </div>
+    `).join('');
+
+  container.innerHTML = `
+    <div class="report-shell">
+      <div class="profile-header">
+        <div>
+          <div class="page-eyebrow">Report Card</div>
+          <div class="page-title">${esc(student.name)}</div>
+          <div class="profile-subtitle">A parent-facing report built from assessment levels, attendance, diagnostic evidence, and teacher notes.</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn" onclick="openReport('${student.id}','${classId}')">Back to Profile</button>
+          <button class="btn" onclick="window.print()">Print</button>
+          <button class="btn btn-primary" id="save-report-btn" onclick="saveStudentReportPage()">Save Report</button>
+        </div>
+      </div>
+
+      <div class="report-page">
+        <div class="report-header">
+          <div>
+            <div class="report-kicker">Online Placement</div>
+            <div class="report-brand">Student Report Card</div>
+          </div>
+          <div class="report-actions">
+            <span class="badge badge-blue">${esc(focusClass ? focusClass.name : 'Global Record')}</span>
+            <span class="badge badge-grey">${esc(focusClass?.teacher || classes[0]?.teacher || 'Teacher not set')}</span>
+          </div>
+        </div>
+
+        <div class="report-meta-grid">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Institution</label>
+            <input id="report-institution" class="form-input" value="${esc(report.institution)}">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Course</label>
+            <input id="report-course" class="form-input" value="${esc(report.course || focusClass?.name || '')}">
+          </div>
+          <div class="report-field">
+            <div class="report-field-label">Student</div>
+            <div class="report-field-value">${esc(student.name)}</div>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Report Date</label>
+            <input id="report-date" type="date" class="form-input" value="${esc(report.reportDate)}">
+          </div>
+        </div>
+
+        <div class="report-overall">
+          <div class="report-overall-level">
+            <div class="report-panel-title">Overall CEFR Level</div>
+            <select id="report-overall-level" class="form-input" style="margin-top:8px;">${REPORT_LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${overallLevel === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
+            <div class="report-overall-value">${esc(overallLevel)}</div>
+          </div>
+          <div class="report-panel">
+            <div class="report-panel-title">Achievement Descriptor</div>
+            <div class="profile-note-text" id="report-overall-descriptor">${esc(skillDescriptor('general', overallLevel))}</div>
+          </div>
+        </div>
+
+        <div class="report-panel">
+          <div class="report-panel-title">Score Guide</div>
+          ${scoreGuideRow(overallLevel)}
+        </div>
+
+        <div class="report-panel">
+          <div class="report-panel-title">Language Skill Profile</div>
+          <div class="report-skill-grid">${skillCards}</div>
+        </div>
+
+        <div class="report-summary-grid">
+          <div class="report-panel">
+            <div class="report-panel-title">Speaking</div>
+            <div class="profile-note-text">${esc(latestSpeaking ? latestSpeaking.note : 'No speaking observation yet.')}</div>
+            <div class="overview-note">${esc(latestSpeaking ? friendlyDateTime(latestSpeaking.createdAt) : 'Speaking is tracked through teacher observations.')}</div>
+            <div class="form-group" style="margin-top:12px;margin-bottom:0;">
+              <label class="form-label">Report Speaking Comment</label>
+              <textarea id="report-speaking-comment" class="form-input report-textarea" placeholder="Summarise spoken confidence, interaction, pronunciation, and fluency.">${esc(report.speakingComment)}</textarea>
+            </div>
+          </div>
+          <div class="report-panel">
+            <div class="report-panel-title">Attendance</div>
+            <div class="report-field-value">${attendanceRate}%</div>
+            <div class="overview-note">${presentCount}/${attendances.length} present records across enrolled classes.</div>
+            <div class="form-group" style="margin-top:12px;margin-bottom:0;">
+              <label class="form-label">Attendance Comment</label>
+              <textarea id="report-attendance-comment" class="form-input report-textarea" placeholder="Add any attendance pattern or punctuality note that should appear on the report.">${esc(report.attendanceComment)}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-summary-grid">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Strengths</label>
+            <textarea id="report-strengths" class="form-input report-textarea" placeholder="Highlight what the student can currently do well.">${esc(report.strengths)}</textarea>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Growth Summary</label>
+            <textarea id="report-growth-summary" class="form-input report-textarea" placeholder="Explain the progress journey using the student's CEFR movement and class evidence.">${esc(report.growthSummary || autoGrowth)}</textarea>
+          </div>
+        </div>
+
+        <div class="report-summary-grid">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Teacher Comment</label>
+            <textarea id="report-teacher-comment" class="form-input report-textarea" placeholder="Overall teacher comment for parents.">${esc(report.teacherComment)}</textarea>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Next Steps</label>
+            <textarea id="report-next-steps" class="form-input report-textarea" placeholder="What the student should focus on next.">${esc(report.nextSteps)}</textarea>
+          </div>
+        </div>
+
+        <div class="report-summary-grid">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Home Support</label>
+            <textarea id="report-home-support" class="form-input report-textarea" placeholder="How parents can support progress at home.">${esc(report.homeSupport)}</textarea>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label">Diagnostic Evidence</label>
+            <textarea id="report-diagnostic-comment" class="form-input report-textarea" placeholder="Summarise the latest placement or diagnostic evidence.">${esc(report.diagnosticComment || (latestDiagnostic ? `${latestDiagnostic.title || 'Diagnostic review'} on ${friendlyDate(latestDiagnostic.date)}. ${latestDiagnostic.comments || ''}`.trim() : ''))}</textarea>
+          </div>
+        </div>
+
+        <div class="report-summary-grid">
+          <div class="report-panel">
+            <div class="report-panel-title">Recent Lesson Evidence</div>
+            <div class="profile-note-text">${esc(summarizeRecentNote(latestNotes, 'No lesson note evidence yet.'))}</div>
+            <div class="overview-note">${latestNotes.length ? `${latestNotes.length} recent note${latestNotes.length === 1 ? '' : 's'} available in the student history.` : 'Add lesson logs and student notes to strengthen reporting.'}</div>
+          </div>
+          <div class="report-panel">
+            <div class="report-panel-title">Enrolled Classes</div>
+            <div class="profile-note-text">${esc(classes.map(cls => cls.name).join(', ') || 'No enrolled classes yet.')}</div>
+            <div class="overview-note">${esc(classes.map(cls => classVitalInfo(cls)).join(' • '))}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  const overallSelect = document.getElementById('report-overall-level');
+  overallSelect?.addEventListener('change', () => {
+    const level = overallSelect.value;
+    const descriptor = document.getElementById('report-overall-descriptor');
+    if (descriptor) descriptor.textContent = skillDescriptor('general', level);
+    renderStudentReportPagePreviewLevel(level);
+  });
+}
+
+function renderStudentReportPagePreviewLevel(level) {
+  const panel = document.querySelector('#tab-student-report .report-score-guide');
+  if (panel) panel.outerHTML = scoreGuideRow(level);
+  const overallValue = document.querySelector('#tab-student-report .report-overall-value');
+  if (overallValue) overallValue.textContent = level;
+}
+
+async function saveStudentReportPage() {
+  const student = normalizeStudentRecord(getStudent(currentStudentReport.studentId));
+  if (!student) return;
+  const reportCard = {
+    ...student.reportCard,
+    institution: document.getElementById('report-institution')?.value.trim() || 'Lesson Engine',
+    course: document.getElementById('report-course')?.value.trim() || '',
+    reportDate: document.getElementById('report-date')?.value || todayStr(),
+    overallLevel: normalizeLevelValue(document.getElementById('report-overall-level')?.value || student.assessment.general.current, 'Pre-A1'),
+    strengths: document.getElementById('report-strengths')?.value.trim() || '',
+    growthSummary: document.getElementById('report-growth-summary')?.value.trim() || '',
+    teacherComment: document.getElementById('report-teacher-comment')?.value.trim() || '',
+    nextSteps: document.getElementById('report-next-steps')?.value.trim() || '',
+    homeSupport: document.getElementById('report-home-support')?.value.trim() || '',
+    speakingComment: document.getElementById('report-speaking-comment')?.value.trim() || '',
+    attendanceComment: document.getElementById('report-attendance-comment')?.value.trim() || '',
+    diagnosticComment: document.getElementById('report-diagnostic-comment')?.value.trim() || ''
+  };
+  const updated = { ...student, reportCard, diagnostics: student.diagnostics, speakingLog: student.speakingLog };
+  setBusy('save-report-btn', true);
+  try {
+    await persistStudentRecord(updated);
+    renderStudents();
+    renderStudentReportPage();
+    showToast('Report card saved.', 'success');
+  } catch (e) {
+    showToast('Failed to save report card.', 'error');
+  } finally {
+    setBusy('save-report-btn', false);
   }
 }
 

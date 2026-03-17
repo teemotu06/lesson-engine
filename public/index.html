@@ -1014,7 +1014,7 @@
       <datalist id="student-options"></datalist>
     </div>
     <div class="form-group">
-      <label class="form-label">Current Level</label>
+      <label class="form-label">Entry Phonics Level</label>
       <select id="student-level" class="form-input"></select>
     </div>
     <div class="modal-actions">
@@ -1066,7 +1066,40 @@ let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
 let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
-const LEVEL_OPTIONS = ['Pre-CEFR', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const LEVEL_OPTIONS = ['Pre-CEFR', 'Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'];
+const SKILL_LEVEL_FIELDS = ['phonics', 'general', 'reading', 'listening'];
+const SKILL_LABELS = {
+  phonics: 'Phonics',
+  general: 'General',
+  reading: 'Reading',
+  listening: 'Listening'
+};
+const SKILL_DESCRIPTORS = {
+  general: {
+    'Pre-A1': 'Beginning to understand and use very basic classroom and everyday English with strong support.',
+    'A1': 'Can understand and use simple familiar expressions and short phrases about immediate needs.',
+    'A2': 'Can handle routine exchanges and understand short clear messages on familiar topics.',
+    'B1': 'Can deal with everyday situations and express main ideas on school, home, and interests.',
+    'B2': 'Can interact with growing independence and explain opinions with supporting detail.',
+    'C1': 'Can use language flexibly and effectively across most academic and social situations.'
+  },
+  reading: {
+    'Pre-A1': 'Recognises basic words, simple classroom language, and highly supported print.',
+    'A1': 'Can read very short simple texts and find familiar names, words, and phrases.',
+    'A2': 'Can understand short straightforward texts and locate key information in simple passages.',
+    'B1': 'Can follow the main points in graded texts on familiar topics and infer some meaning from context.',
+    'B2': 'Can read extended texts with good independence and track argument, detail, and tone.',
+    'C1': 'Can read complex texts confidently and interpret nuanced meaning with little support.'
+  },
+  listening: {
+    'Pre-A1': 'Understands isolated words, classroom routines, and key cues when speech is very supported.',
+    'A1': 'Can understand slow clear speech about familiar personal and classroom topics.',
+    'A2': 'Can understand the main point of short clear messages and simple spoken instructions.',
+    'B1': 'Can follow the main ideas of longer speech on familiar topics in standard language.',
+    'B2': 'Can understand extended speech and discussion with limited repetition.',
+    'C1': 'Can follow complex spoken language and implied meaning across a wide range of contexts.'
+  }
+};
 
 // ════════════════════════════════════════════════════
 // TOAST
@@ -1308,6 +1341,50 @@ function populateLevelOptions(selected = 'Pre-CEFR') {
   const select = document.getElementById('student-level');
   if (!select) return;
   select.innerHTML = LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${level === selected ? ' selected' : ''}>${esc(level)}</option>`).join('');
+}
+
+function normalizeStudentAssessment(student) {
+  const baseLevel = student?.level || 'Pre-CEFR';
+  const existing = student?.assessment || {};
+  const normalizeLevelPair = (skill, fallback) => ({
+    start: existing[skill]?.start || fallback,
+    current: existing[skill]?.current || fallback
+  });
+
+  return {
+    phonics: normalizeLevelPair('phonics', baseLevel),
+    general: normalizeLevelPair('general', 'Pre-A1'),
+    reading: normalizeLevelPair('reading', 'Pre-A1'),
+    listening: normalizeLevelPair('listening', 'Pre-A1'),
+    speakingNotes: existing.speakingNotes || student?.speakingNotes || ''
+  };
+}
+
+function buildAssessmentPayload(student, assessment) {
+  return {
+    ...student,
+    level: assessment.phonics.current,
+    assessment
+  };
+}
+
+function levelRank(level) {
+  const idx = LEVEL_OPTIONS.indexOf(level);
+  return idx >= 0 ? idx : 0;
+}
+
+function progressNarrative(skill, assessment) {
+  const label = SKILL_LABELS[skill];
+  const { start, current } = assessment[skill];
+  if (start === current) {
+    return `${label} is currently being tracked at ${current}.`;
+  }
+  const direction = levelRank(current) >= levelRank(start) ? 'from' : 'adjusted from';
+  return `${label} has moved ${direction} ${start} to ${current}.`;
+}
+
+function skillDescriptor(skill, level) {
+  return SKILL_DESCRIPTORS[skill]?.[level] || 'Descriptor not set for this level yet.';
 }
 
 function dotClass(dateStr) {
@@ -1982,10 +2059,12 @@ function renderStudents() {
           const noteCount = DB.studentnotes.filter(n => n.studentId === st.id).length;
           const classCount = classesForStudent(st.id).length;
           const attendanceCount = DB.attendances.filter(entry => entry.studentId === st.id).length;
+          const assessment = normalizeStudentAssessment(st);
           html += `
             <div class="student-row">
               <div class="student-row-name">${esc(st.name)}</div>
-              <span class="badge badge-grey" style="font-size:10px;">${esc(st.level || 'Pre-CEFR')}</span>
+              <span class="badge badge-grey" style="font-size:10px;">Phonics ${esc(assessment.phonics.current)}</span>
+              <span class="badge badge-grey" style="font-size:10px;">General ${esc(assessment.general.current)}</span>
               <span class="badge badge-grey" style="font-size:10px;">${noteCount} note${noteCount !== 1 ? 's' : ''}</span>
               <span class="badge badge-grey" style="font-size:10px;">${attendanceCount} attendance</span>
               <span class="badge badge-grey" style="font-size:10px;">${classCount} class${classCount !== 1 ? 'es' : ''}</span>
@@ -2107,7 +2186,14 @@ async function saveStudent() {
   const createdNew = !student;
 
   if (!student) {
-    student = { id: 'st_' + Date.now(), name, level };
+    const assessment = {
+      phonics: { start: level, current: level },
+      general: { start: 'Pre-A1', current: 'Pre-A1' },
+      reading: { start: 'Pre-A1', current: 'Pre-A1' },
+      listening: { start: 'Pre-A1', current: 'Pre-A1' },
+      speakingNotes: ''
+    };
+    student = { id: 'st_' + Date.now(), name, level, assessment };
     try {
       await api('POST', '/api/students', student);
       DB.students.push(student);
@@ -2117,7 +2203,9 @@ async function saveStudent() {
       return;
     }
   } else if (student.level !== level) {
-    student = { ...student, level };
+    const assessment = normalizeStudentAssessment(student);
+    assessment.phonics.current = level;
+    student = buildAssessmentPayload({ ...student, name }, assessment);
     try {
       await api('POST', '/api/students', student);
       DB.students = DB.students.map(entry => entry.id === student.id ? student : entry);
@@ -2207,6 +2295,7 @@ function openReport(studentId, classId) {
   const st  = getStudent(studentId);
   if (!st) return;
   const cls = DB.classes.find(c => c.id === classId);
+  const assessment = normalizeStudentAssessment(st);
   const studentClasses = classesForStudent(studentId);
   const studentLessons = sortLessons(DB.lessons.filter(lesson => studentClasses.some(group => group.id === lesson.classId)), true);
   const notes = DB.studentnotes.filter(n => n.studentId === studentId);
@@ -2246,14 +2335,36 @@ function openReport(studentId, classId) {
           </div>`;
       }).join('')}</div>`;
 
+  const growthCardsHtml = SKILL_LEVEL_FIELDS.map(skill => `
+    <div class="profile-card">
+      <div class="label">${SKILL_LABELS[skill]}</div>
+      <div class="form-row" style="margin-top:10px;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Start</label>
+          <select class="form-input profile-skill-start" data-skill="${skill}">${LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${assessment[skill].start === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Current</label>
+          <select class="form-input profile-skill-current" data-skill="${skill}">${LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${assessment[skill].current === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
+        </div>
+      </div>
+      <div class="overview-note" style="margin-top:10px;">${esc(progressNarrative(skill, assessment))}</div>
+      ${skill === 'phonics'
+        ? `<div class="report-lesson-note" style="margin-top:10px;">Use phonics as the early-stage baseline when showing movement into CEFR bands.</div>`
+        : `<div class="report-lesson-note" style="margin-top:10px;">${esc(skillDescriptor(skill, assessment[skill].current))}</div>`}
+    </div>
+  `).join('');
+
   document.getElementById('report-content').innerHTML = `
     <input type="hidden" id="profile-student-id" value="${esc(studentId)}">
+    <input type="hidden" id="profile-class-id" value="${esc(classId || '')}">
     <div class="report-title">${esc(st.name)}</div>
     <div class="report-meta">${cls ? esc(cls.name) + (cls.teacher ? ' · ' + esc(cls.teacher) : '') : 'Student profile'}</div>
     <div class="profile-grid">
       <div class="profile-card">
-        <div class="label">Current Level</div>
-        <select id="profile-student-level" class="form-input" style="margin-top:8px;"></select>
+        <div class="label">Parent Story</div>
+        <div class="profile-value">${esc(progressNarrative('general', assessment))}</div>
+        <div class="overview-note">Use this as the headline growth message for parents.</div>
       </div>
       <div class="profile-card">
         <div class="label">Classes</div>
@@ -2272,6 +2383,14 @@ function openReport(studentId, classId) {
       </div>
     </div>
     <div class="report-section">
+      <div class="report-section-title">Skills & Descriptors</div>
+      <div class="profile-grid">${growthCardsHtml}</div>
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Speaking Notes</div>
+      <textarea id="profile-speaking-notes" class="form-input" rows="4" placeholder="Use this space for speaking confidence, pronunciation, fluency, and oral interaction notes.">${esc(assessment.speakingNotes)}</textarea>
+    </div>
+    <div class="report-section">
       <div class="report-section-title">Enrolled Classes</div>
       ${classHistoryHtml}
     </div>
@@ -2284,26 +2403,29 @@ function openReport(studentId, classId) {
       ${lessonHistoryHtml}
     </div>`;
 
-  const levelSelect = document.getElementById('profile-student-level');
-  if (levelSelect) {
-    levelSelect.innerHTML = LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${(st.level || 'Pre-CEFR') === level ? ' selected' : ''}>${esc(level)}</option>`).join('');
-  }
-
   document.getElementById('modal-report').style.display = 'flex';
 }
 
 async function saveStudentProfile() {
   const studentId = document.getElementById('profile-student-id')?.value;
-  const level = document.getElementById('profile-student-level')?.value || 'Pre-CEFR';
+  const classId = document.getElementById('profile-class-id')?.value || '';
   const student = getStudent(studentId);
   if (!student) return;
-  const updated = { ...student, level };
+  const assessment = normalizeStudentAssessment(student);
+  document.querySelectorAll('.profile-skill-start').forEach(select => {
+    assessment[select.dataset.skill].start = select.value;
+  });
+  document.querySelectorAll('.profile-skill-current').forEach(select => {
+    assessment[select.dataset.skill].current = select.value;
+  });
+  assessment.speakingNotes = document.getElementById('profile-speaking-notes')?.value.trim() || '';
+  const updated = buildAssessmentPayload(student, assessment);
   setBusy('save-profile-btn', true);
   try {
     await api('POST', '/api/students', updated);
     DB.students = DB.students.map(entry => entry.id === studentId ? updated : entry);
     renderStudents();
-    openReport(studentId, classesForStudent(studentId)[0]?.id || '');
+    openReport(studentId, classId || classesForStudent(studentId)[0]?.id || '');
     showToast('Student profile updated.', 'success');
   } catch (e) {
     showToast('Failed to update student profile.', 'error');
@@ -2504,6 +2626,7 @@ async function deleteClass(classId) {
     const lessonIds  = DB.lessons.filter(l => l.classId === classId).map(l => l.id);
     DB.logs          = DB.logs.filter(g => !lessonIds.includes(g.lessonId));
     DB.studentnotes  = DB.studentnotes.filter(n => !lessonIds.includes(n.lessonId));
+    DB.attendances   = DB.attendances.filter(entry => !lessonIds.includes(entry.lessonId));
     DB.lessons       = DB.lessons.filter(l => l.classId !== classId);
     DB.subunits      = DB.subunits.filter(s => s.classId !== classId);
     DB.units         = DB.units.filter(u => u.classId !== classId);
@@ -2525,6 +2648,7 @@ async function deleteBook(bookId) {
     const subIds    = DB.subunits.filter(s => s.bookId === bookId).map(s => s.id);
     const lessonIds = DB.lessons.filter(l => l.bookId === bookId).map(l => l.id);
     DB.logs     = DB.logs.filter(g => !lessonIds.includes(g.lessonId));
+    DB.attendances = DB.attendances.filter(entry => !lessonIds.includes(entry.lessonId));
     DB.lessons  = DB.lessons.filter(l => l.bookId !== bookId);
     DB.subunits = DB.subunits.filter(s => s.bookId !== bookId);
     DB.units    = DB.units.filter(u => u.id !== bookId);
@@ -2542,6 +2666,7 @@ async function deleteSubunit(subunitId) {
     await api('DELETE', `/api/subunits/${subunitId}`);
     const lessonIds = DB.lessons.filter(l => l.subunitId === subunitId).map(l => l.id);
     DB.logs     = DB.logs.filter(g => !lessonIds.includes(g.lessonId));
+    DB.attendances = DB.attendances.filter(entry => !lessonIds.includes(entry.lessonId));
     DB.lessons  = DB.lessons.filter(l => l.subunitId !== subunitId);
     DB.subunits = DB.subunits.filter(s => s.id !== subunitId);
     delete expandedSubunits[subunitId];
@@ -2557,6 +2682,7 @@ async function deleteLesson(lessonId) {
     await api('DELETE', `/api/lessons/${lessonId}`);
     DB.logs         = DB.logs.filter(g => g.lessonId !== lessonId);
     DB.studentnotes = DB.studentnotes.filter(n => n.lessonId !== lessonId);
+    DB.attendances  = DB.attendances.filter(entry => entry.lessonId !== lessonId);
     DB.lessons      = DB.lessons.filter(l => l.id !== lessonId);
     renderClasses();
   } catch(e) { showToast('Failed to delete lesson.', 'error'); }

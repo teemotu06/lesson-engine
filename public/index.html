@@ -3715,19 +3715,48 @@ function printStudentReport() {
   const classId = currentStudentReport.classId || classesForStudent(student.id)[0]?.id || '';
   const focusClass = DB.classes.find(cls => cls.id === classId);
   const reportData = reportFormData(student);
-  const popup = window.open('', '_blank', 'noopener,noreferrer,width=980,height=1200');
-  if (!popup) {
-    showToast('Allow pop-ups to print the report card.', 'error');
+  const existingFrame = document.getElementById('report-print-frame');
+  if (existingFrame) existingFrame.remove();
+  const frame = document.createElement('iframe');
+  frame.id = 'report-print-frame';
+  frame.style.position = 'fixed';
+  frame.style.right = '0';
+  frame.style.bottom = '0';
+  frame.style.width = '0';
+  frame.style.height = '0';
+  frame.style.border = '0';
+  frame.style.opacity = '0';
+  document.body.appendChild(frame);
+
+  const doc = frame.contentWindow?.document;
+  if (!doc || !frame.contentWindow) {
+    frame.remove();
+    showToast('Print preview could not be created.', 'error');
     return;
   }
-  popup.document.open();
-  popup.document.write(buildPrintableReportDocument(student, focusClass, reportData));
-  popup.document.close();
-  popup.focus();
-  setTimeout(() => {
-    popup.print();
-    popup.onafterprint = () => popup.close();
-  }, 250);
+
+  const html = buildPrintableReportDocument(student, focusClass, reportData);
+  doc.open();
+  doc.write(html);
+  doc.close();
+
+  const cleanup = () => setTimeout(() => frame.remove(), 800);
+  frame.onload = () => {
+    setTimeout(() => {
+      try {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+      } catch (e) {
+        showToast('Printing failed. Please try again.', 'error');
+      } finally {
+        cleanup();
+      }
+    }, 250);
+  };
+
+  if (doc.readyState === 'complete') {
+    frame.onload();
+  }
 }
 
 async function saveStudentReportPage() {

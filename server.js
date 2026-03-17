@@ -16,6 +16,7 @@ function normalizeDataShape(data) {
   const lessons = Array.isArray(data.lessons) ? data.lessons : [];
   const logs = Array.isArray(data.logs) ? data.logs : [];
   const studentnotes = Array.isArray(data.studentnotes) ? data.studentnotes : [];
+  const attendances = Array.isArray(data.attendances) ? data.attendances : [];
   const rawStudents = Array.isArray(data.students) ? data.students : [];
   const explicitEnrollments = Array.isArray(data.enrollments) ? data.enrollments : [];
 
@@ -41,7 +42,7 @@ function normalizeDataShape(data) {
     enrollments.push({ id: enrollmentId, studentId: student.id, classId: student.classId });
   }
 
-  return { classes, units, subunits, lessons, logs, students, enrollments, studentnotes };
+  return { classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances };
 }
 
 function createPostgresStore(pool) {
@@ -56,6 +57,7 @@ function createPostgresStore(pool) {
         CREATE TABLE IF NOT EXISTS students     (id TEXT PRIMARY KEY, data JSONB NOT NULL);
         CREATE TABLE IF NOT EXISTS enrollments  (id TEXT PRIMARY KEY, data JSONB NOT NULL);
         CREATE TABLE IF NOT EXISTS studentnotes (id TEXT PRIMARY KEY, data JSONB NOT NULL);
+        CREATE TABLE IF NOT EXISTS attendances  (id TEXT PRIMARY KEY, data JSONB NOT NULL);
       `);
     },
     async list(table) {
@@ -86,6 +88,7 @@ function createPostgresStore(pool) {
       await pool.query('BEGIN');
       try {
         await pool.query('DELETE FROM studentnotes');
+        await pool.query('DELETE FROM attendances');
         await pool.query('DELETE FROM enrollments');
         await pool.query('DELETE FROM students');
         await pool.query('DELETE FROM logs');
@@ -102,6 +105,7 @@ function createPostgresStore(pool) {
         for (const entry of (data.students     || [])) await this.upsert('students',     entry);
         for (const entry of (data.enrollments  || [])) await this.upsert('enrollments',  entry);
         for (const entry of (data.studentnotes || [])) await this.upsert('studentnotes', entry);
+        for (const entry of (data.attendances  || [])) await this.upsert('attendances',  entry);
 
         await pool.query('COMMIT');
       } catch (error) {
@@ -111,6 +115,7 @@ function createPostgresStore(pool) {
     },
     async clearAll() {
       await pool.query('DELETE FROM studentnotes');
+      await pool.query('DELETE FROM attendances');
       await pool.query('DELETE FROM enrollments');
       await pool.query('DELETE FROM students');
       await pool.query('DELETE FROM logs');
@@ -123,7 +128,7 @@ function createPostgresStore(pool) {
 }
 
 function createFileStore(filename) {
-  let state = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [] };
+  let state = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [] };
   let writeQueue = Promise.resolve();
 
   async function ensureFile() {
@@ -169,7 +174,7 @@ function createFileStore(filename) {
       await queueWrite();
     },
     async clearAll() {
-      state = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [] };
+      state = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [] };
       await queueWrite();
     }
   };
@@ -248,6 +253,7 @@ app.delete('/api/classes/:id', async (req, res, next) => {
     for (const lessonId of lessonIds) {
       await store.removeByField('logs', 'lessonId', lessonId);
       await store.removeByField('studentnotes', 'lessonId', lessonId);
+      await store.removeByField('attendances', 'lessonId', lessonId);
     }
     await store.removeByField('lessons', 'classId', id);
     await store.removeByField('subunits', 'classId', id);
@@ -319,6 +325,7 @@ app.delete('/api/lessons/:id', async (req, res, next) => {
     const { id } = req.params;
     await store.removeByField('logs', 'lessonId', id);
     await store.removeByField('studentnotes', 'lessonId', id);
+    await store.removeByField('attendances', 'lessonId', id);
     await store.remove('lessons', id);
     res.json({ ok: true });
   } catch (e) { next(e); }
@@ -346,6 +353,7 @@ app.delete('/api/students/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     await store.removeByField('studentnotes', 'studentId', id);
+    await store.removeByField('attendances', 'studentId', id);
     await store.removeByField('enrollments', 'studentId', id);
     await store.remove('students', id);
     res.json({ ok: true });
@@ -378,10 +386,23 @@ app.delete('/api/studentnotes/:id', async (req, res, next) => {
   try { await store.remove('studentnotes', req.params.id); res.json({ ok: true }); } catch (e) { next(e); }
 });
 
+// ─── Attendance ────────────────────────────────────────────────────────────
+app.get('/api/attendances', async (req, res, next) => {
+  try { res.json(await store.list('attendances')); } catch (e) { next(e); }
+});
+
+app.post('/api/attendances', async (req, res, next) => {
+  try { await store.upsert('attendances', req.body); res.json({ ok: true }); } catch (e) { next(e); }
+});
+
+app.delete('/api/attendances/:id', async (req, res, next) => {
+  try { await store.remove('attendances', req.params.id); res.json({ ok: true }); } catch (e) { next(e); }
+});
+
 // ─── Export ────────────────────────────────────────────────────────────────
 app.get('/api/export', async (req, res, next) => {
   try {
-    const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes] = await Promise.all([
+    const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances] = await Promise.all([
       store.list('classes'),
       store.list('units'),
       store.list('subunits'),
@@ -389,17 +410,18 @@ app.get('/api/export', async (req, res, next) => {
       store.list('logs'),
       store.list('students'),
       store.list('enrollments'),
-      store.list('studentnotes')
+      store.list('studentnotes'),
+      store.list('attendances')
     ]);
-    res.json({ classes, units, subunits, lessons, logs, students, enrollments, studentnotes });
+    res.json({ classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances });
   } catch (e) { next(e); }
 });
 
 // ─── Import ────────────────────────────────────────────────────────────────
 app.post('/api/import', async (req, res, next) => {
   try {
-    const { classes = [], units = [], subunits = [], lessons = [], logs = [], students = [], enrollments = [], studentnotes = [] } = req.body;
-    await store.replaceAll({ classes, units, subunits, lessons, logs, students, enrollments, studentnotes });
+    const { classes = [], units = [], subunits = [], lessons = [], logs = [], students = [], enrollments = [], studentnotes = [], attendances = [] } = req.body;
+    await store.replaceAll({ classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances });
     res.json({ ok: true });
   } catch (e) { next(e); }
 });

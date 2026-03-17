@@ -687,6 +687,60 @@
       font-size: 11px;
       color: var(--dim);
     }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+    .profile-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.46);
+      border: 1px solid rgba(116,99,79,0.1);
+    }
+    .profile-value {
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .profile-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .history-list {
+      max-height: 320px;
+      overflow-y: auto;
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .history-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.42);
+      border: 1px solid rgba(116,99,79,0.1);
+    }
+    .history-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .history-meta {
+      font-size: 11px;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .attendance-present { background: var(--green-dim); color: var(--green); border-color: rgba(17,122,101,0.14); }
+    .attendance-absent { background: rgba(255,245,245,0.92); color: var(--red); border-color: rgba(197,61,61,0.14); }
+    .attendance-late { background: var(--amber-dim); color: var(--amber); border-color: rgba(154,91,0,0.14); }
+    .attendance-excused { background: var(--accent-dim); color: var(--accent); border-color: rgba(21,112,239,0.14); }
     .log-history { max-height: 420px; overflow-y: auto; }
     .log-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
     .log-item:last-child { border-bottom: none; }
@@ -956,8 +1010,12 @@
     <input type="hidden" id="student-classId">
     <div class="form-group">
       <label class="form-label">Student Name</label>
-      <input type="text" id="student-name" class="form-input" list="student-options" placeholder="Type a name or pick an existing student">
+      <input type="text" id="student-name" class="form-input" list="student-options" placeholder="Type a name or pick an existing student" oninput="syncStudentModalLevel()">
       <datalist id="student-options"></datalist>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Current Level</label>
+      <select id="student-level" class="form-input"></select>
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-student')">Cancel</button>
@@ -985,12 +1043,12 @@
   </div>
 </div>
 
-<!-- ═══ Modal: Student Report ═══ -->
+<!-- ═══ Modal: Student Profile ═══ -->
 <div id="modal-report" class="modal-backdrop" style="display:none;">
   <div class="modal-card" style="max-width:560px;">
     <div id="report-content"></div>
     <div class="modal-actions">
-      <button class="btn" onclick="window.print()">Print</button>
+      <button class="btn" id="save-profile-btn" onclick="saveStudentProfile()">Save Profile</button>
       <button class="btn btn-primary" onclick="closeModal('modal-report')">Close</button>
     </div>
   </div>
@@ -1002,12 +1060,13 @@
 // ════════════════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════════════════
-let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [] };
+let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [] };
 let expandedClasses  = {};
 let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
 let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
+const LEVEL_OPTIONS = ['Pre-CEFR', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
 // ════════════════════════════════════════════════════
 // TOAST
@@ -1038,7 +1097,7 @@ async function api(method, path, body) {
 }
 
 async function loadData() {
-  const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes] = await Promise.all([
+  const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances] = await Promise.all([
     api('GET', '/api/classes'),
     api('GET', '/api/units'),
     api('GET', '/api/subunits'),
@@ -1047,6 +1106,7 @@ async function loadData() {
     api('GET', '/api/students'),
     api('GET', '/api/enrollments'),
     api('GET', '/api/studentnotes'),
+    api('GET', '/api/attendances'),
   ]);
   DB = {
     classes:      classes      || [],
@@ -1056,7 +1116,8 @@ async function loadData() {
     logs:         logs         || [],
     students:     students     || [],
     enrollments:  enrollments  || [],
-    studentnotes: studentnotes || []
+    studentnotes: studentnotes || [],
+    attendances:  attendances  || []
   };
 }
 
@@ -1230,6 +1291,25 @@ function enrollmentForStudentInClass(studentId, classId) {
   return DB.enrollments.find(enrollment => enrollment.studentId === studentId && enrollment.classId === classId) || null;
 }
 
+function attendanceForStudentLesson(studentId, lessonId) {
+  return DB.attendances.find(entry => entry.studentId === studentId && entry.lessonId === lessonId) || null;
+}
+
+function attendanceLabel(status) {
+  const map = { present: 'Present', absent: 'Absent', late: 'Late', excused: 'Excused' };
+  return map[status] || 'Present';
+}
+
+function attendanceBadge(status) {
+  return `<span class="status-badge attendance-${status || 'present'}">${attendanceLabel(status)}</span>`;
+}
+
+function populateLevelOptions(selected = 'Pre-CEFR') {
+  const select = document.getElementById('student-level');
+  if (!select) return;
+  select.innerHTML = LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${level === selected ? ' selected' : ''}>${esc(level)}</option>`).join('');
+}
+
 function dotClass(dateStr) {
   const t = todayStr();
   return !dateStr ? 'dot-future' : dateStr < t ? 'dot-past' : dateStr === t ? 'dot-today' : 'dot-future';
@@ -1355,9 +1435,19 @@ function renderLogStudentNotes(lessonId) {
       <div class="log-student-grid">
         ${classStudents.map(student => {
           const existing = DB.studentnotes.find(note => note.studentId === student.id && note.lessonId === lessonId);
+          const attendance = attendanceForStudentLesson(student.id, lessonId);
           return `
             <div class="log-student-card">
               <div class="log-student-name">${esc(student.name)}</div>
+              <div class="form-group" style="margin-bottom:10px;">
+                <label class="form-label">Attendance</label>
+                <select class="form-input log-student-attendance" data-student-id="${student.id}">
+                  <option value="present"${(!attendance || attendance.status === 'present') ? ' selected' : ''}>Present</option>
+                  <option value="absent"${attendance && attendance.status === 'absent' ? ' selected' : ''}>Absent</option>
+                  <option value="late"${attendance && attendance.status === 'late' ? ' selected' : ''}>Late</option>
+                  <option value="excused"${attendance && attendance.status === 'excused' ? ' selected' : ''}>Excused</option>
+                </select>
+              </div>
               <textarea
                 class="form-input log-student-note"
                 data-student-id="${student.id}"
@@ -1790,6 +1880,7 @@ async function saveLog() {
   const cls = DB.classes.find(c => c.id === lesson.classId);
   const existingLog = DB.logs.find(g => g.lessonId === lessonId);
   const studentNoteFields = Array.from(document.querySelectorAll('.log-student-note'));
+  const attendanceFields = Array.from(document.querySelectorAll('.log-student-attendance'));
 
   const log = {
     id: existingLog ? existingLog.id : 'g_' + Date.now(), lessonId,
@@ -1803,6 +1894,23 @@ async function saveLog() {
   setBusy('save-log-btn', true);
   try {
     await api('POST', '/api/logs', log);
+    await Promise.all(attendanceFields.map(async field => {
+      const studentId = field.dataset.studentId;
+      const status = field.value;
+      const existingAttendance = attendanceForStudentLesson(studentId, lessonId);
+      const entry = {
+        id: existingAttendance ? existingAttendance.id : `at_${lessonId}_${studentId}`,
+        studentId,
+        lessonId,
+        classId: lesson.classId,
+        date: lesson.date,
+        status
+      };
+      await api('POST', '/api/attendances', entry);
+      const attendanceIndex = DB.attendances.findIndex(item => item.id === entry.id);
+      if (attendanceIndex >= 0) DB.attendances[attendanceIndex] = entry;
+      else DB.attendances.push(entry);
+    }));
     await Promise.all(studentNoteFields.map(async field => {
       const studentId = field.dataset.studentId;
       const note = field.value.trim();
@@ -1873,12 +1981,15 @@ function renderStudents() {
         clsStudents.forEach(st => {
           const noteCount = DB.studentnotes.filter(n => n.studentId === st.id).length;
           const classCount = classesForStudent(st.id).length;
+          const attendanceCount = DB.attendances.filter(entry => entry.studentId === st.id).length;
           html += `
             <div class="student-row">
               <div class="student-row-name">${esc(st.name)}</div>
+              <span class="badge badge-grey" style="font-size:10px;">${esc(st.level || 'Pre-CEFR')}</span>
               <span class="badge badge-grey" style="font-size:10px;">${noteCount} note${noteCount !== 1 ? 's' : ''}</span>
+              <span class="badge badge-grey" style="font-size:10px;">${attendanceCount} attendance</span>
               <span class="badge badge-grey" style="font-size:10px;">${classCount} class${classCount !== 1 ? 'es' : ''}</span>
-              <button class="btn" style="font-size:11px;padding:4px 10px;" onclick="openReport('${st.id}','${cls.id}')">Report</button>
+              <button class="btn" style="font-size:11px;padding:4px 10px;" onclick="openReport('${st.id}','${cls.id}')">Profile</button>
               <button class="btn-ghost" onclick="deleteStudent('${st.id}','${cls.id}')" title="Remove from class">&#10005;</button>
             </div>`;
         });
@@ -1958,7 +2069,7 @@ async function clearAllData() {
   if (!confirm('Final confirmation: permanently delete all classes, books, units, lessons, students, and logs?')) return;
   try {
     await api('DELETE', '/api/clear');
-    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [] };
+    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [] };
     refreshTeacherOptions();
     refreshStudentOptions();
     renderSettings();
@@ -1974,26 +2085,44 @@ async function clearAllData() {
 function openStudentModal(classId) {
   document.getElementById('student-classId').value = classId;
   document.getElementById('student-name').value    = '';
+  populateLevelOptions('Pre-CEFR');
   refreshStudentOptions();
   document.getElementById('modal-student').style.display = 'flex';
+}
+
+function syncStudentModalLevel() {
+  const name = document.getElementById('student-name')?.value.trim().toLocaleLowerCase();
+  if (!name) return;
+  const existing = DB.students.find(entry => (entry.name || '').trim().toLocaleLowerCase() === name);
+  if (existing) populateLevelOptions(existing.level || 'Pre-CEFR');
 }
 
 async function saveStudent() {
   const classId = document.getElementById('student-classId').value;
   const name    = document.getElementById('student-name').value.trim();
+  const level   = document.getElementById('student-level').value || 'Pre-CEFR';
   if (!name) { showToast('Please enter a student name.', 'error'); return; }
   const normalizedName = name.toLocaleLowerCase();
   let student = DB.students.find(entry => (entry.name || '').trim().toLocaleLowerCase() === normalizedName) || null;
   const createdNew = !student;
 
   if (!student) {
-    student = { id: 'st_' + Date.now(), name };
+    student = { id: 'st_' + Date.now(), name, level };
     try {
       await api('POST', '/api/students', student);
       DB.students.push(student);
       refreshStudentOptions([student.name]);
     } catch (e) {
       showToast('Failed to save student.', 'error');
+      return;
+    }
+  } else if (student.level !== level) {
+    student = { ...student, level };
+    try {
+      await api('POST', '/api/students', student);
+      DB.students = DB.students.map(entry => entry.id === student.id ? student : entry);
+    } catch (e) {
+      showToast('Failed to update student level.', 'error');
       return;
     }
   }
@@ -2078,54 +2207,109 @@ function openReport(studentId, classId) {
   const st  = getStudent(studentId);
   if (!st) return;
   const cls = DB.classes.find(c => c.id === classId);
-  const clsLessons = sortLessons(DB.lessons.filter(l => l.classId === classId));
+  const studentClasses = classesForStudent(studentId);
+  const studentLessons = sortLessons(DB.lessons.filter(lesson => studentClasses.some(group => group.id === lesson.classId)), true);
   const notes = DB.studentnotes.filter(n => n.studentId === studentId);
-  const notedCount = notes.length;
-  const unitIds  = [...new Set(clsLessons.map(l => l.subunitId).filter(Boolean))];
-  const bookIds  = [...new Set(clsLessons.map(l => l.bookId).filter(Boolean))];
+  const attendances = DB.attendances.filter(entry => entry.studentId === studentId).sort((a, b) =>
+    (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')
+  );
+  const presentCount = attendances.filter(entry => entry.status === 'present').length;
+  const attendanceRate = attendances.length ? Math.round((presentCount / attendances.length) * 100) : 0;
 
-  let lessonsHtml = '';
-  if (clsLessons.length === 0) {
-    lessonsHtml = `<div style="color:#aaa;font-size:12px;">No lessons in this class yet.</div>`;
-  } else {
-    lessonsHtml = clsLessons.map(lesson => {
-      const su   = DB.subunits.find(s => s.id === lesson.subunitId);
-      const book = su ? DB.units.find(u => u.id === su.bookId) : null;
-      const note = notes.find(n => n.lessonId === lesson.id);
-      const ctx  = [
-        lesson.date ? friendlyDate(lesson.date) : '',
-        book  ? esc(book.name)              : '',
-        su    ? esc(subunitDisplayName(su)) : ''
-      ].filter(Boolean).join(' · ');
-      return `
-        <div class="report-lesson-item">
-          <div class="report-lesson-title">${esc(lessonDisplayName(lesson))}</div>
-          <div class="report-lesson-ctx">${ctx}</div>
-          ${note
-            ? `<div class="report-lesson-note">${esc(note.note)}</div>`
-            : `<div class="report-no-note">No note recorded</div>`}
-        </div>`;
-    }).join('');
-  }
+  const classHistoryHtml = studentClasses.length === 0
+    ? `<div class="report-no-note">No class enrollments yet.</div>`
+    : `<div class="profile-list">${studentClasses.map(group => `<span class="badge badge-grey">${esc(group.name)}</span>`).join('')}</div>`;
+
+  const attendanceHistoryHtml = attendances.length === 0
+    ? `<div class="report-no-note">No attendance recorded yet.</div>`
+    : `<div class="history-list">${attendances.slice(0, 40).map(entry => {
+        const lesson = DB.lessons.find(item => item.id === entry.lessonId);
+        const classRef = DB.classes.find(group => group.id === entry.classId);
+        return `
+          <div class="history-item">
+            <div class="history-title">${lesson ? esc(lessonDisplayName(lesson)) : 'Lesson'}</div>
+            <div class="history-meta">${entry.date ? friendlyDate(entry.date) : 'No date'}${classRef ? ` · ${esc(classRef.name)}` : ''}</div>
+            ${attendanceBadge(entry.status)}
+          </div>`;
+      }).join('')}</div>`;
+
+  const lessonHistoryHtml = studentLessons.length === 0
+    ? `<div class="report-no-note">No lessons recorded yet.</div>`
+    : `<div class="history-list">${studentLessons.slice(0, 50).map(lesson => {
+        const classRef = DB.classes.find(group => group.id === lesson.classId);
+        const note = notes.find(entry => entry.lessonId === lesson.id);
+        return `
+          <div class="history-item">
+            <div class="history-title">${esc(lessonDisplayName(lesson))}</div>
+            <div class="history-meta">${lesson.date ? friendlyDate(lesson.date) : 'No date'}${classRef ? ` · ${esc(classRef.name)}` : ''}</div>
+            ${note ? `<div class="report-lesson-note">${esc(note.note)}</div>` : `<div class="report-no-note">No note recorded</div>`}
+          </div>`;
+      }).join('')}</div>`;
 
   document.getElementById('report-content').innerHTML = `
+    <input type="hidden" id="profile-student-id" value="${esc(studentId)}">
     <div class="report-title">${esc(st.name)}</div>
-    <div class="report-meta">${cls ? esc(cls.name) + (cls.teacher ? ' · ' + esc(cls.teacher) : '') : 'Unknown class'}</div>
-    <div class="report-section">
-      <div class="report-section-title">Overview</div>
-      <div class="report-stat-row">
-        <div class="report-stat"><div class="report-stat-num">${clsLessons.length}</div><div class="report-stat-lbl">Lessons</div></div>
-        <div class="report-stat"><div class="report-stat-num">${notedCount}</div><div class="report-stat-lbl">Notes</div></div>
-        <div class="report-stat"><div class="report-stat-num">${bookIds.length}</div><div class="report-stat-lbl">Books</div></div>
-        <div class="report-stat"><div class="report-stat-num">${unitIds.length}</div><div class="report-stat-lbl">Units</div></div>
+    <div class="report-meta">${cls ? esc(cls.name) + (cls.teacher ? ' · ' + esc(cls.teacher) : '') : 'Student profile'}</div>
+    <div class="profile-grid">
+      <div class="profile-card">
+        <div class="label">Current Level</div>
+        <select id="profile-student-level" class="form-input" style="margin-top:8px;"></select>
+      </div>
+      <div class="profile-card">
+        <div class="label">Classes</div>
+        <div class="profile-value">${studentClasses.length}</div>
+        <div class="overview-note">Active enrollments across the school.</div>
+      </div>
+      <div class="profile-card">
+        <div class="label">Attendance</div>
+        <div class="profile-value">${attendanceRate}%</div>
+        <div class="overview-note">${presentCount}/${attendances.length} present records</div>
+      </div>
+      <div class="profile-card">
+        <div class="label">Notes</div>
+        <div class="profile-value">${notes.length}</div>
+        <div class="overview-note">Teacher observations saved across lessons.</div>
       </div>
     </div>
     <div class="report-section">
-      <div class="report-section-title">Lesson History</div>
-      ${lessonsHtml}
+      <div class="report-section-title">Enrolled Classes</div>
+      ${classHistoryHtml}
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Attendance History</div>
+      ${attendanceHistoryHtml}
+    </div>
+    <div class="report-section">
+      <div class="report-section-title">Lesson Notes</div>
+      ${lessonHistoryHtml}
     </div>`;
 
+  const levelSelect = document.getElementById('profile-student-level');
+  if (levelSelect) {
+    levelSelect.innerHTML = LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${(st.level || 'Pre-CEFR') === level ? ' selected' : ''}>${esc(level)}</option>`).join('');
+  }
+
   document.getElementById('modal-report').style.display = 'flex';
+}
+
+async function saveStudentProfile() {
+  const studentId = document.getElementById('profile-student-id')?.value;
+  const level = document.getElementById('profile-student-level')?.value || 'Pre-CEFR';
+  const student = getStudent(studentId);
+  if (!student) return;
+  const updated = { ...student, level };
+  setBusy('save-profile-btn', true);
+  try {
+    await api('POST', '/api/students', updated);
+    DB.students = DB.students.map(entry => entry.id === studentId ? updated : entry);
+    renderStudents();
+    openReport(studentId, classesForStudent(studentId)[0]?.id || '');
+    showToast('Student profile updated.', 'success');
+  } catch (e) {
+    showToast('Failed to update student profile.', 'error');
+  } finally {
+    setBusy('save-profile-btn', false);
+  }
 }
 
 function openClassModal(existingId) {

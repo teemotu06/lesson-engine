@@ -819,13 +819,15 @@
     .class-detail-meta { font-size:12px; color:var(--muted); line-height:1.6; }
     .report-shell { display:grid; gap:20px; }
     .report-page {
-      padding: 24px;
-      border-radius: 26px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(253,248,240,0.95));
-      border: 1px solid rgba(255,255,255,0.8);
-      box-shadow: var(--shadow-md);
+      padding: 34px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at top right, rgba(255,214,102,0.18), transparent 26%),
+        linear-gradient(180deg, rgba(255,255,255,0.985), rgba(253,248,240,0.96));
+      border: 1px solid rgba(255,255,255,0.82);
+      box-shadow: 0 26px 70px rgba(66, 49, 14, 0.14);
       display: grid;
-      gap: 18px;
+      gap: 22px;
     }
     .report-header {
       display:flex;
@@ -833,20 +835,33 @@
       justify-content:space-between;
       gap:16px;
       flex-wrap:wrap;
-      padding-bottom:14px;
-      border-bottom:1px solid rgba(116,99,79,0.12);
+      padding-bottom:18px;
+      border-bottom:1px solid rgba(116,99,79,0.14);
     }
-    .report-brand { font-size:26px; font-weight:800; letter-spacing:0.04em; color:var(--text); }
+    .report-brand { font-size:30px; font-weight:900; letter-spacing:0.04em; color:var(--text); }
     .report-kicker { font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); font-weight:800; margin-bottom:6px; }
+    .report-subbrand { font-size:13px; color:var(--muted); line-height:1.6; max-width:54ch; margin-top:8px; }
+    .report-badge-stack { display:grid; gap:8px; justify-items:end; }
+    .report-pill {
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(116,99,79,0.12);
+      background: rgba(255,255,255,0.76);
+      font-size:11px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:var(--dim);
+      font-weight:800;
+    }
     .report-meta-grid, .report-summary-grid, .report-skill-grid {
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
       gap:12px;
     }
     .report-field, .report-panel {
-      padding:14px;
-      border-radius:18px;
-      background: rgba(255,255,255,0.56);
+      padding:16px;
+      border-radius:20px;
+      background: rgba(255,255,255,0.6);
       border:1px solid rgba(116,99,79,0.1);
     }
     .report-field-label, .report-panel-title {
@@ -860,17 +875,18 @@
     .report-field-value { font-size:16px; color:var(--text); font-weight:700; }
     .report-overall {
       display:grid;
-      grid-template-columns:minmax(160px, 220px) minmax(0, 1fr);
-      gap:14px;
+      grid-template-columns:minmax(180px, 260px) minmax(0, 1fr);
+      gap:16px;
       align-items:stretch;
     }
     .report-overall-level {
-      padding:16px;
-      border-radius:20px;
-      background: linear-gradient(135deg, rgba(255,214,102,0.45), rgba(255,255,255,0.92));
-      border:1px solid rgba(191,147,18,0.18);
+      padding:20px;
+      border-radius:24px;
+      background: linear-gradient(135deg, rgba(255,214,102,0.52), rgba(255,255,255,0.94));
+      border:1px solid rgba(191,147,18,0.22);
     }
-    .report-overall-value { font-size:36px; font-weight:900; color:var(--text); line-height:1; margin-top:8px; }
+    .report-overall-value { font-size:42px; font-weight:900; color:var(--text); line-height:1; margin-top:12px; letter-spacing:-0.04em; }
+    .report-overall-copy { font-size:13px; color:var(--muted); line-height:1.6; margin-top:10px; }
     .report-score-guide { display:grid; gap:6px; }
     .report-score-bands, .report-score-levels {
       display:grid;
@@ -901,12 +917,110 @@
     }
     .report-skill-card { display:grid; gap:10px; }
     .report-skill-level { font-size:22px; font-weight:900; color:var(--text); }
+    .report-divider {
+      height:1px;
+      background: linear-gradient(90deg, rgba(116,99,79,0), rgba(116,99,79,0.16), rgba(116,99,79,0));
+    }
+    .report-section-heading {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:4px;
+    }
+    .report-section-name {
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      color:var(--dim);
+      font-weight:900;
+    }
+    .report-section-note {
+      font-size:12px;
+      color:var(--muted);
+    }
+    .report-input,
+    .report-input.form-input,
+    .report-textarea.form-input,
+    .report-page select.form-input {
+      border-radius: 14px;
+      border: 1px solid rgba(116,99,79,0.12);
+      background: rgba(255,255,255,0.8);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
     .report-textarea { min-height:100px; resize:vertical; }
     .report-actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .report-footer {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:16px;
+      padding-top:10px;
+    }
+    .report-signoff {
+      padding-top:24px;
+      border-top:1px solid rgba(116,99,79,0.14);
+    }
+    .report-signoff-line {
+      height:1px;
+      background: rgba(116,99,79,0.2);
+      margin-bottom:8px;
+    }
+    .report-signoff-label {
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:var(--dim);
+      font-weight:800;
+    }
+    .report-print-note {
+      font-size:11px;
+      color:var(--dim);
+      line-height:1.6;
+    }
     @media print {
+      @page { size: A4 portrait; margin: 12mm; }
       body { background: #fff; }
+      .app-shell, .app-chrome, .content-shell, .tab-content { padding:0 !important; margin:0 !important; background:#fff !important; box-shadow:none !important; border:none !important; }
       .app-header, .tab-bar, .page-actions, .report-actions, .btn, .btn-primary { display:none !important; }
-      .content-shell, .tab-content, .report-page { padding:0; box-shadow:none; background:#fff; border:none; }
+      .report-shell, .profile-header { gap:0 !important; margin:0 !important; }
+      .report-page {
+        padding: 0 !important;
+        box-shadow:none !important;
+        background:#fff !important;
+        border:none !important;
+        border-radius:0 !important;
+      }
+      .report-field, .report-panel, .report-overall-level {
+        background:#fff !important;
+        border-color: rgba(0,0,0,0.12) !important;
+        box-shadow:none !important;
+      }
+      .report-input,
+      .report-input.form-input,
+      .report-textarea.form-input,
+      .report-page select.form-input,
+      .report-page input.form-input,
+      .report-page textarea.form-input {
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        color: #111 !important;
+        appearance: none !important;
+        font: inherit !important;
+      }
+      .report-page textarea.form-input {
+        min-height: auto !important;
+        resize: none !important;
+        overflow: visible !important;
+      }
+      .report-page select.form-input {
+        font-weight: 900 !important;
+      }
+      .report-pill {
+        border-color: rgba(0,0,0,0.12) !important;
+        background:#fff !important;
+      }
     }
     @media (max-width: 860px) {
       .profile-hero { grid-template-columns:1fr; }
@@ -3014,6 +3128,7 @@ function renderStudentReportPage() {
   const attendanceRate = attendances.length ? Math.round((presentCount / attendances.length) * 100) : 0;
   const latestDiagnostic = student.diagnostics.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')).at(0);
   const latestSpeaking = student.speakingLog.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '') || (b.id || '').localeCompare(a.id || '')).at(0);
+  const leadTeacher = focusClass?.teacher || classes[0]?.teacher || 'Teacher not set';
 
   const autoGrowth = buildParentStory(student)
     .filter(item => ['Foundations', 'General English', 'Reading', 'Listening'].includes(item.skill))
@@ -3053,21 +3168,23 @@ function renderStudentReportPage() {
           <div>
             <div class="report-kicker">Online Placement</div>
             <div class="report-brand">Student Report Card</div>
+            <div class="report-subbrand">A polished parent-facing summary of level, descriptor evidence, classroom progress, and next-step planning.</div>
           </div>
-          <div class="report-actions">
-            <span class="badge badge-blue">${esc(focusClass ? focusClass.name : 'Global Record')}</span>
-            <span class="badge badge-grey">${esc(focusClass?.teacher || classes[0]?.teacher || 'Teacher not set')}</span>
+          <div class="report-badge-stack">
+            <div class="report-pill">${esc(focusClass ? focusClass.name : 'Global Record')}</div>
+            <div class="report-pill">${esc(leadTeacher)}</div>
+            <div class="report-pill">Confidential Learner Progress Record</div>
           </div>
         </div>
 
         <div class="report-meta-grid">
           <div class="form-group" style="margin:0;">
             <label class="form-label">Institution</label>
-            <input id="report-institution" class="form-input" value="${esc(report.institution)}">
+            <input id="report-institution" class="form-input report-input" value="${esc(report.institution)}">
           </div>
           <div class="form-group" style="margin:0;">
             <label class="form-label">Course</label>
-            <input id="report-course" class="form-input" value="${esc(report.course || focusClass?.name || '')}">
+            <input id="report-course" class="form-input report-input" value="${esc(report.course || focusClass?.name || '')}">
           </div>
           <div class="report-field">
             <div class="report-field-label">Student</div>
@@ -3075,15 +3192,16 @@ function renderStudentReportPage() {
           </div>
           <div class="form-group" style="margin:0;">
             <label class="form-label">Report Date</label>
-            <input id="report-date" type="date" class="form-input" value="${esc(report.reportDate)}">
+            <input id="report-date" type="date" class="form-input report-input" value="${esc(report.reportDate)}">
           </div>
         </div>
 
         <div class="report-overall">
           <div class="report-overall-level">
             <div class="report-panel-title">Overall CEFR Level</div>
-            <select id="report-overall-level" class="form-input" style="margin-top:8px;">${REPORT_LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${overallLevel === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
+            <select id="report-overall-level" class="form-input report-input" style="margin-top:8px;">${REPORT_LEVEL_OPTIONS.map(level => `<option value="${esc(level)}"${overallLevel === level ? ' selected' : ''}>${esc(level)}</option>`).join('')}</select>
             <div class="report-overall-value">${esc(overallLevel)}</div>
+            <div class="report-overall-copy">This headline level is intended for parent reporting and should reflect the clearest current overall performance picture.</div>
           </div>
           <div class="report-panel">
             <div class="report-panel-title">Achievement Descriptor</div>
@@ -3097,74 +3215,113 @@ function renderStudentReportPage() {
         </div>
 
         <div class="report-panel">
-          <div class="report-panel-title">Language Skill Profile</div>
+          <div class="report-section-heading">
+            <div class="report-section-name">Language Skill Profile</div>
+            <div class="report-section-note">Descriptor-backed summary of current performance by area.</div>
+          </div>
           <div class="report-skill-grid">${skillCards}</div>
         </div>
 
+        <div class="report-divider"></div>
+
         <div class="report-summary-grid">
           <div class="report-panel">
-            <div class="report-panel-title">Speaking</div>
+            <div class="report-section-heading">
+              <div class="report-section-name">Speaking and Participation</div>
+              <div class="report-section-note">Observation-led evidence rather than fixed CEFR sublevels.</div>
+            </div>
             <div class="profile-note-text">${esc(latestSpeaking ? latestSpeaking.note : 'No speaking observation yet.')}</div>
             <div class="overview-note">${esc(latestSpeaking ? friendlyDateTime(latestSpeaking.createdAt) : 'Speaking is tracked through teacher observations.')}</div>
             <div class="form-group" style="margin-top:12px;margin-bottom:0;">
               <label class="form-label">Report Speaking Comment</label>
-              <textarea id="report-speaking-comment" class="form-input report-textarea" placeholder="Summarise spoken confidence, interaction, pronunciation, and fluency.">${esc(report.speakingComment)}</textarea>
+              <textarea id="report-speaking-comment" class="form-input report-input report-textarea" placeholder="Summarise spoken confidence, interaction, pronunciation, and fluency.">${esc(report.speakingComment)}</textarea>
             </div>
           </div>
           <div class="report-panel">
-            <div class="report-panel-title">Attendance</div>
+            <div class="report-section-heading">
+              <div class="report-section-name">Attendance and Reliability</div>
+              <div class="report-section-note">Attendance trends that matter for parent communication.</div>
+            </div>
             <div class="report-field-value">${attendanceRate}%</div>
             <div class="overview-note">${presentCount}/${attendances.length} present records across enrolled classes.</div>
             <div class="form-group" style="margin-top:12px;margin-bottom:0;">
               <label class="form-label">Attendance Comment</label>
-              <textarea id="report-attendance-comment" class="form-input report-textarea" placeholder="Add any attendance pattern or punctuality note that should appear on the report.">${esc(report.attendanceComment)}</textarea>
+              <textarea id="report-attendance-comment" class="form-input report-input report-textarea" placeholder="Add any attendance pattern or punctuality note that should appear on the report.">${esc(report.attendanceComment)}</textarea>
             </div>
           </div>
         </div>
 
+        <div class="report-divider"></div>
+
         <div class="report-summary-grid">
           <div class="form-group" style="margin:0;">
             <label class="form-label">Strengths</label>
-            <textarea id="report-strengths" class="form-input report-textarea" placeholder="Highlight what the student can currently do well.">${esc(report.strengths)}</textarea>
+            <textarea id="report-strengths" class="form-input report-input report-textarea" placeholder="Highlight what the student can currently do well.">${esc(report.strengths)}</textarea>
           </div>
           <div class="form-group" style="margin:0;">
             <label class="form-label">Growth Summary</label>
-            <textarea id="report-growth-summary" class="form-input report-textarea" placeholder="Explain the progress journey using the student's CEFR movement and class evidence.">${esc(report.growthSummary || autoGrowth)}</textarea>
+            <textarea id="report-growth-summary" class="form-input report-input report-textarea" placeholder="Explain the progress journey using the student's CEFR movement and class evidence.">${esc(report.growthSummary || autoGrowth)}</textarea>
           </div>
         </div>
 
         <div class="report-summary-grid">
           <div class="form-group" style="margin:0;">
             <label class="form-label">Teacher Comment</label>
-            <textarea id="report-teacher-comment" class="form-input report-textarea" placeholder="Overall teacher comment for parents.">${esc(report.teacherComment)}</textarea>
+            <textarea id="report-teacher-comment" class="form-input report-input report-textarea" placeholder="Overall teacher comment for parents.">${esc(report.teacherComment)}</textarea>
           </div>
           <div class="form-group" style="margin:0;">
             <label class="form-label">Next Steps</label>
-            <textarea id="report-next-steps" class="form-input report-textarea" placeholder="What the student should focus on next.">${esc(report.nextSteps)}</textarea>
+            <textarea id="report-next-steps" class="form-input report-input report-textarea" placeholder="What the student should focus on next.">${esc(report.nextSteps)}</textarea>
           </div>
         </div>
 
         <div class="report-summary-grid">
           <div class="form-group" style="margin:0;">
             <label class="form-label">Home Support</label>
-            <textarea id="report-home-support" class="form-input report-textarea" placeholder="How parents can support progress at home.">${esc(report.homeSupport)}</textarea>
+            <textarea id="report-home-support" class="form-input report-input report-textarea" placeholder="How parents can support progress at home.">${esc(report.homeSupport)}</textarea>
           </div>
           <div class="form-group" style="margin:0;">
             <label class="form-label">Diagnostic Evidence</label>
-            <textarea id="report-diagnostic-comment" class="form-input report-textarea" placeholder="Summarise the latest placement or diagnostic evidence.">${esc(report.diagnosticComment || (latestDiagnostic ? `${latestDiagnostic.title || 'Diagnostic review'} on ${friendlyDate(latestDiagnostic.date)}. ${latestDiagnostic.comments || ''}`.trim() : ''))}</textarea>
+            <textarea id="report-diagnostic-comment" class="form-input report-input report-textarea" placeholder="Summarise the latest placement or diagnostic evidence.">${esc(report.diagnosticComment || (latestDiagnostic ? `${latestDiagnostic.title || 'Diagnostic review'} on ${friendlyDate(latestDiagnostic.date)}. ${latestDiagnostic.comments || ''}`.trim() : ''))}</textarea>
           </div>
         </div>
 
+        <div class="report-divider"></div>
+
         <div class="report-summary-grid">
           <div class="report-panel">
-            <div class="report-panel-title">Recent Lesson Evidence</div>
+            <div class="report-section-heading">
+              <div class="report-section-name">Evidence Snapshot</div>
+              <div class="report-section-note">Concrete notes and class context behind the reported level.</div>
+            </div>
             <div class="profile-note-text">${esc(summarizeRecentNote(latestNotes, 'No lesson note evidence yet.'))}</div>
             <div class="overview-note">${latestNotes.length ? `${latestNotes.length} recent note${latestNotes.length === 1 ? '' : 's'} available in the student history.` : 'Add lesson logs and student notes to strengthen reporting.'}</div>
           </div>
           <div class="report-panel">
-            <div class="report-panel-title">Enrolled Classes</div>
+            <div class="report-section-heading">
+              <div class="report-section-name">Class Context</div>
+              <div class="report-section-note">Where this progress is being observed.</div>
+            </div>
             <div class="profile-note-text">${esc(classes.map(cls => cls.name).join(', ') || 'No enrolled classes yet.')}</div>
             <div class="overview-note">${esc(classes.map(cls => classVitalInfo(cls)).join(' • '))}</div>
+          </div>
+        </div>
+
+        <div class="report-footer">
+          <div class="report-signoff">
+            <div class="report-signoff-line"></div>
+            <div class="report-signoff-label">Teacher</div>
+            <div class="overview-note">${esc(leadTeacher)}</div>
+          </div>
+          <div class="report-signoff">
+            <div class="report-signoff-line"></div>
+            <div class="report-signoff-label">Report Date</div>
+            <div class="overview-note">${esc(friendlyDate(report.reportDate || todayStr()))}</div>
+          </div>
+          <div class="report-signoff">
+            <div class="report-signoff-line"></div>
+            <div class="report-signoff-label">Parent / Guardian Review</div>
+            <div class="report-print-note">Use this space for family acknowledgement after discussing the student’s current level, evidence, and next-step goals.</div>
           </div>
         </div>
       </div>

@@ -4,269 +4,717 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lesson Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 13px;
-      background: #fff;
-      color: #1a1a1a;
-      min-height: 100vh;
+    /* ══════════════════════════════════════════
+       TOKENS
+    ══════════════════════════════════════════ */
+    :root {
+      --bg:           #0b0c10;
+      --bg-card:      #111219;
+      --bg-card-alt:  #14151e;
+      --bg-elevated:  #1a1b26;
+      --bg-input:     #0e0f17;
+      --border:       rgba(255,255,255,0.07);
+      --border-str:   rgba(255,255,255,0.13);
+      --text:         #f0f0f8;
+      --text-2:       #8e90ae;
+      --text-3:       #52546a;
+      --orange:       #ff7140;
+      --orange-dim:   rgba(255,113,64,0.13);
+      --orange-glow:  rgba(255,113,64,0.28);
+      --blue:         #6ea8fe;
+      --blue-dim:     rgba(110,168,254,0.13);
+      --green:        #34d399;
+      --green-dim:    rgba(52,211,153,0.13);
+      --amber:        #fbbf24;
+      --amber-dim:    rgba(251,191,36,0.13);
+      --red:          #f87171;
+      --red-dim:      rgba(248,113,113,0.13);
+      --r:            13px;
+      --r-sm:         9px;
     }
 
-    /* ─── Tab bar ─── */
-    .tab-bar {
-      display: flex;
-      border-bottom: 1px solid #e5e5e5;
-      background: #fff;
+    /* ══════════════════════════════════════════
+       RESET + BASE
+    ══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    button, input, select, textarea { font: inherit; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse 130% 38% at 50% -5%, rgba(255,113,64,0.07) 0%, transparent 55%),
+        #0b0c10;
+    }
+
+    /* ══════════════════════════════════════════
+       SHELL
+    ══════════════════════════════════════════ */
+    .shell {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 16px 80px;
+    }
+
+    /* ══════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════ */
+    .nav-wrap {
       position: sticky;
       top: 0;
       z-index: 100;
+      padding: 14px 0 10px;
+      background: linear-gradient(to bottom, #0b0c10 58%, transparent);
     }
+
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px;
+      background: rgba(18,19,28,0.92);
+      border: 1px solid var(--border-str);
+      border-radius: 18px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .nav-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ff7140, #ff9a6c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-right: 2px;
+      box-shadow: 0 4px 14px var(--orange-glow);
+    }
+
+    .nav-logo svg { display: block; }
+
+    .nav-tabs { display: flex; flex: 1; gap: 2px; }
+
     .tab-btn {
       flex: 1;
-      padding: 14px 8px;
-      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 6px;
+      border: 1px solid transparent;
+      border-radius: 12px;
       background: none;
       cursor: pointer;
-      font-size: 13px;
-      color: #888;
-      border-bottom: 2px solid transparent;
-      transition: color 0.15s, border-color 0.15s;
-      font-family: inherit;
-    }
-    .tab-btn.active { color: #2E6DA4; border-bottom-color: #2E6DA4; font-weight: 600; }
-    .tab-btn:hover:not(.active) { color: #555; }
-
-    /* ─── Content ─── */
-    .tab-content { display: none; padding: 16px; max-width: 720px; margin: 0 auto; }
-    .tab-content.active { display: block; }
-
-    /* ─── Typography / labels ─── */
-    .label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #888;
+      font-size: 12px;
       font-weight: 600;
-    }
-
-    /* ─── Badges ─── */
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
+      color: var(--text-3);
+      letter-spacing: 0.01em;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
       white-space: nowrap;
     }
-    .badge-blue  { background: #dceefa; color: #2E6DA4; }
-    .badge-amber { background: #fef3d0; color: #b07d0d; }
-    .badge-grey  { background: #efefef; color: #666; }
-    .badge-green { background: #d4f5ec; color: #1D9E75; }
-    .badge-today { background: #1D9E75; color: #fff; }
-    .badge-tani  { background: #dceefa; color: #2E6DA4; }
-    .badge-alba  { background: #fef3d0; color: #b07d0d; }
-    .badge-day   { background: #efefef; color: #555; font-size: 10px; padding: 2px 6px; }
 
-    /* ─── Cards ─── */
-    .card { background: #f7f7f7; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
-    .card-header {
+    .tab-btn.active {
+      background: rgba(255,255,255,0.07);
+      border-color: var(--border-str);
+      color: var(--text);
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.03);
+      color: var(--text-2);
+    }
+
+    /* ══════════════════════════════════════════
+       CONTENT AREAS
+    ══════════════════════════════════════════ */
+    .tab-content { display: none; padding-top: 6px; }
+    .tab-content.active { display: block; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+    }
+
+    /* ══════════════════════════════════════════
+       TODAY TAB
+    ══════════════════════════════════════════ */
+    .today-date {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .today-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 18px 18px 22px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.14s;
+    }
+
+    .today-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--orange);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .today-card.is-alba::before { background: var(--amber); }
+    .today-card:hover { border-color: var(--border-str); }
+
+    .today-card-top {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 12px 14px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .today-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .today-card-field {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-bottom: 3px;
+    }
+
+    .today-card-field strong { color: var(--text); }
+
+    .unit-note {
+      margin-top: 10px;
+      padding: 7px 10px;
+      background: rgba(251,191,36,0.07);
+      border: 1px solid rgba(251,191,36,0.2);
+      border-radius: var(--r-sm);
+      font-size: 12px;
+      color: var(--amber);
+    }
+
+    .log-done {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--green);
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      padding: 56px 24px;
+      color: var(--text-3);
+    }
+
+    .empty-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+      opacity: 0.6;
+    }
+
+    .empty-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-2);
+      margin-bottom: 5px;
+    }
+
+    .next-up {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 18px;
+    }
+
+    .next-up-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 7px;
+    }
+
+    .next-up-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .next-up-meta { font-size: 12px; color: var(--text-2); }
+
+    /* ══════════════════════════════════════════
+       BADGES
+    ══════════════════════════════════════════ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+    }
+
+    .badge-tani  { background: var(--orange-dim); color: var(--orange); }
+    .badge-alba  { background: var(--amber-dim);  color: var(--amber); }
+    .badge-blue  { background: var(--blue-dim);   color: var(--blue); }
+    .badge-amber { background: var(--amber-dim);  color: var(--amber); }
+    .badge-green { background: var(--green-dim);  color: var(--green); }
+    .badge-today { background: var(--green-dim);  color: var(--green); }
+    .badge-grey  { background: rgba(255,255,255,0.06); color: var(--text-2); border: 1px solid var(--border); }
+    .badge-day   { background: rgba(255,255,255,0.05); color: var(--text-3); border: 1px solid var(--border); font-size: 10px; padding: 2px 7px; }
+
+    /* ══════════════════════════════════════════
+       CARDS (classes)
+    ══════════════════════════════════════════ */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      margin-bottom: 8px;
+      overflow: hidden;
+      transition: border-color 0.12s;
+    }
+
+    .card:hover { border-color: var(--border-str); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 16px;
       cursor: pointer;
       user-select: none;
       flex-wrap: wrap;
+      transition: background 0.1s;
     }
-    .card-header:hover { background: #f0f0f0; }
-    .card-title { font-weight: 600; font-size: 14px; flex: 1; min-width: 80px; }
-    .card-body { padding: 4px 14px 14px; border-top: 1px solid #e8e8e8; }
 
-    /* chevron */
-    .chevron { width: 14px; height: 14px; color: #aaa; transition: transform 0.2s; flex-shrink: 0; }
-    .chevron.open { transform: rotate(90deg); }
+    .card-header:hover { background: rgba(255,255,255,0.02); }
 
-    /* ─── Unit card (nested) ─── */
-    .unit-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 6px; margin-bottom: 6px; overflow: hidden; }
-    .unit-card .card-header { padding: 10px 12px; }
-    .unit-card .card-header:hover { background: #f8f8f8; }
-    .unit-card .card-body { padding: 4px 12px 12px; }
-    .unit-card .card-title { font-size: 13px; }
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      flex: 1;
+      min-width: 80px;
+      letter-spacing: -0.02em;
+    }
 
-    /* ─── Lesson rows ─── */
+    .card-body {
+      padding: 8px 16px 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* unit nested card */
+    .unit-card {
+      background: rgba(255,255,255,0.022);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 7px;
+      overflow: hidden;
+    }
+
+    .unit-card .card-header { padding: 10px 13px; }
+    .unit-card .card-body   { padding: 4px 13px 13px; border-top: 1px solid var(--border); }
+    .unit-card .card-title  { font-size: 13px; }
+
+    /* ── lesson rows ── */
     .lesson-row {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 4px;
-      border-bottom: 1px solid #f0f0f0;
+      padding: 7px 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      border-radius: 6px;
+      transition: background 0.1s;
     }
-    .lesson-row:last-child { border-bottom: none; }
-    .lesson-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .dot-past   { background: #B4B2A9; }
-    .dot-today  { background: #1D9E75; }
-    .dot-future { background: #2E6DA4; }
-    .lesson-row-name { flex: 1; font-size: 13px; }
-    .lesson-row-meta { font-size: 11px; color: #888; white-space: nowrap; }
 
-    /* ─── Buttons ─── */
+    .lesson-row:last-child { border-bottom: none; }
+    .lesson-row:hover { background: rgba(255,255,255,0.03); }
+
+    .lesson-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .dot-past   { background: var(--text-3); }
+    .dot-today  { background: var(--green); box-shadow: 0 0 0 3px var(--green-dim); animation: glow 2s ease infinite; }
+    .dot-future { background: var(--blue); }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 0 3px var(--green-dim); }
+      50%       { box-shadow: 0 0 0 5px rgba(52,211,153,0.07); }
+    }
+
+    .lesson-row-name { flex: 1; font-size: 12px; font-weight: 600; }
+    .lesson-row-meta { font-size: 11px; color: var(--text-3); white-space: nowrap; }
+
+    /* class meta */
+    .class-meta  { padding: 8px 0 10px; }
+    .info-row    { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 4px; font-size: 12px; color: var(--text-2); }
+    .info-label  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-right: 4px; }
+    .units-wrap  { margin-top: 10px; }
+
+    /* ── ghost / delete btn ── */
+    .btn-ghost {
+      background: none;
+      border: none;
+      padding: 4px 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-3);
+      font-size: 13px;
+      line-height: 1;
+      flex-shrink: 0;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .btn-ghost:hover { background: var(--red-dim); color: var(--red); }
+
+    /* ── add row btn ── */
+    .btn-add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px dashed rgba(255,255,255,0.11);
+      border-radius: var(--r-sm);
+      background: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-3);
+      transition: all 0.14s;
+    }
+
+    .btn-add:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-dim); }
+
+    /* ══════════════════════════════════════════
+       LOG TAB
+    ══════════════════════════════════════════ */
+    .log-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px;
+      margin-bottom: 22px;
+    }
+
+    .log-history-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 12px;
+    }
+
+    .log-item {
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log-item:last-child { border-bottom: none; }
+    .log-item-meta  { font-size: 11px; color: var(--text-3); margin-bottom: 3px; }
+    .log-item-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .log-item-notes { font-size: 13px; color: var(--text-2); }
+
+    /* ══════════════════════════════════════════
+       SETTINGS TAB
+    ══════════════════════════════════════════ */
+    .settings-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px;
+      margin-bottom: 10px;
+    }
+
+    .settings-block-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 14px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .stat-cell {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 14px 12px;
+    }
+
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-3);
+    }
+
+    /* ══════════════════════════════════════════
+       BUTTONS
+    ══════════════════════════════════════════ */
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 7px 14px;
-      border-radius: 6px;
-      border: 1px solid #ddd;
-      background: #fff;
+      gap: 6px;
+      padding: 8px 15px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border-str);
+      background: rgba(255,255,255,0.055);
       cursor: pointer;
       font-size: 13px;
-      color: #444;
-      font-family: inherit;
-      transition: background 0.15s, color 0.15s;
+      font-weight: 600;
+      color: var(--text-2);
+      transition: all 0.14s;
+      letter-spacing: -0.01em;
     }
-    .btn:hover { background: #f0f0f0; }
-    .btn-primary { background: #2E6DA4; color: #fff; border-color: #2E6DA4; }
-    .btn-primary:hover { background: #255d8e; border-color: #255d8e; }
-    .btn-ghost { border: none; background: none; color: #bbb; padding: 3px 6px; font-size: 13px; font-family: inherit; cursor: pointer; }
-    .btn-ghost:hover { color: #e05252; }
-    .btn-add {
-      border: 1px dashed #ccc; color: #888; background: none; width: 100%;
-      justify-content: center; margin-top: 8px; font-size: 12px;
-      padding: 7px; border-radius: 6px; cursor: pointer; font-family: inherit;
-      transition: all 0.15s;
-    }
-    .btn-add:hover { border-color: #2E6DA4; color: #2E6DA4; background: #f0f6ff; }
-    .btn-danger { color: #e05252; border-color: #e8c4c4; }
-    .btn-danger:hover { background: #fff0f0; }
 
-    /* ─── Modal ─── */
+    .btn:hover { background: rgba(255,255,255,0.09); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    .btn-primary {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #ff8c5c;
+      border-color: #ff8c5c;
+      box-shadow: 0 0 18px var(--orange-glow);
+      color: #fff;
+    }
+
+    .btn-danger { color: var(--red); border-color: rgba(248,113,113,0.22); background: var(--red-dim); }
+    .btn-danger:hover { background: rgba(248,113,113,0.2); border-color: rgba(248,113,113,0.32); color: var(--red); }
+
+    /* ══════════════════════════════════════════
+       CHEVRON
+    ══════════════════════════════════════════ */
+    .chevron { width: 14px; height: 14px; color: var(--text-3); transition: transform 0.18s, color 0.18s; flex-shrink: 0; }
+    .chevron.open { transform: rotate(90deg); color: var(--text-2); }
+
+    /* ══════════════════════════════════════════
+       MODALS
+    ══════════════════════════════════════════ */
     .modal-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45);
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.76);
       z-index: 1000;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 16px;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
-    .modal-card {
-      background: #fff; border-radius: 12px; padding: 24px;
-      width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto;
-    }
-    .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
-    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
 
-    /* ─── Form ─── */
-    .form-group { margin-bottom: 14px; }
+    .modal-card {
+      background: #16171f;
+      border: 1px solid var(--border-str);
+      border-radius: 20px;
+      padding: 26px;
+      width: 100%;
+      max-width: 440px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.85);
+    }
+
+    .modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 22px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 22px;
+    }
+
+    /* ══════════════════════════════════════════
+       FORMS
+    ══════════════════════════════════════════ */
+    .form-group { margin-bottom: 15px; }
+
     .form-label {
-      display: block; font-size: 11px; text-transform: uppercase;
-      letter-spacing: 0.05em; color: #888; font-weight: 600; margin-bottom: 5px;
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-3);
+      margin-bottom: 6px;
     }
+
     .form-input {
-      display: block; width: 100%; padding: 8px 10px;
-      border: 1px solid #ddd; border-radius: 6px;
-      font-size: 13px; font-family: inherit; color: #1a1a1a;
-      background: #fff; transition: border-color 0.15s;
+      display: block;
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-str);
+      border-radius: var(--r-sm);
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg-input);
+      transition: border-color 0.14s, box-shadow 0.14s;
+      outline: none;
     }
-    .form-input:focus { outline: none; border-color: #2E6DA4; }
-    textarea.form-input { resize: vertical; min-height: 80px; }
+
+    .form-input::placeholder { color: var(--text-3); }
+    .form-input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px var(--orange-dim); }
+
+    textarea.form-input { resize: vertical; min-height: 78px; }
+
     select.form-input {
       appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 10px center;
-      padding-right: 28px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2352546a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 30px;
     }
+
+    select.form-input option { background: #16171f; color: var(--text); }
+
     .form-row { display: flex; gap: 10px; }
     .form-row .form-group { flex: 1; }
 
-    /* ─── Day toggles ─── */
     .day-toggles { display: flex; gap: 6px; flex-wrap: wrap; }
+
     .day-toggle {
-      padding: 5px 10px; border-radius: 4px;
-      border: 1px solid #ddd; background: #fff;
-      cursor: pointer; font-size: 12px; color: #666;
-      font-family: inherit; transition: all 0.15s;
+      padding: 6px 11px;
+      border-radius: 7px;
+      border: 1px solid var(--border-str);
+      background: var(--bg-input);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-2);
+      transition: all 0.12s;
     }
-    .day-toggle.active { background: #2E6DA4; border-color: #2E6DA4; color: #fff; }
 
-    /* ─── Today tab ─── */
-    .today-date { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
-    .lesson-card { background: #f7f7f7; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
-    .lesson-card-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-    .lesson-card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-    .lesson-card-field { font-size: 13px; margin-bottom: 4px; color: #444; }
-    .lesson-card-field strong { color: #1a1a1a; }
-    .unit-notes-strip {
-      background: #fff8e1; border-left: 3px solid #f5c842;
-      border-radius: 0 4px 4px 0; padding: 8px 10px;
-      font-size: 12px; color: #7a6200; margin: 10px 0 4px;
+    .day-toggle.active {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #fff;
+      box-shadow: 0 0 12px var(--orange-glow);
     }
-    .log-notes-inline { font-size: 12px; color: #999; font-style: italic; margin-top: 10px; }
-    .no-lessons-card {
-      text-align: center; padding: 36px 16px; background: #f7f7f7;
-      border-radius: 8px; color: #888; font-size: 14px; margin-bottom: 16px;
-    }
-    .next-preview { border: 1px solid #e8e8e8; border-radius: 8px; padding: 14px; }
-    .next-preview .label { display: block; margin-bottom: 8px; }
 
-    /* ─── Classes tab ─── */
-    .tab-header-row {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-bottom: 16px;
-    }
-    .tab-section-title { font-size: 16px; font-weight: 700; }
-    .class-meta { padding: 10px 0 8px; }
-    .info-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 4px; font-size: 12px; color: #555; }
-    .info-row .label { margin-right: 4px; }
-    .units-container { margin-top: 8px; }
-
-    /* ─── Log tab ─── */
-    .log-form { background: #f7f7f7; border-radius: 8px; padding: 14px; margin-bottom: 20px; }
-    .log-history { max-height: 420px; overflow-y: auto; }
-    .log-item { border-bottom: 1px solid #f0f0f0; padding: 12px 0; }
-    .log-item:last-child { border-bottom: none; }
-    .log-item-meta { font-size: 11px; color: #888; margin-bottom: 2px; }
-    .log-item-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-    .log-item-notes { font-size: 12px; color: #555; }
-
-    /* ─── Settings tab ─── */
-    .settings-section { margin-bottom: 24px; }
-    .settings-section-title {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
-      color: #888; font-weight: 600; margin-bottom: 12px;
-    }
-    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 4px; }
-    .stat-card { background: #f7f7f7; border-radius: 6px; padding: 12px; text-align: center; }
-    .stat-number { font-size: 28px; font-weight: 700; color: #2E6DA4; }
-    .stat-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
-
-    /* ─── Responsive ─── */
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
     @media (max-width: 480px) {
-      .tab-content { padding: 10px; }
-      .modal-card { padding: 18px; }
+      .tab-btn .tab-label { display: none; }
       .form-row { flex-direction: column; }
       .form-row .form-group { flex: none; }
+      .modal-card { padding: 20px; border-radius: 16px; }
     }
   </style>
 </head>
 <body>
 
-<!-- Tab bar -->
-<div class="tab-bar">
-  <button class="tab-btn active" data-tab="today">Today</button>
-  <button class="tab-btn" data-tab="classes">Classes</button>
-  <button class="tab-btn" data-tab="log">Log</button>
-  <button class="tab-btn" data-tab="settings">Settings</button>
+<div class="shell">
+
+  <!-- ══ NAV ══ -->
+  <div class="nav-wrap">
+    <nav class="nav-bar">
+      <div class="nav-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+      </div>
+      <div class="nav-tabs">
+        <button class="tab-btn active" data-tab="today">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span class="tab-label">Today</span>
+        </button>
+        <button class="tab-btn" data-tab="classes">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span class="tab-label">Classes</span>
+        </button>
+        <button class="tab-btn" data-tab="log">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span class="tab-label">Log</span>
+        </button>
+        <button class="tab-btn" data-tab="settings">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span class="tab-label">Settings</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ══ TAB PANELS ══ -->
+  <div id="tab-today"    class="tab-content active"></div>
+  <div id="tab-classes"  class="tab-content"></div>
+  <div id="tab-log"      class="tab-content"></div>
+  <div id="tab-settings" class="tab-content"></div>
+
 </div>
 
-<!-- Tab panels -->
-<div id="tab-today"    class="tab-content active"></div>
-<div id="tab-classes"  class="tab-content"></div>
-<div id="tab-log"      class="tab-content"></div>
-<div id="tab-settings" class="tab-content"></div>
-
-<!-- ═══ Modal: New Class ═══ -->
+<!-- ══ MODAL: New Class ══ -->
 <div id="modal-class" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
     <div class="modal-title">New Class</div>
@@ -291,11 +739,11 @@
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Lesson Start</label>
+        <label class="form-label">Start Time</label>
         <input type="time" id="cls-tstart" class="form-input">
       </div>
       <div class="form-group">
-        <label class="form-label">Lesson End</label>
+        <label class="form-label">End Time</label>
         <input type="time" id="cls-tend" class="form-input">
       </div>
     </div>
@@ -311,12 +759,12 @@
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-class')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveClass()">Save</button>
+      <button class="btn btn-primary" onclick="saveClass()">Save Class</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ Modal: New Unit ═══ -->
+<!-- ══ MODAL: New Unit ══ -->
 <div id="modal-unit" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
     <div class="modal-title">New Unit</div>
@@ -335,12 +783,12 @@
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-unit')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveUnit()">Save</button>
+      <button class="btn btn-primary" onclick="saveUnit()">Save Unit</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ Modal: New Lesson ═══ -->
+<!-- ══ MODAL: New Lesson ══ -->
 <div id="modal-lesson" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
     <div class="modal-title">New Lesson</div>
@@ -370,7 +818,7 @@
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-lesson')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveLesson()">Save</button>
+      <button class="btn btn-primary" onclick="saveLesson()">Save Lesson</button>
     </div>
   </div>
 </div>
@@ -475,6 +923,12 @@ function dotClass(dateStr) {
   return 'dot-future';
 }
 
+function chevronSvg(open) {
+  return `<svg class="chevron${open ? ' open' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>`;
+}
+
 // ════════════════════════════════════════════
 // TABS
 // ════════════════════════════════════════════
@@ -504,7 +958,12 @@ function renderToday() {
   let html = `<div class="today-date">${friendlyDateLong(today)}</div>`;
 
   if (todayLessons.length === 0) {
-    html += `<div class="no-lessons-card">No lessons today</div>`;
+    html += `
+      <div class="empty">
+        <div class="empty-icon">📅</div>
+        <div class="empty-title">No lessons today</div>
+        <div style="font-size:13px;">Enjoy the free day.</div>
+      </div>`;
 
     const upcoming = DB.lessons
       .filter(l => l.date > today)
@@ -515,10 +974,10 @@ function renderToday() {
       const cls  = DB.classes.find(c => c.id === next.classId);
       const unit = DB.units.find(u => u.id === next.unitId);
       html += `
-        <div class="next-preview">
-          <span class="label">Next Lesson</span>
-          <div style="font-weight:600;margin-bottom:4px;">${esc(next.name)}</div>
-          <div style="font-size:12px;color:#555;">
+        <div class="next-up">
+          <div class="next-up-label">Next up</div>
+          <div class="next-up-title">${esc(next.name)}</div>
+          <div class="next-up-meta">
             ${friendlyDate(next.date)}${next.tstart ? ' at ' + friendlyTime(next.tstart) : ''}
             ${cls  ? ' · ' + esc(cls.name)  : ''}
             ${unit ? ' · ' + esc(unit.name) : ''}
@@ -530,26 +989,27 @@ function renderToday() {
       const cls  = DB.classes.find(c => c.id === lesson.classId);
       const unit = DB.units.find(u => u.id === lesson.unitId);
       const log  = DB.logs.find(g => g.lessonId === lesson.id);
+      const isAlba = cls && cls.teacher === 'Alba';
 
       const timeBadge = lesson.tstart
         ? `<span class="badge badge-grey">${friendlyTime(lesson.tstart)}${cls && cls.tend ? ' – ' + friendlyTime(cls.tend) : ''}</span>`
         : '';
 
       html += `
-        <div class="lesson-card">
-          <div class="lesson-card-badges">
-            ${cls  ? `<span class="badge ${cls.teacher === 'Alba' ? 'badge-amber' : 'badge-blue'}">${esc(cls.name)}</span>` : ''}
+        <div class="today-card${isAlba ? ' is-alba' : ''}">
+          <div class="today-card-top">
+            ${cls  ? `<span class="badge ${isAlba ? 'badge-alba' : 'badge-tani'}">${esc(cls.name)}</span>` : ''}
             ${cls  ? teacherBadge(cls.teacher) : ''}
             ${timeBadge}
             ${unit ? `<span class="badge badge-grey">${esc(unit.name)}</span>` : ''}
           </div>
-          <div class="lesson-card-title">${esc(lesson.name)}</div>
-          ${lesson.plan ? `<div class="lesson-card-field"><strong>Teach:</strong> ${esc(lesson.plan)}</div>` : ''}
-          ${lesson.pos  ? `<div class="lesson-card-field"><strong>Start at:</strong> ${esc(lesson.pos)}</div>` : ''}
-          ${unit && unit.notes ? `<div class="unit-notes-strip">&#9888; ${esc(unit.notes)}</div>` : ''}
+          <div class="today-card-title">${esc(lesson.name)}</div>
+          ${lesson.plan ? `<div class="today-card-field"><strong>Teach:</strong> ${esc(lesson.plan)}</div>` : ''}
+          ${lesson.pos  ? `<div class="today-card-field"><strong>Start at:</strong> ${esc(lesson.pos)}</div>` : ''}
+          ${unit && unit.notes ? `<div class="unit-note">⚠ ${esc(unit.notes)}</div>` : ''}
           ${log
-            ? `<div class="log-notes-inline">Logged: ${esc(log.notes)}</div>`
-            : `<button class="btn btn-primary" style="margin-top:10px;font-size:12px;" onclick="logFromToday('${lesson.id}')">Log this lesson</button>`
+            ? `<div class="log-done"><span>✓</span><span>Logged: ${esc(log.notes)}</span></div>`
+            : `<button class="btn btn-primary" style="margin-top:14px;font-size:12px;" onclick="logFromToday('${lesson.id}')">Log this lesson →</button>`
           }
         </div>`;
     });
@@ -569,19 +1029,25 @@ function logFromToday(lessonId) {
 function renderClasses() {
   const el = document.getElementById('tab-classes');
   let html = `
-    <div class="tab-header-row">
-      <div class="tab-section-title">Classes</div>
+    <div class="section-header">
+      <div class="section-title">Classes</div>
       <button class="btn btn-primary" onclick="openClassModal()">+ New Class</button>
     </div>`;
 
   if (DB.classes.length === 0) {
-    html += `<div style="text-align:center;padding:40px 16px;color:#aaa;">No classes yet. Create your first class.</div>`;
+    html += `
+      <div class="empty">
+        <div class="empty-icon">📚</div>
+        <div class="empty-title">No classes yet</div>
+        <div style="font-size:13px;margin-bottom:20px;">Add your first class to get started.</div>
+        <button class="btn btn-primary" onclick="openClassModal()">+ New Class</button>
+      </div>`;
   } else {
     DB.classes.forEach(cls => {
-      const isOpen    = !!expandedClasses[cls.id];
+      const isOpen     = !!expandedClasses[cls.id];
       const clsLessons = DB.lessons.filter(l => l.classId === cls.id);
-      const clsUnits  = DB.units.filter(u => u.classId === cls.id);
-      const endDate   = classEndDate(cls.id);
+      const clsUnits   = DB.units.filter(u => u.classId === cls.id);
+      const endDate    = classEndDate(cls.id);
 
       html += `
         <div class="card">
@@ -591,8 +1057,8 @@ function renderClasses() {
             ${teacherBadge(cls.teacher)}
             ${(cls.days || []).map(d => `<span class="badge badge-day">${esc(d)}</span>`).join('')}
             <span class="badge badge-grey">${clsLessons.length} lesson${clsLessons.length !== 1 ? 's' : ''}</span>
-            <span style="font-size:11px;color:#aaa;white-space:nowrap;">ends ${friendlyDate(endDate)}</span>
-            <button class="btn-ghost" onclick="event.stopPropagation();deleteClass('${cls.id}')" title="Delete class">&#10005;</button>
+            <span style="font-size:11px;color:var(--text-3);white-space:nowrap;">ends ${friendlyDate(endDate)}</span>
+            <button class="btn-ghost" onclick="event.stopPropagation();deleteClass('${cls.id}')" title="Delete class">✕</button>
           </div>`;
 
       if (isOpen) {
@@ -600,23 +1066,23 @@ function renderClasses() {
           <div class="card-body">
             <div class="class-meta">
               <div class="info-row">
-                <span><span class="label">Curriculum</span> ${esc(cls.curriculum) || '—'}</span>
+                <span><span class="info-label">Curriculum</span>${esc(cls.curriculum) || '—'}</span>
               </div>
               <div class="info-row">
-                <span><span class="label">Start</span> ${friendlyDate(cls.start)}</span>
-                <span><span class="label">Time</span> ${friendlyTime(cls.tstart)}${cls.tend ? ' – ' + friendlyTime(cls.tend) : ''}</span>
+                <span><span class="info-label">Start</span>${friendlyDate(cls.start)}</span>
+                <span><span class="info-label">Time</span>${friendlyTime(cls.tstart)}${cls.tend ? ' – ' + friendlyTime(cls.tend) : ''}</span>
               </div>
             </div>
-            <div class="units-container">`;
+            <div class="units-wrap">`;
 
         if (clsUnits.length === 0) {
-          html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No units yet.</div>`;
+          html += `<div style="font-size:12px;color:var(--text-3);padding:6px 0;">No units yet.</div>`;
         } else {
           clsUnits.forEach(unit => { html += renderUnitCard(unit); });
         }
 
         html += `
-              <button class="btn btn-add" onclick="openUnitModal('${cls.id}')">+ Add Unit</button>
+              <button class="btn-add" onclick="openUnitModal('${cls.id}')">+ Add Unit</button>
             </div>
           </div>`;
       }
@@ -641,23 +1107,22 @@ function renderUnitCard(unit) {
       <div class="card-header" onclick="toggleUnit('${unit.id}')">
         ${chevronSvg(isOpen)}
         <div class="card-title">${esc(unit.name)}</div>
-        ${unit.program ? `<span class="badge badge-grey" style="font-size:10px;">${esc(unit.program)}</span>` : ''}
-        <span class="badge badge-grey" style="font-size:10px;">${unitLessons.length} lesson${unitLessons.length !== 1 ? 's' : ''}</span>
-        ${range.start ? `<span style="font-size:11px;color:#aaa;white-space:nowrap;">${friendlyDate(range.start)} → ${friendlyDate(range.end)}</span>` : ''}
-        <button class="btn-ghost" onclick="event.stopPropagation();deleteUnit('${unit.id}')" title="Delete unit">&#10005;</button>
+        ${unit.program ? `<span class="badge badge-grey">${esc(unit.program)}</span>` : ''}
+        <span class="badge badge-grey">${unitLessons.length} lesson${unitLessons.length !== 1 ? 's' : ''}</span>
+        ${range.start ? `<span style="font-size:11px;color:var(--text-3);white-space:nowrap;">${friendlyDate(range.start)} → ${friendlyDate(range.end)}</span>` : ''}
+        <button class="btn-ghost" onclick="event.stopPropagation();deleteUnit('${unit.id}')" title="Delete unit">✕</button>
       </div>`;
 
   if (isOpen) {
     html += `<div class="card-body">`;
 
     if (unit.notes) {
-      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;">&#9888; ${esc(unit.notes)}</div>`;
+      html += `<div class="unit-note" style="margin:6px 0 12px;">⚠ ${esc(unit.notes)}</div>`;
     }
 
     if (unitLessons.length === 0) {
-      html += `<div style="color:#ccc;font-size:12px;padding:4px 0;">No lessons yet.</div>`;
+      html += `<div style="font-size:12px;color:var(--text-3);padding:4px 0;">No lessons yet.</div>`;
     } else {
-      html += `<div>`;
       unitLessons.forEach(lesson => {
         const isToday = lesson.date === today;
         html += `
@@ -665,28 +1130,21 @@ function renderUnitCard(unit) {
             <div class="lesson-dot ${dotClass(lesson.date)}"></div>
             <div class="lesson-row-name">
               ${esc(lesson.name)}
-              ${isToday ? `<span class="badge badge-today" style="font-size:10px;margin-left:4px;">Today</span>` : ''}
+              ${isToday ? `<span class="badge badge-today" style="margin-left:5px;">Today</span>` : ''}
             </div>
-            <div class="lesson-row-meta">${friendlyDate(lesson.date)}${lesson.tstart ? ' ' + friendlyTime(lesson.tstart) : ''}</div>
-            <button class="btn-ghost" onclick="deleteLesson('${lesson.id}')" title="Delete lesson">&#10005;</button>
+            <div class="lesson-row-meta">${friendlyDate(lesson.date)}${lesson.tstart ? ' · ' + friendlyTime(lesson.tstart) : ''}</div>
+            <button class="btn-ghost" onclick="deleteLesson('${lesson.id}')" title="Delete lesson">✕</button>
           </div>`;
       });
-      html += `</div>`;
     }
 
     html += `
-        <button class="btn btn-add" onclick="openLessonModal('${unit.id}','${unit.classId}')">+ Add Lesson</button>
+        <button class="btn-add" onclick="openLessonModal('${unit.id}','${unit.classId}')">+ Add Lesson</button>
       </div>`;
   }
 
   html += `</div>`;
   return html;
-}
-
-function chevronSvg(open) {
-  return `<svg class="chevron${open ? ' open' : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-    <polyline points="9 18 15 12 9 6"></polyline>
-  </svg>`;
 }
 
 function toggleClass(id) {
@@ -717,12 +1175,12 @@ function renderLog() {
   const sortedLogs = DB.logs.slice().sort((a, b) => b.date.localeCompare(a.date));
   let logsHtml = '';
   if (sortedLogs.length === 0) {
-    logsHtml = `<div style="color:#aaa;font-size:12px;padding:16px 0;">No logs yet.</div>`;
+    logsHtml = `<div style="color:var(--text-3);font-size:13px;padding:16px 0;">No logs yet.</div>`;
   } else {
     sortedLogs.forEach(g => {
       logsHtml += `
         <div class="log-item">
-          <div class="log-item-meta">${friendlyDate(g.date)} &middot; ${esc(g.className)}</div>
+          <div class="log-item-meta">${friendlyDate(g.date)} · ${esc(g.className)}</div>
           <div class="log-item-title">${esc(g.lessonName)}</div>
           <div class="log-item-notes">${esc(g.notes)}</div>
         </div>`;
@@ -730,7 +1188,9 @@ function renderLog() {
   }
 
   document.getElementById('tab-log').innerHTML = `
-    <div class="tab-section-title" style="margin-bottom:16px;">Lesson Log</div>
+    <div class="section-header">
+      <div class="section-title">Log</div>
+    </div>
     <div class="log-form">
       <div class="form-group">
         <label class="form-label">Lesson</label>
@@ -742,8 +1202,8 @@ function renderLog() {
       </div>
       <button class="btn btn-primary" onclick="saveLog()">Save Log</button>
     </div>
-    <div class="label" style="margin-bottom:12px;">History</div>
-    <div class="log-history">${logsHtml}</div>`;
+    <div class="log-history-label">History</div>
+    <div>${logsHtml}</div>`;
 
   if (pendingLogLessonId) {
     const sel = document.getElementById('log-lesson-select');
@@ -780,20 +1240,22 @@ function saveLog() {
 // ════════════════════════════════════════════
 function renderSettings() {
   document.getElementById('tab-settings').innerHTML = `
-    <div class="tab-section-title" style="margin-bottom:20px;">Settings</div>
+    <div class="section-header">
+      <div class="section-title">Settings</div>
+    </div>
 
-    <div class="settings-section">
-      <div class="settings-section-title">Stats</div>
+    <div class="settings-block">
+      <div class="settings-block-title">Overview</div>
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-number">${DB.classes.length}</div><div class="stat-label">Classes</div></div>
-        <div class="stat-card"><div class="stat-number">${DB.units.length}</div><div class="stat-label">Units</div></div>
-        <div class="stat-card"><div class="stat-number">${DB.lessons.length}</div><div class="stat-label">Lessons</div></div>
-        <div class="stat-card"><div class="stat-number">${DB.logs.length}</div><div class="stat-label">Logs</div></div>
+        <div class="stat-cell"><div class="stat-num">${DB.classes.length}</div><div class="stat-lbl">Classes</div></div>
+        <div class="stat-cell"><div class="stat-num">${DB.units.length}</div><div class="stat-lbl">Units</div></div>
+        <div class="stat-cell"><div class="stat-num">${DB.lessons.length}</div><div class="stat-lbl">Lessons</div></div>
+        <div class="stat-cell"><div class="stat-num">${DB.logs.length}</div><div class="stat-lbl">Logs</div></div>
       </div>
     </div>
 
-    <div class="settings-section">
-      <div class="settings-section-title">Backup &amp; Restore</div>
+    <div class="settings-block">
+      <div class="settings-block-title">Backup &amp; Restore</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="exportData()">Export Backup</button>
         <button class="btn" onclick="document.getElementById('import-file').click()">Import Backup</button>
@@ -801,8 +1263,8 @@ function renderSettings() {
       </div>
     </div>
 
-    <div class="settings-section">
-      <div class="settings-section-title">Danger Zone</div>
+    <div class="settings-block">
+      <div class="settings-block-title">Danger Zone</div>
       <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
     </div>`;
 }
@@ -886,20 +1348,18 @@ function closeModal(id) {
   document.getElementById(id).style.display = 'none';
 }
 
-// Close on backdrop click
 document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
   backdrop.addEventListener('click', e => {
     if (e.target === backdrop) closeModal(backdrop.id);
   });
 });
 
-// Day toggle buttons
 document.querySelectorAll('#cls-days .day-toggle').forEach(btn => {
   btn.addEventListener('click', () => btn.classList.toggle('active'));
 });
 
 // ════════════════════════════════════════════
-// SAVE (modals)
+// SAVE
 // ════════════════════════════════════════════
 function saveClass() {
   const name       = document.getElementById('cls-name').value.trim();

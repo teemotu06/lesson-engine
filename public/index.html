@@ -3,103 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lesson Engine</title>
+  <title>Knowledge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg:          #06091a;
-      --bg-2:        #0a0f28;
-      --bg-card:     rgba(12, 28, 72, 0.55);
-      --bg-card-alt: rgba(8, 20, 55, 0.65);
-      --bg-input:    rgba(5, 15, 45, 0.7);
-      --surface:     rgba(20, 50, 120, 0.28);
-      --surface-mid: rgba(20, 50, 120, 0.18);
-      --elevated:    rgba(30, 65, 140, 0.35);
-      --border:      rgba(56, 189, 248, 0.11);
-      --border-str:  rgba(56, 189, 248, 0.22);
-      --border-hi:   rgba(56, 189, 248, 0.18);
-      --text:        #e4edfb;
-      --muted:       #7aa2cc;
-      --dim:         #3d5878;
-      --accent:      #38bdf8;
-      --accent-hov:  #7dd3fc;
-      --accent-dim:  rgba(56,189,248,0.12);
-      --accent-glow: rgba(56,189,248,0.25);
-      --violet:      #818cf8;
-      --violet-dim:  rgba(129,140,248,0.12);
-      --green:       #34d399;
-      --green-dim:   rgba(52,211,153,0.13);
-      --amber:       #fbbf24;
-      --amber-dim:   rgba(251,191,36,0.12);
-      --red:         #f87171;
-      --teal:        #2dd4bf;
-      --teal-dim:    rgba(45,212,191,0.12);
-      --shadow-sm:   0 2px 12px rgba(0,8,40,0.5), 0 1px 3px rgba(0,0,0,0.3);
-      --shadow-md:   0 8px 40px rgba(0,8,40,0.65), 0 2px 8px rgba(0,0,0,0.4);
-      --blur-sm:     blur(20px) saturate(1.4);
-      --blur-md:     blur(36px) saturate(1.5);
-      --blur-lg:     blur(52px) saturate(1.6);
+      --bg:         #eef1f8;
+      --bg-2:       #e8ecf5;
+      --bg-card:    #ffffff;
+      --bg-input:   #f5f7fc;
+      --surface:    #f0f3fa;
+      --border:     rgba(99, 102, 241, 0.10);
+      --border-str: rgba(99, 102, 241, 0.20);
+      --text:       #1a1d2e;
+      --muted:      #6b7080;
+      --dim:        #a0a8bb;
+      --accent:     #5b6af5;
+      --accent-hov: #4355e8;
+      --accent-dim: rgba(91, 106, 245, 0.10);
+      --violet:     #818cf8;
+      --green:      #22c55e;
+      --green-dim:  rgba(34, 197, 94, 0.10);
+      --amber:      #f59e0b;
+      --teal:       #14b8a6;
+      --red:        #ef4444;
+      --shadow-sm:  0 1px 3px rgba(26,29,46,0.06), 0 1px 2px rgba(26,29,46,0.04);
+      --shadow-md:  0 4px 12px rgba(26,29,46,0.08), 0 2px 4px rgba(26,29,46,0.04);
+      --shadow-lg:  0 8px 30px rgba(26,29,46,0.10), 0 2px 8px rgba(26,29,46,0.06);
+      --radius:     14px;
+      --radius-sm:  8px;
+      --radius-lg:  20px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    button, input, select, textarea { font: inherit; }
-
-    body {
-      font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    html, body {
+      height: 100%;
+      font-family: 'Inter', 'Space Grotesk', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       font-size: 14px;
       line-height: 1.5;
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(ellipse 110% 50% at 50%  -5%, rgba(56,189,248,0.1) 0%, transparent 55%),
-        radial-gradient(ellipse  70% 45% at  8%  65%, rgba(129,140,248,0.09) 0%, transparent 50%),
-        radial-gradient(ellipse  60% 40% at 92%  80%, rgba(45,212,191,0.07) 0%, transparent 50%),
-        linear-gradient(180deg, #06091a 0%, #04060f 100%);
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── App Shell ── */
+    /* ── App shell ── */
     .app-shell {
-      position: relative;
-      z-index: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 16px 60px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .app-chrome {
-      position: relative;
-      overflow: hidden;
-      border-radius: 28px;
-      background: rgba(10, 22, 60, 0.58);
-      backdrop-filter: var(--blur-lg);
-      -webkit-backdrop-filter: var(--blur-lg);
-      border: 1px solid var(--border-str);
-      box-shadow:
-        var(--shadow-md),
-        inset 0 1px 0 rgba(56,189,248,0.12),
-        inset 0 -1px 0 rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
-    .app-chrome::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 6% 8%,  rgba(56,189,248,0.08), transparent 28%),
-        radial-gradient(circle at 90% 6%, rgba(129,140,248,0.07), transparent 26%);
-      pointer-events: none;
-      z-index: 0;
-      border-radius: inherit;
-    }
-
-    /* ── App Header ── */
+    /* ── Header ── */
     .app-header {
-      position: relative;
-      z-index: 1;
-      padding: 22px 24px 16px;
+      background: #ffffff;
       border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 18px 28px 0;
     }
 
     .app-header-top {
@@ -107,643 +78,2120 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       flex-wrap: wrap;
     }
 
+    /* Logo mark */
     .app-mark {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-size: 11px;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
       font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--dim);
+      color: var(--text);
+      letter-spacing: -0.02em;
     }
 
-    .app-mark-badge { display: none; }
+    .app-mark-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--violet) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
+    /* Hero section */
     .app-hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(220px, 0.7fr);
-      gap: 16px;
+      grid-template-columns: minmax(0, 1.4fr) minmax(200px, 0.6fr);
+      gap: 20px;
       align-items: end;
+      padding-bottom: 4px;
     }
 
-    .app-title,
-    .page-title,
-    .tab-section-title,
     .today-date,
-    .report-title,
-    .modal-title {
-      font-family: 'Space Grotesk', monospace;
-      letter-spacing: -0.04em;
-      color: var(--text);
+    .app-hero-kicker {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
     }
 
-    .app-title { font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 0.95; font-weight: 700; max-width: 12ch; }
+    .app-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      max-width: 14ch;
+    }
 
     .app-hero-card {
-      justify-self: end;
-      width: 100%;
-      max-width: 300px;
-      padding: 16px 18px;
-      border-radius: 20px;
-      background: rgba(56,189,248,0.07);
-      backdrop-filter: var(--blur-sm);
-      -webkit-backdrop-filter: var(--blur-sm);
-      border: 1px solid var(--border-str);
-      box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(56,189,248,0.14);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--violet) 100%);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 6px;
+      color: #fff;
     }
-
-    .app-hero-kicker,
-    .page-eyebrow,
-    .label,
-    .settings-section-title,
-    .sn-section-label,
-    .report-section-title,
-    .hero-stat-label,
-    .stat-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--dim);
-      font-weight: 800;
-    }
-
-    .app-hero-kicker { color: var(--accent); margin-bottom: 6px; }
 
     .app-hero-value {
-      font-family: 'Space Grotesk', monospace;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      margin-bottom: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 4px;
     }
 
-    .app-hero-note { color: var(--muted); font-size: 13px; }
+    .app-hero-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.80);
+      line-height: 1.3;
+    }
 
-    /* ── Tab Bar ── */
+    /* ── Tab bar ── */
     .tab-bar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 5px;
-      margin: 0 16px;
-      padding: 7px;
-      border-radius: 18px;
-      background: rgba(6, 16, 48, 0.8);
-      backdrop-filter: var(--blur-md);
-      -webkit-backdrop-filter: var(--blur-md);
-      border: 1px solid var(--border-str);
-      box-shadow:
-        0 4px 24px rgba(0,8,40,0.5),
-        inset 0 1px 0 rgba(56,189,248,0.1),
-        inset 0 -1px 0 rgba(0,0,0,0.2);
+      display: flex;
+      gap: 2px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      overflow-x: auto;
     }
 
     .tab-btn {
-      padding: 10px 8px;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      background: transparent;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
       cursor: pointer;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--dim);
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      transition: all 0.15s;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
     }
 
     .tab-btn.active {
       color: var(--accent);
-      background: rgba(56,189,248,0.1);
-      border-color: rgba(56,189,248,0.25);
-      box-shadow: 0 0 12px rgba(56,189,248,0.1), inset 0 1px 0 rgba(56,189,248,0.12);
-    }
-
-    .tab-btn:hover:not(.active) {
-      color: var(--muted);
-      background: rgba(56,189,248,0.05);
+      border-bottom-color: var(--accent);
+      font-weight: 600;
     }
 
     /* ── Content ── */
-    .content-shell { padding: 16px 18px 20px; position: relative; z-index: 1; }
+    .content-shell {
+      flex: 1;
+      padding: 24px 28px 40px;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
 
-    .tab-content { display: none; max-width: 860px; margin: 0 auto; padding: 24px 8px 16px; }
+    .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    .page-intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
-    .page-title { font-size: clamp(2rem, 4vw, 2.8rem); line-height: 0.95; font-weight: 700; margin-top: 4px; }
-    .page-copy { margin-top: 8px; max-width: 50ch; color: var(--muted); font-size: 13px; }
-    .page-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-
-    /* ── Stats ── */
-    .hero-stats, .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 4px; }
-    .hero-stats { margin: 18px 0 22px; }
-
-    .hero-stat, .stat-card {
-      background: var(--bg-card);
-      backdrop-filter: var(--blur-sm);
-      -webkit-backdrop-filter: var(--blur-sm);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px 14px;
-      box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(56,189,248,0.08);
+    /* ── Page intro ── */
+    .page-intro {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
     }
 
-    .hero-stat-value, .stat-number {
-      font-family: 'Space Grotesk', monospace;
-      font-size: 32px;
-      line-height: 1;
-      letter-spacing: -0.05em;
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--accent);
+      margin-bottom: 4px;
     }
 
-    .hero-stat-note { margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .page-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
 
-    .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 12px 0 16px; }
-    .overview-card { padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
-    .overview-value { margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--text); }
-    .overview-note { margin-top: 4px; font-size: 12px; color: var(--muted); }
+    .page-copy {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 55ch;
+    }
 
-    /* ── Status badges ── */
-    .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid transparent; white-space: nowrap; }
-    .status-complete { background: var(--green-dim); color: var(--green); border-color: rgba(52,211,153,0.22); }
-    .status-progress { background: var(--accent-dim); color: var(--accent); border-color: rgba(56,189,248,0.25); }
-    .status-planned  { background: var(--surface-mid); color: var(--muted); border-color: var(--border); }
+    .page-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+      align-items: flex-start;
+      padding-top: 4px;
+    }
 
-    /* ── Progress ── */
-    .progress-block { margin-top: 10px; }
-    .progress-track { width: 100%; height: 5px; border-radius: 999px; background: rgba(56,189,248,0.08); overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--teal)); box-shadow: 0 0 6px rgba(56,189,248,0.4); }
-    .progress-fill.complete { background: linear-gradient(90deg, var(--green), var(--teal)); box-shadow: 0 0 6px rgba(52,211,153,0.4); }
-    .progress-meta { margin-top: 5px; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; color: var(--muted); flex-wrap: wrap; }
+    /* ── Hero stats ── */
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
 
-    /* ── Badges ── */
-    .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; letter-spacing: 0.01em; border: 1px solid transparent; }
-    .badge-blue  { background: var(--accent-dim); color: var(--accent); border-color: rgba(56,189,248,0.2); }
-    .badge-amber { background: var(--amber-dim); color: var(--amber); }
-    .badge-green { background: var(--green-dim); color: var(--green); }
-    .badge-rose  { background: rgba(248,113,113,0.12); color: var(--red); }
-    .badge-grey  { background: var(--surface); color: var(--muted); border-color: var(--border); }
-    .badge-today { background: var(--green-dim); color: var(--green); }
-    .badge-tani  { background: var(--accent-dim); color: var(--accent); }
-    .badge-alba  { background: var(--violet-dim); color: var(--violet); }
-    .badge-day   { background: var(--surface); color: var(--dim); font-size: 10px; padding: 2px 7px; border-color: var(--border); }
-    .badge-sm    { font-size: 10px; padding: 2px 7px; }
+    .hero-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .hero-stat-note {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 6px;
+    }
 
     /* ── Cards ── */
-    .card,
-    .lesson-card,
-    .log-form,
-    .student-class-section,
-    .settings-section {
+    .lesson-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      backdrop-filter: var(--blur-sm);
-      -webkit-backdrop-filter: var(--blur-sm);
-    }
-
-    .card {
-      border-radius: 18px;
+      border-radius: var(--radius);
+      padding: 18px 20px;
       margin-bottom: 10px;
-      overflow: hidden;
-      transition: border-color 0.14s, box-shadow 0.14s;
-      box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(56,189,248,0.07);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.15s;
     }
 
-    .card:hover {
-      border-color: var(--border-str);
-      box-shadow: 0 4px 20px rgba(56,189,248,0.08), var(--shadow-sm), inset 0 1px 0 rgba(56,189,248,0.1);
+    .lesson-card:hover { box-shadow: var(--shadow-md); }
+
+    .lesson-card-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
-    .card-header { display: flex; align-items: center; gap: 8px; padding: 14px 16px; cursor: pointer; user-select: none; flex-wrap: wrap; transition: background 0.12s; }
-    .card-header:hover { background: rgba(56,189,248,0.04); }
-    .card-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; flex: 1; min-width: 80px; letter-spacing: -0.02em; color: var(--text); }
-    .card-body { padding: 8px 16px 16px; border-top: 1px solid var(--border); background: rgba(0,8,30,0.2); }
+    .lesson-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
 
-    .unit-card { background: rgba(8, 20, 60, 0.5); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 8px; overflow: hidden; }
-    .unit-card .card-header { padding: 10px 13px; }
-    .unit-card .card-header:hover { background: rgba(56,189,248,0.04); }
-    .unit-card .card-body { padding: 4px 13px 13px; border-top: 1px solid var(--border); background: rgba(0,5,20,0.15); }
-    .unit-card .card-title { font-size: 13px; }
+    .lesson-card-field {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
 
-    .subunit-card { background: rgba(6, 16, 48, 0.45); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 7px; overflow: hidden; }
-    .subunit-card .card-header { padding: 9px 11px; gap: 6px; flex-wrap: wrap; }
-    .subunit-card .card-header:hover { background: rgba(56,189,248,0.03); }
-    .subunit-card .card-body { padding: 4px 11px 11px; border-top: 1px solid var(--border); background: rgba(0,4,16,0.1); }
-    .subunit-card .card-title { font-size: 12px; font-weight: 700; }
+    .lesson-card-field strong { color: var(--text); font-weight: 600; }
 
-    .chevron { width: 14px; height: 14px; color: var(--dim); transition: transform 0.18s, color 0.18s; flex-shrink: 0; }
-    .chevron.open { transform: rotate(90deg); color: var(--muted); }
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
 
-    /* ── Lesson rows ── */
-    .lesson-item { border-bottom: 1px solid rgba(56,189,248,0.07); }
-    .lesson-item:last-child { border-bottom: none; }
-    .lesson-row { display: flex; align-items: center; gap: 8px; padding: 8px 4px; cursor: pointer; border-radius: 8px; transition: background 0.1s; }
-    .lesson-row:hover { background: rgba(56,189,248,0.05); }
-    .lesson-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .dot-past   { background: var(--dim); }
-    .dot-today  { background: var(--green); box-shadow: 0 0 0 3px var(--green-dim), 0 0 8px rgba(52,211,153,0.4); animation: pulse-dot 2s ease infinite; }
-    .dot-future { background: var(--accent); box-shadow: 0 0 4px rgba(56,189,248,0.4); }
-    @keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 3px var(--green-dim),0 0 8px rgba(52,211,153,0.3)} 50%{box-shadow:0 0 0 5px rgba(52,211,153,0.06),0 0 12px rgba(52,211,153,0.2)} }
-    .lesson-row-name { flex: 1; font-size: 12px; font-weight: 700; color: var(--text); }
-    .lesson-row-meta { font-size: 11px; color: var(--dim); white-space: nowrap; }
-    .lesson-row-name .badge { font-size: 10px; margin-left: 4px; }
-
-    .lesson-detail { padding: 12px 12px 14px 34px; border-top: 1px solid var(--border); background: rgba(0,5,20,0.25); font-size: 12px; color: var(--muted); line-height: 1.8; border-radius: 0 0 14px 14px; }
-    .lesson-detail-row { display: flex; gap: 10px; }
-    .lesson-detail-row .label { flex-shrink: 0; padding-top: 1px; }
+    .badge-blue   { background: rgba(91,106,245,0.10); color: var(--accent); }
+    .badge-green  { background: rgba(34,197,94,0.10);  color: #16a34a; }
+    .badge-amber  { background: rgba(245,158,11,0.12); color: #d97706; }
+    .badge-grey   { background: rgba(107,112,128,0.09); color: var(--muted); }
+    .badge-red    { background: rgba(239,68,68,0.10);  color: #dc2626; }
+    .badge-violet { background: rgba(129,140,248,0.12); color: #6366f1; }
+    .badge-teal   { background: rgba(20,184,166,0.10); color: #0d9488; }
 
     /* ── Buttons ── */
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 9px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border-str);
-      background: rgba(20, 50, 110, 0.4);
-      backdrop-filter: var(--blur-sm);
-      -webkit-backdrop-filter: var(--blur-sm);
-      cursor: pointer;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
       font-size: 13px;
-      font-weight: 700;
-      color: var(--muted);
-      transition: all 0.14s;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      text-decoration: none;
     }
 
-    .btn:hover { background: rgba(30, 70, 150, 0.5); color: var(--text); border-color: var(--border-str); }
-    .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
     .btn-primary {
-      background: linear-gradient(135deg, rgba(56,189,248,0.85), rgba(45,212,191,0.75));
-      color: #04060f;
-      border-color: transparent;
-      box-shadow: 0 4px 18px rgba(56,189,248,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
-      backdrop-filter: none;
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(91,106,245,0.25);
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, rgba(125,211,252,0.9), rgba(94,234,212,0.85));
-      color: #04060f;
-      box-shadow: 0 6px 24px rgba(56,189,248,0.45);
+      background: var(--accent-hov);
+      box-shadow: 0 3px 10px rgba(91,106,245,0.30);
+      transform: translateY(-1px);
     }
 
-    .btn-ghost { border: none; background: none; box-shadow: none; color: var(--dim); padding: 3px 6px; font-size: 13px; cursor: pointer; transition: color 0.12s, background 0.12s; border-radius: 6px; backdrop-filter: none; }
-    .btn-ghost:hover { color: var(--red); background: rgba(248,113,113,0.1); }
-    .btn-edit { border: none; background: none; box-shadow: none; color: var(--dim); padding: 3px 6px; font-size: 12px; cursor: pointer; transition: color 0.12s, background 0.12s; border-radius: 6px; backdrop-filter: none; }
-    .btn-edit:hover { color: var(--accent); background: var(--accent-dim); }
-    .btn-add { border: 1px dashed rgba(56,189,248,0.2); color: var(--dim); background: none; width: 100%; justify-content: center; margin-top: 10px; box-shadow: none; font-size: 12px; padding: 9px; border-radius: 999px; cursor: pointer; transition: all 0.14s; font-weight: 700; backdrop-filter: none; }
-    .btn-add:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-    .btn-danger { color: var(--red); border-color: rgba(248,113,113,0.2); box-shadow: none; background: rgba(248,113,113,0.07); backdrop-filter: none; }
-    .btn-danger:hover { background: rgba(248,113,113,0.14); color: var(--red); }
-    .btn-sm { font-size: 11px; padding: 5px 11px; }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border-str);
+    }
 
-    /* ── Modals ── */
+    .btn-secondary:hover { background: var(--bg-2); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover { background: var(--surface); color: var(--text); }
+
+    .btn-danger {
+      background: rgba(239,68,68,0.08);
+      color: var(--red);
+      border: 1px solid rgba(239,68,68,0.15);
+    }
+
+    .btn-danger:hover { background: rgba(239,68,68,0.14); }
+
+    .btn-sm { padding: 6px 13px; font-size: 12px; }
+    .btn-xs { padding: 4px 10px; font-size: 11px; }
+    .mt-10  { margin-top: 10px; }
+
+    /* ── Forms ── */
+    .form-group { margin-bottom: 14px; }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 9px 13px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-str);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(91,106,245,0.12);
+    }
+
+    .form-textarea { resize: vertical; min-height: 80px; }
+
+    .form-row {
+      display: flex;
+      gap: 14px;
+    }
+
+    .form-row .form-group { flex: 1; }
+
+    /* Checkbox */
+    .day-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .day-check {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .day-check input[type=checkbox] { accent-color: var(--accent); }
+
+    /* ── Modal ── */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,4,20,0.6);
-      z-index: 1000;
+      background: rgba(26,29,46,0.40);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      z-index: 200;
+      padding: 20px;
     }
 
     .modal-card {
-      background: rgba(10, 24, 68, 0.88);
-      backdrop-filter: var(--blur-lg);
-      -webkit-backdrop-filter: var(--blur-lg);
-      border: 1px solid var(--border-str);
-      border-radius: 24px;
-      padding: 26px;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 28px;
       width: 100%;
-      max-width: 440px;
+      max-width: 480px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 24px 64px rgba(0,8,40,0.7), inset 0 1px 0 rgba(56,189,248,0.14);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
     }
 
-    .modal-title { font-size: 22px; font-weight: 700; margin-bottom: 22px; }
-    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
 
-    /* ── Forms ── */
-    .form-group { margin-bottom: 15px; }
-    .form-label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--dim); font-weight: 800; margin-bottom: 6px; }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 20px;
+    }
 
-    .form-input {
-      display: block;
-      width: 100%;
-      padding: 9px 12px;
-      border: 1px solid var(--border-str);
-      border-radius: 10px;
+    /* ── Sections & class accordion ── */
+    .class-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .class-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .class-section-header:hover { background: var(--surface); }
+
+    .class-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .class-section-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .class-section-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .class-section-body {
+      border-top: 1px solid var(--border);
+      padding: 16px 20px;
+    }
+
+    /* ── Books / Units ── */
+    .unit-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 8px;
+    }
+
+    .unit-card-title {
+      font-weight: 600;
       font-size: 13px;
       color: var(--text);
-      background: var(--bg-input);
-      transition: border-color 0.14s, box-shadow 0.14s;
-      outline: none;
+      margin-bottom: 6px;
     }
 
-    .form-input::placeholder { color: var(--dim); }
-    .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim), 0 0 8px rgba(56,189,248,0.12); }
-    textarea.form-input { resize: vertical; min-height: 80px; }
-    select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233d5878' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 30px; }
-    select.form-input option { background: #0a1840; color: var(--text); }
-    .form-row { display: flex; gap: 12px; }
-    .form-row .form-group { flex: 1; }
+    .unit-card-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
 
-    .day-toggles { display: flex; gap: 6px; flex-wrap: wrap; }
-    .day-toggle { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border-str); background: var(--bg-input); cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); transition: all 0.12s; }
-    .day-toggle.active { background: linear-gradient(135deg, rgba(56,189,248,0.8), rgba(45,212,191,0.7)); border-color: transparent; color: #04060f; box-shadow: 0 2px 8px rgba(56,189,248,0.3); }
+    .unit-notes-strip {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface);
+      border-left: 3px solid var(--accent-dim);
+      border-radius: 0 4px 4px 0;
+      padding: 6px 10px;
+      margin-top: 8px;
+    }
 
-    /* ── Today tab ── */
-    .today-date { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.04em; }
+    /* ── Subunit / lesson rows ── */
+    .subunit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
 
-    .lesson-card {
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 12px;
-      position: relative;
+    .subunit-row:hover { background: var(--surface); }
+
+    .subunit-row-left { flex: 1; min-width: 0; }
+
+    .subunit-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
       overflow: hidden;
-      box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(56,189,248,0.07);
+      text-overflow: ellipsis;
     }
 
-    .lesson-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, var(--accent), var(--teal)); border-radius: 0 2px 2px 0; box-shadow: 0 0 8px rgba(56,189,248,0.4); }
-    .lesson-card-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-    .lesson-card-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
-    .lesson-card-field { font-size: 13px; margin-bottom: 4px; color: var(--muted); }
-    .lesson-card-field strong { color: var(--text); font-weight: 700; }
+    .subunit-meta {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 2px;
+    }
 
-    .unit-notes-strip { background: rgba(251,191,36,0.07); border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0; padding: 7px 10px; font-size: 12px; color: var(--amber); margin: 10px 0 4px; }
-    .log-notes-inline { font-size: 12px; color: var(--green); margin-top: 10px; }
-    .no-lessons-card { text-align: center; padding: 48px 16px; border-radius: 20px; color: var(--dim); font-size: 14px; margin-bottom: 16px; background: var(--surface); border: 1px solid var(--border); }
-    .next-preview { border: 1px solid rgba(56,189,248,0.2); border-radius: 18px; padding: 16px 18px; background: rgba(56,189,248,0.06); }
-    .next-preview .label { display: block; margin-bottom: 8px; color: var(--accent); }
+    .subunit-actions { display: flex; gap: 4px; flex-shrink: 0; }
 
-    /* ── Classes tab ── */
-    .tab-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .tab-section-title { font-size: clamp(2rem, 4vw, 2.8rem); line-height: 0.96; font-weight: 700; }
-    .class-meta { padding: 8px 0 8px; }
-    .info-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 5px; font-size: 12px; color: var(--muted); }
-    .info-row .label { margin-right: 4px; }
-    .units-container { margin-top: 10px; }
+    /* ── Progress bar ── */
+    .progress-bar {
+      height: 5px;
+      border-radius: 3px;
+      background: var(--surface);
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--violet));
+      transition: width 0.4s ease;
+    }
 
     /* ── Log tab ── */
-    .log-form { border-radius: 20px; padding: 18px; margin-bottom: 22px; }
-    .log-student-notes { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
-    .log-student-grid { display: grid; gap: 10px; margin-top: 10px; }
-    .log-student-card { padding: 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
-    .log-student-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .log-student-help { margin-top: 5px; font-size: 11px; color: var(--dim); }
-    .log-history { max-height: 420px; overflow-y: auto; }
-    .log-item { border-bottom: 1px solid var(--border); padding: 13px 0; }
-    .log-item:last-child { border-bottom: none; }
-    .log-item-meta { font-size: 11px; color: var(--dim); margin-bottom: 3px; letter-spacing: 0.03em; text-transform: uppercase; font-weight: 700; }
-    .log-item-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-    .log-item-notes { font-size: 12px; color: var(--muted); line-height: 1.6; }
-    .log-history-label { margin-bottom: 12px; }
+    .log-entry {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .log-entry-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .log-entry-meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .log-notes-inline {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      margin-top: 8px;
+    }
+
+    /* ── Stats ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+    }
+
+    .stat-card-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-card-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Today dots ── */
+    .today-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+    }
+
+    .future-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      opacity: 0.5;
+    }
+
+    /* ── Lesson timeline dots ── */
+    .lesson-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .lesson-dot.done     { background: var(--green); }
+    .lesson-dot.today    { background: var(--accent); }
+    .lesson-dot.upcoming { background: var(--dim); }
 
     /* ── Students ── */
-    .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 14px 0 18px; }
-    .profile-card { padding: 14px; border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm); }
-    .profile-value { margin-top: 5px; font-size: 14px; font-weight: 700; color: var(--text); }
-    .profile-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
-    .history-list { max-height: 320px; overflow-y: auto; display: grid; gap: 8px; margin-top: 10px; }
-    .history-item { padding: 11px 13px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
-    .history-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-    .history-meta { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+    .student-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: box-shadow 0.15s;
+    }
 
-    .attendance-present { background: var(--green-dim); color: var(--green); border-color: rgba(52,211,153,0.22); }
-    .attendance-absent  { background: rgba(248,113,113,0.1); color: var(--red); border-color: rgba(248,113,113,0.2); }
-    .attendance-late    { background: var(--amber-dim); color: var(--amber); border-color: rgba(251,191,36,0.2); }
-    .attendance-excused { background: var(--accent-dim); color: var(--accent); border-color: rgba(56,189,248,0.22); }
+    .student-row:hover { box-shadow: var(--shadow-md); }
 
-    .profile-shell { display: grid; gap: 18px; }
-    .profile-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
-    .profile-subtitle { margin-top: 6px; color: var(--muted); font-size: 13px; max-width: 60ch; }
-    .profile-section { padding: 20px; border-radius: 22px; background: var(--bg-card); border: 1px solid var(--border); backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm); box-shadow: var(--shadow-sm); }
-    .profile-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim); font-weight: 800; margin-bottom: 12px; }
-    .profile-hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr); gap: 14px; }
-    .profile-hero-story { padding: 16px; border-radius: 18px; background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.15); }
-    .profile-story-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: -0.02em; }
-    .profile-story-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
-    .profile-story-list { display: grid; gap: 8px; margin-top: 10px; }
-    .profile-story-item { padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
-    .profile-story-skill { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); font-weight: 800; margin-bottom: 5px; }
-    .profile-story-text { font-size: 13px; color: var(--text); line-height: 1.6; }
-    .profile-skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
-    .profile-note-feed { display: grid; gap: 8px; margin-top: 10px; }
-    .profile-note-item { padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
-    .profile-note-meta { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
-    .profile-note-text { font-size: 13px; color: var(--text); line-height: 1.6; }
-    .diagnostic-grid { display: grid; gap: 10px; margin-top: 12px; }
-    .diagnostic-item { padding: 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
-    .diagnostic-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-    .diagnostic-meta { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px; }
-    .diagnostic-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-    .class-detail-list { display: grid; gap: 8px; margin-top: 10px; }
-    .class-detail-item { padding: 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
-    .class-detail-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-    .class-detail-meta { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .student-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-dim), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
 
-    /* ── Report ── */
-    .report-shell { display: grid; gap: 18px; }
-    .report-page { padding: 30px; border-radius: 24px; background: var(--bg-card); backdrop-filter: var(--blur-md); -webkit-backdrop-filter: var(--blur-md); border: 1px solid var(--border-str); box-shadow: var(--shadow-md), inset 0 1px 0 rgba(56,189,248,0.08); display: grid; gap: 20px; }
-    .report-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-    .report-brand { font-size: 28px; font-weight: 900; letter-spacing: 0.04em; color: var(--text); }
-    .report-kicker { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 800; margin-bottom: 5px; }
-    .report-subbrand { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 54ch; margin-top: 6px; }
-    .report-badge-stack { display: grid; gap: 6px; justify-items: end; }
-    .report-pill { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border-str); background: var(--surface); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 800; }
-    .report-meta-grid, .report-summary-grid, .report-skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-    .report-field, .report-panel { padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
-    .report-field-label, .report-panel-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); font-weight: 800; margin-bottom: 5px; }
-    .report-field-value { font-size: 15px; color: var(--text); font-weight: 700; }
-    .report-overall { display: grid; grid-template-columns: minmax(180px, 240px) minmax(0, 1fr); gap: 14px; align-items: stretch; }
-    .report-overall-level { padding: 18px; border-radius: 20px; background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); }
-    .report-overall-value { font-size: 42px; font-weight: 900; color: var(--accent); line-height: 1; margin-top: 10px; letter-spacing: -0.04em; text-shadow: 0 0 20px rgba(56,189,248,0.4); }
-    .report-overall-copy { font-size: 13px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
-    .report-score-guide { display: grid; gap: 6px; }
-    .report-score-bands, .report-score-levels { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 3px; }
-    .report-score-band, .report-score-level { padding: 6px 4px; border-radius: 8px; text-align: center; font-size: 10px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-weight: 700; }
-    .report-score-band { font-size: 11px; color: var(--text); }
-    .report-score-band:first-child { grid-column: span 1; }
-    .report-score-band:nth-child(2), .report-score-band:nth-child(3), .report-score-band:nth-child(4), .report-score-band:nth-child(5) { grid-column: span 3; }
-    .report-score-band:last-child { grid-column: span 1; }
-    .report-score-level.active { background: rgba(56,189,248,0.18); color: var(--accent); border-color: rgba(56,189,248,0.3); }
-    .report-skill-card { display: grid; gap: 8px; }
-    .report-skill-level { font-size: 22px; font-weight: 900; color: var(--accent); }
-    .report-divider { height: 1px; background: linear-gradient(90deg, rgba(56,189,248,0), rgba(56,189,248,0.15), rgba(56,189,248,0)); }
-    .report-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
-    .report-section-name { font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--dim); font-weight: 900; }
-    .report-section-note { font-size: 12px; color: var(--muted); }
-    .report-input, .report-input.form-input, .report-textarea.form-input, .report-page select.form-input { border-radius: 10px; border: 1px solid var(--border-str); background: var(--bg-input); box-shadow: none; color: var(--text); }
-    .report-textarea { min-height: 100px; resize: vertical; }
-    .report-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-    .report-footer { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; padding-top: 8px; }
-    .report-signoff { padding-top: 20px; border-top: 1px solid var(--border); }
-    .report-signoff-line { height: 1px; background: rgba(56,189,248,0.15); margin-bottom: 6px; }
-    .report-signoff-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); font-weight: 800; }
-    .report-print-note { font-size: 11px; color: var(--dim); line-height: 1.6; }
-    .report-title { font-size: 34px; font-weight: 700; margin-bottom: 4px; }
-    .report-meta { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
-    .report-section { margin-bottom: 20px; }
-    .report-section-title { border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; }
-    .report-stat-row { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 8px; }
-    .report-stat { text-align: center; min-width: 60px; }
-    .report-stat-num { font-size: 26px; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; line-height: 1; }
-    .report-stat-lbl { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 4px; font-weight: 700; }
-    .report-lesson-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
-    .report-lesson-item:last-child { border-bottom: none; }
-    .report-lesson-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
-    .report-lesson-ctx { font-size: 11px; color: var(--dim); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
-    .report-lesson-note { font-size: 12px; color: var(--text); background: var(--accent-dim); border-left: 3px solid var(--accent); padding: 5px 9px; border-radius: 0 5px 5px 0; line-height: 1.6; }
-    .report-no-note { font-size: 11px; color: var(--dim); font-style: italic; }
+    .student-row-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      flex: 1;
+      min-width: 0;
+    }
 
-    /* ── Toasts ── */
-    .toast-shelf { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-    .toast { padding: 11px 16px; border-radius: 14px; font-size: 13px; font-weight: 600; pointer-events: auto; animation: toast-in .2s ease both; max-width: 300px; line-height: 1.4; backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm); }
-    .toast-success { background: rgba(10,28,20,0.92); border: 1px solid rgba(52,211,153,0.25); color: var(--green); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-    .toast-error   { background: rgba(28,8,8,0.92); border: 1px solid rgba(248,113,113,0.25); color: var(--red); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-    .toast-info    { background: rgba(6,18,50,0.92); border: 1px solid rgba(56,189,248,0.25); color: var(--accent); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-    @keyframes toast-in { from{opacity:0;transform:translateY(8px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .student-row-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .student-row-actions {
+      display: flex;
+      gap: 6px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     /* ── Settings ── */
-    .settings-section { margin-bottom: 24px; padding: 20px; border-radius: 22px; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(56,189,248,0.06); }
-    .settings-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--dim); font-weight: 800; margin-bottom: 14px; }
+    .settings-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
 
-    /* ── Loading / error ── */
-    .loading-state, .error-state { text-align: center; padding: 56px 16px; font-size: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); }
-    .loading-state { color: var(--dim); }
-    .error-state { color: var(--red); }
+    .settings-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
 
-    /* ── Students list ── */
-    .student-class-section { margin-bottom: 22px; padding: 18px; border-radius: 22px; box-shadow: var(--shadow-sm); }
-    .student-class-heading { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .student-row { display: flex; align-items: center; gap: 8px; padding: 10px 4px; border-bottom: 1px solid var(--border); font-size: 13px; }
-    .student-row:last-child { border-bottom: none; }
-    .student-row-name { flex: 1; font-weight: 700; }
-    .student-row-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
-    .student-row-actions { display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0; }
-    .student-list-inner { background: rgba(0,8,30,0.25); border-radius: 14px; padding: 8px 12px; }
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 9999;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.2s ease;
+    }
 
-    /* ── Student notes ── */
-    .sn-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-    .sn-row { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; font-size: 12px; }
-    .sn-row-name { width: 90px; flex-shrink: 0; color: var(--muted); font-weight: 700; }
-    .sn-row-note { flex: 1; color: var(--text); }
-    .sn-row-note.empty { color: var(--dim); font-style: italic; }
-    .sn-add-btn { font-size: 11px; color: var(--accent); background: none; border: none; cursor: pointer; padding: 0; white-space: nowrap; font-weight: 700; }
-    .sn-add-btn:hover { text-decoration: underline; }
+    .toast.error { background: var(--red); }
+    .toast.success { background: var(--green); }
 
-    /* ── Utilities ── */
-    .date-range { font-size: 11px; color: var(--dim); white-space: nowrap; }
-    .empty-state-inline  { font-size: 12px; color: var(--dim); padding: 4px 0; }
-    .empty-state-section { text-align: center; padding: 40px 16px; color: var(--dim); font-size: 14px; }
-    .section-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .preview-meta { font-size: 12px; color: var(--muted); }
-    .mt-10{margin-top:10px} .mt-8{margin-top:8px} .mb-8{margin-bottom:8px} .mb-10{margin-bottom:10px} .mb-14{margin-bottom:14px}
-    .form-group-inline{margin-bottom:0} .form-group-spaced{margin-top:12px;margin-bottom:0} .text-empty{color:var(--dim)}
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-    /* ── Print ── */
-    @media print {
-      @page { size: A4 portrait; margin: 12mm; }
-      body { background: #fff; color: #111; }
-      .app-shell,.app-chrome,.content-shell,.tab-content{padding:0!important;margin:0!important;background:#fff!important;box-shadow:none!important;border:none!important;}
-      .app-header,.tab-bar,.page-actions,.report-actions,.btn,.btn-primary{display:none!important;}
-      .report-shell,.profile-header{gap:0!important;margin:0!important;}
-      .report-page{padding:0!important;box-shadow:none!important;background:#fff!important;border:none!important;border-radius:0!important;}
-      .report-field,.report-panel,.report-overall-level{background:#fff!important;border-color:rgba(0,0,0,.12)!important;box-shadow:none!important;}
-      .report-input,.report-input.form-input,.report-textarea.form-input,.report-page select.form-input,.report-page input.form-input,.report-page textarea.form-input{padding:0!important;border:none!important;background:transparent!important;box-shadow:none!important;color:#111!important;appearance:none!important;font:inherit!important;}
-      .report-page textarea.form-input{min-height:auto!important;resize:none!important;overflow:visible!important;}
-      .report-page select.form-input{font-weight:900!important;}
-      .report-pill{border-color:rgba(0,0,0,.12)!important;background:#fff!important;}
-      .tab-bar,.modal-actions{display:none!important;}
-      .modal-backdrop{position:static;background:none;padding:0;backdrop-filter:none;}
-      .modal-card{box-shadow:none;max-width:100%;border:none;}
+    /* ── Misc ── */
+    .no-lessons-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .next-preview {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 10px;
+    }
+
+    .next-preview .label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .preview-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .empty-state-section {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--dim);
+      margin: 20px 0 10px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+
+    /* ── Student profile / report ── */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .profile-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-dim), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .profile-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .profile-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .note-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .note-card-meta {
+      font-size: 11px;
+      color: var(--dim);
+      margin-bottom: 6px;
     }
 
     /* ── Responsive ── */
-    @media (max-width: 860px) {
-      .app-shell{padding:14px 10px 40px;}
-      .app-header{padding:18px 16px 12px;}
-      .app-hero{grid-template-columns:1fr;}
-      .app-hero-card{justify-self:stretch;max-width:none;}
-      .tab-bar{margin:0 10px;}
-      .content-shell{padding:10px 10px 16px;}
-      .profile-hero{grid-template-columns:1fr;}
-      .report-overall{grid-template-columns:1fr;}
-    }
     @media (max-width: 640px) {
-      .tab-bar{grid-template-columns:repeat(2,minmax(0,1fr));}
-      .tab-btn:last-child{grid-column:1/-1;}
-      .tab-content{padding:16px 2px 12px;}
+      .app-header { padding: 14px 16px 0; }
+      .content-shell { padding: 16px 14px 32px; }
+      .tab-bar { padding: 0 14px; }
+      .tab-btn { padding: 10px 12px; font-size: 12px; }
+      .hero-stats,.stats-grid { grid-template-columns: 1fr; }
+      .app-hero { grid-template-columns: 1fr; }
+      .student-row { flex-wrap: wrap; align-items: flex-start; }
+      .student-row-name { flex: 1 1 auto; min-width: 0; }
+      .student-row-meta { flex: 1 1 100%; }
+      .student-row-actions { width: 100%; margin-left: 0; justify-content: flex-end; }
+      .modal-card { padding: 18px; border-radius: 16px; }
+      .form-row { flex-direction: column; }
+      .form-row .form-group { flex: none; }
     }
-    @media (max-width: 480px) {
-      .app-chrome{border-radius:22px;}
-      .tab-bar{gap:5px;padding:7px;border-radius:16px;}
-      .tab-btn{padding:10px 6px;font-size:10px;}
-      .tab-content{padding:14px 0;}
-      .modal-card{padding:18px;border-radius:20px;}
-      .form-row{flex-direction:column;}
-      .form-row .form-group{flex:none;}
-      .hero-stats,.stats-grid{grid-template-columns:1fr;}
-      .student-row{flex-wrap:wrap;align-items:flex-start;}
-      .student-row-name{flex:1 1 auto;min-width:0;}
-      .student-row-meta{flex:1 1 100%;}
-      .student-row-actions{width:100%;margin-left:0;justify-content:flex-end;}
+
+    /* ── 2026 redesign overrides ── */
+    :root {
+      --glass: rgba(255, 255, 255, 0.62);
+      --glass-strong: rgba(255, 255, 255, 0.74);
+      --glass-border: rgba(255, 255, 255, 0.7);
+      --glass-shadow: 0 28px 70px rgba(113, 128, 150, 0.18);
+      --ink-soft: #7c8396;
+      --ink-muted: #9da5b8;
+      --blue-soft: #5e6bff;
+      --blue-deep: #4857ef;
+      --blue-wash: rgba(94, 107, 255, 0.14);
+      --rose-wash: rgba(255, 182, 193, 0.28);
+      --cyan-wash: rgba(110, 204, 255, 0.24);
+      --card-radius: 30px;
+      --panel-radius: 24px;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(168, 206, 255, 0.65), transparent 24%),
+        radial-gradient(circle at 82% 10%, rgba(188, 202, 255, 0.55), transparent 20%),
+        radial-gradient(circle at 90% 82%, rgba(245, 213, 227, 0.38), transparent 22%),
+        linear-gradient(180deg, #dbe5f4 0%, #e9eef7 38%, #e5ebf5 100%);
+      color: var(--text);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(255,255,255,0.32), transparent 28%),
+        radial-gradient(circle at top, rgba(255,255,255,0.5), transparent 36%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 18px 22px;
+    }
+
+    .app-chrome {
+      max-width: 1480px;
+      min-height: calc(100vh - 36px);
+      margin: 0 auto;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr) 310px;
+      gap: 18px;
+    }
+
+    .glass-panel,
+    .shell-sidebar,
+    .shell-rail,
+    .workspace-header,
+    .hero-stat,
+    .card,
+    .unit-card,
+    .subunit-card,
+    .lesson-item,
+    .modal-card,
+    .overview-card,
+    .log-student-card,
+    .student-profile-hero,
+    .student-profile-card,
+    .student-assessment-card,
+    .student-story-card,
+    .settings-card,
+    .report-preview-shell,
+    .dashboard-panel,
+    .rail-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.66));
+      border: 1px solid rgba(255,255,255,0.78);
+      box-shadow: 0 20px 40px rgba(134, 148, 169, 0.14);
+      backdrop-filter: blur(24px) saturate(1.1);
+      -webkit-backdrop-filter: blur(24px) saturate(1.1);
+    }
+
+    .shell-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      padding: 18px 14px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.48));
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+    }
+
+    .sidebar-brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .brand-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 999px;
+      background: #111827;
+      display: block;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+    }
+
+    .brand-dot-secondary {
+      width: 10px;
+      height: 10px;
+      opacity: 0.92;
+    }
+
+    .brand-dot-tertiary {
+      width: 8px;
+      height: 8px;
+      opacity: 0.78;
+    }
+
+    .sidebar-brand-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 4px 0 0;
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      background: transparent;
+      color: #364152;
+      font-size: 0.95rem;
+      font-weight: 600;
+      justify-content: flex-start;
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease, color 180ms ease;
+      cursor: pointer;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255,255,255,0.52);
+      color: #101828;
+      transform: translateY(-1px);
+    }
+
+    .tab-btn.active {
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(255,255,255,0.85);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 8px 20px rgba(144, 157, 178, 0.18);
+      color: #111827;
+    }
+
+    .tab-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: currentColor;
+      flex-shrink: 0;
+    }
+
+    .tab-icon svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 18px 12px 8px;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .sidebar-logout {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.54);
+      color: #364152;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 180ms ease, transform 180ms ease;
+    }
+
+    .sidebar-logout:hover {
+      background: rgba(255,255,255,0.82);
+      transform: translateY(-1px);
+    }
+
+    .sidebar-logout svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .shell-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .workspace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 22px 24px;
+      border-radius: 30px;
+    }
+
+    .workspace-kicker {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 2px;
+    }
+
+    .workspace-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .workspace-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 4vw, 2.7rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+      color: #101828;
+    }
+
+    .workspace-subtitle {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .workspace-metrics {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .metric-pill {
+      min-width: 0;
+      flex: 1 1 132px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    .metric-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(94,107,255,0.16), rgba(94,107,255,0.08));
+      color: var(--blue-soft);
+    }
+
+    .metric-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .metric-copy {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .metric-copy strong {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: -0.03em;
+    }
+
+    .metric-copy span {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+
+    .content-shell {
+      max-width: none;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      min-width: 0;
+    }
+
+    .shell-rail {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 30px;
+      min-width: 0;
+    }
+
+    .rail-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.82);
+      color: var(--ink-soft);
+    }
+
+    .rail-search svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .rail-search input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #111827;
+    }
+
+    .rail-section {
+      border-radius: 24px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.64));
+      border: 1px solid rgba(255,255,255,0.82);
+      min-width: 0;
+    }
+
+    .rail-progress-title,
+    .rail-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.35rem;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .rail-progress-label {
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .rail-progress-meta,
+    .rail-course-meta,
+    .course-card-copy,
+    .teacher-meta,
+    .mini-card-meta,
+    .activity-hint,
+    .page-copy,
+    .hero-stat-note,
+    .overview-note,
+    .lesson-card-field,
+    .preview-meta,
+    .settings-help,
+    .empty-state-inline,
+    .empty-state-section,
+    .text-empty {
+      color: var(--ink-soft);
+    }
+
+    .rail-section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .rail-course-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rail-course-item {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .rail-course-item:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .rail-course-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--blue-deep);
+      background: linear-gradient(180deg, rgba(94,107,255,0.14), rgba(94,107,255,0.08));
+    }
+
+    .rail-course-arrow {
+      color: var(--ink-muted);
+      font-size: 1.15rem;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .dashboard-shell {
+      display: grid;
+      gap: 18px;
+    }
+
+    .dashboard-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.95fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .dashboard-panel {
+      border-radius: 28px;
+      padding: 22px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .dashboard-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-panel-title,
+    .page-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      color: #111827;
+    }
+
+    .dashboard-panel-title.small {
+      font-size: 1.45rem;
+    }
+
+    .mini-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      background: transparent;
+      color: #4b5565;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .dashboard-welcome {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dashboard-caption,
+    .page-eyebrow,
+    .hero-stat-label,
+    .label,
+    .settings-section-title,
+    .sn-section-label,
+    .report-section-title {
+      color: var(--ink-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .activity-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.9fr);
+      gap: 18px;
+      align-items: stretch;
+      min-width: 0;
+    }
+
+    .activity-bars {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 12px;
+      align-items: end;
+      min-height: 188px;
+      padding-top: 14px;
+    }
+
+    .activity-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      min-height: 170px;
+    }
+
+    .activity-bar {
+      width: 100%;
+      max-width: 42px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(231,236,247,0.98), rgba(241,244,250,0.72));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+      position: relative;
+      min-height: 24px;
+    }
+
+    .activity-bar.is-active {
+      background: linear-gradient(180deg, #6f78ff 0%, #5666ff 100%);
+      box-shadow: 0 20px 30px rgba(91, 106, 245, 0.26);
+    }
+
+    .activity-day-label {
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+    }
+
+    .activity-mini-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .activity-mini-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+      min-width: 0;
+    }
+
+    .mini-card-time {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--blue-wash);
+      color: var(--blue-deep);
+      font-size: 0.75rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .mini-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.08rem;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+      overflow-wrap: anywhere;
+    }
+
+    .dashboard-bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .teacher-row {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .teacher-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 74px;
+    }
+
+    .teacher-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      color: #4b5565;
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(227,232,242,0.78));
+      border: 1px solid rgba(255,255,255,0.86);
+      box-shadow: 0 12px 24px rgba(158, 169, 188, 0.18);
+    }
+
+    .teacher-name {
+      font-weight: 700;
+      color: #111827;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .teacher-meta {
+      font-size: 0.76rem;
+      text-align: center;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+    }
+
+    .course-card {
+      min-height: 160px;
+      padding: 16px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.62));
+      border: 1px solid rgba(255,255,255,0.82);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16), transparent 40%),
+        var(--course-bg, linear-gradient(135deg, rgba(94,107,255,0.18), rgba(94,107,255,0.02)));
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .course-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .course-card-tag {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.82);
+      color: #3c4657;
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-bottom: 56px;
+    }
+
+    .course-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.12rem;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .page-intro {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .page-copy {
+      max-width: 64ch;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-stats,
+    .stats-grid,
+    .overview-grid,
+    .student-assessment-grid,
+    .settings-grid,
+    .student-story-grid {
+      gap: 14px;
+    }
+
+    .hero-stats {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .hero-stat,
+    .overview-card,
+    .student-assessment-card,
+    .student-story-card,
+    .settings-card {
+      border-radius: 22px;
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .hero-stat-value,
+    .overview-value,
+    .stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #111827;
+    }
+
+    .day-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .day-toggle {
+      min-width: 54px;
+      padding: 10px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.86);
+      color: #475467;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .day-toggle:hover {
+      background: rgba(255,255,255,0.96);
+      border-color: rgba(94,107,255,0.28);
+      color: #1f2937;
+      transform: translateY(-1px);
+    }
+
+    .day-toggle.active {
+      background: linear-gradient(135deg, rgba(94,107,255,0.16), rgba(94,107,255,0.1));
+      border-color: rgba(94,107,255,0.42);
+      color: var(--blue-deep);
+      box-shadow: 0 10px 18px rgba(94,107,255,0.14);
+    }
+
+    .class-chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .class-chip {
+      min-width: 92px;
+      padding: 10px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.86);
+      color: #475467;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+      text-align: center;
+    }
+
+    .class-chip:hover {
+      background: rgba(255,255,255,0.96);
+      border-color: rgba(94,107,255,0.28);
+      color: #1f2937;
+      transform: translateY(-1px);
+    }
+
+    .class-chip.active {
+      background: linear-gradient(135deg, rgba(94,107,255,0.16), rgba(94,107,255,0.1));
+      border-color: rgba(94,107,255,0.42);
+      color: var(--blue-deep);
+      box-shadow: 0 10px 18px rgba(94,107,255,0.14);
+    }
+
+    .setup-flow {
+      display: grid;
+      gap: 14px;
+    }
+
+    .setup-step {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.64);
+      border: 1px solid rgba(255,255,255,0.78);
+    }
+
+    .setup-step-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .setup-step-copy,
+    .curriculum-preview {
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .curriculum-preview {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(94,107,255,0.08);
+      border: 1px solid rgba(94,107,255,0.14);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      color: #344054;
+      font-weight: 600;
+    }
+
+    .toggle-row input {
+      margin-top: 3px;
+      accent-color: var(--blue-deep);
+    }
+
+    .student-directory {
+      display: grid;
+      gap: 14px;
+    }
+
+    .student-directory-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 20px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.82);
+      border-radius: 24px;
+      box-shadow: 0 16px 30px rgba(134, 148, 169, 0.12);
+      min-width: 0;
+    }
+
+    .student-identity {
+      min-width: 0;
+    }
+
+    .student-primary {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.12rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #111827;
+    }
+
+    .student-secondary {
+      margin-top: 4px;
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+    }
+
+    .student-directory-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 14px;
+      min-width: 0;
+    }
+
+    .student-meta-block {
+      min-width: 0;
+    }
+
+    .student-meta-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+
+    .student-meta-value {
+      color: #344054;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .student-directory-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .card,
+    .unit-card,
+    .subunit-card,
+    .lesson-item,
+    .lesson-card,
+    .next-preview,
+    .no-lessons-card,
+    .student-row,
+    .student-profile-card,
+    .report-shell,
+    .empty-state-section {
+      border-radius: 24px;
+    }
+
+    .card {
+      overflow: hidden;
+    }
+
+    .card-header,
+    .lesson-row,
+    .student-row {
+      min-height: 58px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 14px 16px;
+      cursor: pointer;
+    }
+
+    .card-title {
+      min-width: 0;
+      flex: 1 1 160px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #111827;
+      overflow-wrap: anywhere;
+    }
+
+    .chevron {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      color: #475467;
+      transition: transform 180ms ease;
+    }
+
+    .chevron.open {
+      transform: rotate(90deg);
+    }
+
+    .status-badge,
+    .badge {
+      border-radius: 999px;
+    }
+
+    .btn,
+    .btn-primary,
+    .btn-add,
+    .btn-secondary {
+      border-radius: 14px;
+      font-weight: 700;
+      box-shadow: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue-soft), var(--blue-deep));
+      border-color: transparent;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #5666ff, #4150eb);
+    }
+
+    .modal-backdrop {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(203, 213, 225, 0.24);
+    }
+
+    .modal-card {
+      border-radius: 28px;
+    }
+
+    .form-input,
+    select.form-input,
+    textarea.form-input {
+      background: rgba(255,255,255,0.8);
+      border-color: rgba(148, 163, 184, 0.18);
+      color: #111827;
+    }
+
+    .report-preview-shell,
+    .report-shell {
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.86));
+    }
+
+    @media (max-width: 1240px) {
+      .app-shell {
+        padding: 14px;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .app-chrome {
+        grid-template-columns: 1fr;
+      }
+
+      .shell-sidebar {
+        order: 2;
+      }
+
+      .shell-main {
+        order: 1;
+      }
+
+      .shell-rail {
+        order: 3;
+      }
+
+      .workspace-header,
+      .dashboard-hero,
+      .activity-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace-header {
+        flex-direction: column;
+      }
+
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .student-directory-card {
+        grid-template-columns: 1fr;
+      }
+
+      .student-directory-actions {
+        justify-content: flex-start;
+      }
+
+      .shell-sidebar {
+        gap: 14px;
+      }
+
+      .sidebar-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app-shell {
+        padding: 10px;
+      }
+
+      .sidebar-nav {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace-header,
+      .dashboard-panel,
+      .shell-rail,
+      .shell-sidebar {
+        border-radius: 22px;
+      }
+
+      .workspace-title {
+        font-size: 1.9rem;
+      }
+
+      .metric-pill {
+        min-width: calc(50% - 6px);
+        flex-basis: calc(50% - 6px);
+      }
+
+      .student-directory-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .activity-bars {
+        gap: 8px;
+      }
     }
   </style>
 </head>
 <body>
 <div class="app-shell">
   <div class="app-chrome">
-    <header class="app-header">
-      <div class="app-header-top">
-        <div class="app-mark">
-          <span class="app-mark-badge">LE</span>
-          Lesson Engine
+    <aside class="shell-sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-mark">
+          <span class="brand-dot"></span>
+          <span class="brand-dot brand-dot-secondary"></span>
+          <span class="brand-dot brand-dot-tertiary"></span>
+        </div>
+        <div class="sidebar-brand-text">Knowledge</div>
+      </div>
+
+      <div class="sidebar-nav">
+        <button class="tab-btn active" data-tab="today">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10.5V20h14v-9.5"/></svg>
+          </span>
+          <span>Home</span>
+        </button>
+        <button class="tab-btn" data-tab="classes">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>
+          </span>
+          <span>Courses</span>
+        </button>
+        <button class="tab-btn" data-tab="log">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h12"/><path d="M8 12h12"/><path d="M8 18h12"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+          </span>
+          <span>Schedule</span>
+        </button>
+        <button class="tab-btn" data-tab="students">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          <span>Students</span>
+        </button>
+        <button class="tab-btn" data-tab="settings">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </span>
+          <span>Statistics</span>
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="sidebar-logout" onclick="switchTab('settings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+          <span>Log out</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="shell-main">
+      <div class="workspace-header glass-panel">
+        <div class="workspace-copy">
+          <div class="workspace-kicker" id="workspace-kicker">Home</div>
+          <div class="workspace-title-row">
+            <div class="workspace-title" id="workspace-title">Knowledge</div>
+            <div class="workspace-subtitle" id="workspace-subtitle">Welcome back!</div>
+          </div>
+        </div>
+        <div class="workspace-metrics">
+          <div class="metric-pill">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16"/><path d="M6 16V9"/><path d="M12 16V5"/><path d="M18 16v-3"/></svg>
+            </div>
+            <div class="metric-copy">
+              <strong id="shell-metric-classes">0</strong>
+              <span>Classes</span>
+            </div>
+          </div>
+          <div class="metric-pill">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 8h10"/><path d="M7 12h6"/><path d="M8 20h8"/></svg>
+            </div>
+            <div class="metric-copy">
+              <strong id="shell-metric-lessons">0</strong>
+              <span>Lessons</span>
+            </div>
+          </div>
+          <div class="metric-pill">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            </div>
+            <div class="metric-copy">
+              <strong id="shell-metric-students">0</strong>
+              <span>Students</span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="app-hero">
-        <div>
-          <div class="app-title">Lesson Engine</div>
-        </div>
-        <div class="app-hero-card">
-          <div class="app-hero-kicker">Today</div>
-          <div class="app-hero-value" id="app-hero-date">Loading</div>
-          <div class="app-hero-note" id="app-hero-summary">Preparing your schedule and class data.</div>
-        </div>
+
+      <div class="content-shell">
+        <div id="tab-today" class="tab-content active"></div>
+        <div id="tab-classes" class="tab-content"></div>
+        <div id="tab-log" class="tab-content"></div>
+        <div id="tab-students" class="tab-content"></div>
+        <div id="tab-student-profile" class="tab-content"></div>
+        <div id="tab-student-report" class="tab-content"></div>
+        <div id="tab-settings" class="tab-content"></div>
       </div>
-    </header>
+    </main>
 
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="today">Today</button>
-      <button class="tab-btn" data-tab="classes">Classes</button>
-      <button class="tab-btn" data-tab="log">Log</button>
-      <button class="tab-btn" data-tab="students">Students</button>
-      <button class="tab-btn" data-tab="settings">Settings</button>
-    </div>
+    <aside class="shell-rail glass-panel">
+      <label class="rail-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="shell-search" type="search" placeholder="Search">
+      </label>
 
-    <div class="content-shell">
-      <div id="tab-today"    class="tab-content active"></div>
-      <div id="tab-classes"  class="tab-content"></div>
-      <div id="tab-log"      class="tab-content"></div>
-      <div id="tab-students" class="tab-content"></div>
-      <div id="tab-student-profile" class="tab-content"></div>
-      <div id="tab-student-report" class="tab-content"></div>
-      <div id="tab-settings" class="tab-content"></div>
-    </div>
+      <div class="rail-section">
+        <div class="rail-section-head">
+          <div class="rail-section-title">Courses</div>
+          <div class="rail-section-meta" id="rail-course-meta">0 items</div>
+        </div>
+        <div id="rail-course-list" class="rail-course-list"></div>
+      </div>
+    </aside>
   </div>
 </div>
 
@@ -752,20 +2200,29 @@
   <div class="modal-card">
     <div class="modal-title" id="modal-class-title">New Class</div>
     <input type="hidden" id="cls-id">
-    <div class="form-group">
-      <label class="form-label">Class Name</label>
-      <input type="text" id="cls-name" class="form-input" placeholder="e.g. Starters B">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Teacher</label>
-      <input type="text" id="cls-teacher" class="form-input" list="teacher-options" placeholder="e.g. Tani">
-      <datalist id="teacher-options"></datalist>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Start Date</label>
-      <input type="date" id="cls-start" class="form-input">
-    </div>
-    <div class="form-row">
+    <div class="setup-flow">
+      <div class="setup-step">
+        <div class="setup-step-title">1. Class basics</div>
+        <div class="setup-step-copy">Name the class and assign the teacher who will run the lessons.</div>
+        <div class="form-group mt-10">
+          <label class="form-label">Class Name</label>
+          <input type="text" id="cls-name" class="form-input" placeholder="e.g. Starters B">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Teacher</label>
+          <input type="text" id="cls-teacher" class="form-input" list="teacher-options" placeholder="e.g. Tani">
+          <datalist id="teacher-options"></datalist>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="setup-step-title">2. Schedule</div>
+        <div class="setup-step-copy">Knowledge will use this schedule to create the lesson dates.</div>
+        <div class="form-group mt-10">
+          <label class="form-label">Start Date</label>
+          <input type="date" id="cls-start" class="form-input">
+        </div>
+        <div class="form-row">
       <div class="form-group">
         <label class="form-label">Lesson Start</label>
         <input type="time" id="cls-tstart" class="form-input">
@@ -774,16 +2231,32 @@
         <label class="form-label">Lesson End</label>
         <input type="time" id="cls-tend" class="form-input">
       </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Class Days</label>
-      <div class="day-toggles" id="cls-days">
-        <button class="day-toggle" data-day="Mon">Mon</button>
-        <button class="day-toggle" data-day="Tue">Tue</button>
-        <button class="day-toggle" data-day="Wed">Wed</button>
-        <button class="day-toggle" data-day="Thu">Thu</button>
-        <button class="day-toggle" data-day="Fri">Fri</button>
-        <button class="day-toggle" data-day="Sat">Sat</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Class Days</label>
+          <div class="day-toggles" id="cls-days">
+            <button type="button" class="day-toggle" data-day="Mon">Mon</button>
+            <button type="button" class="day-toggle" data-day="Tue">Tue</button>
+            <button type="button" class="day-toggle" data-day="Wed">Wed</button>
+            <button type="button" class="day-toggle" data-day="Thu">Thu</button>
+            <button type="button" class="day-toggle" data-day="Fri">Fri</button>
+            <button type="button" class="day-toggle" data-day="Sat">Sat</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-step" id="curriculum-setup-step">
+        <div class="setup-step-title">3. Curriculum master</div>
+        <div class="setup-step-copy">Choose an Our World level and Knowledge will build the complete lesson sequence for you.</div>
+        <div class="form-group mt-10">
+          <label class="form-label">Curriculum</label>
+          <select id="cls-curriculum" class="form-input" onchange="document.getElementById('cls-autobuild').checked = !!this.value; updateCurriculumPreview()"></select>
+        </div>
+        <label class="toggle-row">
+          <input type="checkbox" id="cls-autobuild" checked>
+          <span>Auto-build books, units, quizzes, review exams, and lesson dates after saving this class.</span>
+        </label>
+        <div class="curriculum-preview" id="cls-curriculum-preview"></div>
       </div>
     </div>
     <div class="modal-actions">
@@ -882,16 +2355,35 @@
 <!-- ═══ Modal: Add Student ═══ -->
 <div id="modal-student" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
-    <div class="modal-title">Add Student</div>
+    <div class="modal-title" id="modal-student-title">Add Student</div>
     <input type="hidden" id="student-classId">
+    <input type="hidden" id="student-id">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">English Name</label>
+        <input type="text" id="student-english-name" class="form-input" list="student-options" placeholder="e.g. Minji Kim" oninput="syncStudentModalLevel()">
+        <datalist id="student-options"></datalist>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Korean Name</label>
+        <input type="text" id="student-korean-name" class="form-input" placeholder="e.g. 김민지">
+      </div>
+    </div>
     <div class="form-group">
-      <label class="form-label">Student Name</label>
-      <input type="text" id="student-name" class="form-input" list="student-options" placeholder="Type a name or pick an existing student" oninput="syncStudentModalLevel()">
-      <datalist id="student-options"></datalist>
+      <label class="form-label">Date of Birth</label>
+      <input type="date" id="student-dob" class="form-input">
     </div>
     <div class="form-group">
       <label class="form-label">Entry Phonics Level</label>
       <select id="student-level" class="form-input"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Current Classes</label>
+      <div id="student-current-classes" class="class-chip-grid"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Past Classes</label>
+      <textarea id="student-past-classes" class="form-input" rows="3" placeholder="Add past classes separated by commas or new lines"></textarea>
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-student')">Cancel</button>
@@ -935,6 +2427,32 @@ let currentStudentProfile = { studentId: null, classId: null };
 let currentStudentReport = { studentId: null, classId: null };
 const LEVEL_OPTIONS = ['Pre-CEFR', 'Pre-A1', 'A1.1', 'A1.2', 'A1.3', 'A2.1', 'A2.2', 'A2.3', 'B1.1', 'B1.2', 'B1.3', 'B2.1', 'B2.2', 'B2.3', 'C1'];
 const REPORT_LEVEL_OPTIONS = LEVEL_OPTIONS.filter(level => level !== 'Pre-CEFR');
+const OW_BASE_LESSONS = [
+  { title: 'Unit Opener + Vocabulary 1', type: 'unit_opener', sources: ['student_book'] },
+  { title: 'Song + Vocabulary 1 Review', type: 'vocabulary_review', sources: ['student_book', 'workbook'] },
+  { title: 'Reading 1', type: 'reading_1', sources: ['student_book'] },
+  { title: 'Grammar 1', type: 'grammar', sources: ['student_book', 'workbook'] },
+  { title: 'Grammar 1 Practice', type: 'grammar_practice', sources: ['grammar_book'] },
+  { title: 'Vocabulary 2', type: 'vocabulary', sources: ['student_book', 'workbook'] },
+  { title: 'Grammar 2', type: 'grammar', sources: ['student_book', 'workbook'] },
+  { title: 'Grammar 2 Practice', type: 'grammar_practice', sources: ['grammar_book'] },
+  { title: 'Reading 2', type: 'reading_2', sources: ['workbook'] },
+  { title: 'Writing', type: 'writing', sources: ['student_book', 'workbook'] },
+  { title: 'Project Based Learning', type: 'project', sources: ['student_book'] },
+  { title: 'Unit Quiz', type: 'quiz', sources: ['assessment'] }
+];
+const OW_UNIT_ZERO_LESSONS = [
+  { title: 'Greetings + Classroom Language', type: 'unit_opener', sources: ['student_book'] },
+  { title: 'Song', type: 'song', sources: ['student_book'] },
+  { title: 'Core Vocabulary + Concepts', type: 'vocabulary', sources: ['student_book', 'workbook'] },
+  { title: 'Review + Practice', type: 'vocabulary_review', sources: ['workbook'] },
+  { title: 'Placement Confirmation Quiz', type: 'placement_quiz', sources: ['assessment'] }
+];
+const CURRICULUM_MASTERS = [
+  { id: '', name: 'No curriculum master - build manually', level: null, lessons: 0 },
+  ...[1, 2, 3].map(level => ({ id: `our_world_l${level}`, name: `Our World Level ${level}`, level, lessons: 116, hasUnitZero: true })),
+  ...[4, 5, 6].map(level => ({ id: `our_world_l${level}`, name: `Our World Level ${level}`, level, lessons: 111, hasUnitZero: false }))
+];
 const LEVEL_GROUPS = [
   { band: 'Pre-A1', levels: ['Pre-A1'] },
   { band: 'A1', levels: ['A1.1', 'A1.2', 'A1.3'] },
@@ -948,6 +2466,15 @@ const LEGACY_LEVEL_MAP = {
   'A2': 'A2.2',
   'B1': 'B1.2',
   'B2': 'B2.2'
+};
+const TAB_META = {
+  today: { kicker: 'Home', title: 'Knowledge', subtitle: 'Welcome back!' },
+  classes: { kicker: 'All courses', title: 'Curriculum map', subtitle: 'Build the structure behind every class.' },
+  log: { kicker: 'Schedule', title: 'Lesson log', subtitle: 'Capture what happened and what comes next.' },
+  students: { kicker: 'Students', title: 'Learner profiles', subtitle: 'Track each student with calmer visibility.' },
+  'student-profile': { kicker: 'Students', title: 'Student profile', subtitle: 'Detailed notes, diagnostics, and progress.' },
+  'student-report': { kicker: 'Students', title: 'Student report', subtitle: 'Printable parent-facing progress summary.' },
+  settings: { kicker: 'Statistics', title: 'System settings', subtitle: 'Keep the engine tidy and export-ready.' }
 };
 const SKILL_LEVEL_FIELDS = ['phonics', 'general', 'reading', 'listening'];
 const SKILL_LABELS = {
@@ -1205,7 +2732,7 @@ function refreshTeacherOptions(extra = []) {
 
 function uniqueStudentNames(extra = []) {
   return [...new Set(
-    [...DB.students.map(student => student.name).filter(Boolean), ...extra.filter(Boolean)]
+    [...DB.students.map(student => student.englishName || student.name).filter(Boolean), ...extra.filter(Boolean)]
       .map(name => String(name).trim())
       .filter(Boolean)
   )].sort((a, b) => a.localeCompare(b));
@@ -1284,6 +2811,65 @@ function normalizeStudentAssessment(student) {
   };
 }
 
+function studentEnglishName(student) {
+  return student?.englishName || student?.name || '';
+}
+
+function studentKoreanName(student) {
+  return student?.koreanName || '';
+}
+
+function studentPrimaryLabel(student) {
+  return studentEnglishName(student) || studentKoreanName(student) || 'Unnamed student';
+}
+
+function parsePastClasses(value) {
+  return String(value || '')
+    .split(/\n|,/)
+    .map(entry => entry.trim())
+    .filter(Boolean);
+}
+
+function curriculumMasterById(id) {
+  return CURRICULUM_MASTERS.find(master => master.id === id) || CURRICULUM_MASTERS[0];
+}
+
+function materialLabel(sources = []) {
+  const labels = {
+    student_book: 'Student Book',
+    workbook: 'Workbook',
+    grammar_book: 'Grammar Book',
+    assessment: 'Assessment'
+  };
+  return sources.map(source => labels[source] || source).join(' + ');
+}
+
+function nextClassDate(currentDate, dayIndexes) {
+  const daySet = new Set(dayIndexes);
+  const date = new Date(`${currentDate}T00:00:00`);
+  for (let i = 0; i < 14; i += 1) {
+    if (daySet.has(date.getDay())) return date.toISOString().slice(0, 10);
+    date.setDate(date.getDate() + 1);
+  }
+  return currentDate;
+}
+
+function addDays(dateStr, count) {
+  const date = new Date(`${dateStr}T00:00:00`);
+  date.setDate(date.getDate() + count);
+  return date.toISOString().slice(0, 10);
+}
+
+function nextLessonDate(previousDate, dayIndexes) {
+  return nextClassDate(addDays(previousDate, 1), dayIndexes);
+}
+
+function classDayIndexes(days) {
+  const map = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const indexes = (days || []).map(day => map[day]).filter(value => value !== undefined);
+  return indexes.length ? indexes : [1, 2, 3, 4, 5];
+}
+
 function buildAssessmentPayload(student, assessment) {
   return {
     ...student,
@@ -1296,7 +2882,7 @@ function normalizeReportCard(student) {
   const record = normalizeStudentAssessment(student);
   const current = student?.reportCard || {};
   return {
-    institution: current.institution || 'Lesson Engine',
+    institution: current.institution || 'Knowledge',
     course: current.course || classesForStudent(student?.id || '').map(cls => cls.name).join(', '),
     reportDate: current.reportDate || todayStr(),
     overallLevel: normalizeLevelValue(current.overallLevel || record.general.current, 'Pre-A1'),
@@ -1316,6 +2902,10 @@ function normalizeStudentRecord(student) {
   const assessment = normalizeStudentAssessment(student);
   return {
     ...student,
+    englishName: student.englishName || student.name || '',
+    koreanName: student.koreanName || '',
+    dob: student.dob || '',
+    pastClasses: Array.isArray(student.pastClasses) ? student.pastClasses : [],
     assessment,
     diagnostics: Array.isArray(student.diagnostics) ? student.diagnostics : [],
     speakingLog: Array.isArray(student.speakingLog) ? student.speakingLog : [],
@@ -1423,6 +3013,115 @@ function editSvg() {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:12px;height:12px;pointer-events:none;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
 }
 
+function hashIndex(value, length) {
+  const input = String(value || '');
+  let total = 0;
+  for (const char of input) total += char.charCodeAt(0);
+  return length ? total % length : 0;
+}
+
+function initials(value, fallback = 'K') {
+  const parts = String(value || '')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2);
+  if (!parts.length) return fallback;
+  return parts.map(part => part[0]).join('').toUpperCase();
+}
+
+function shellMetricValue(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function topRailCourses(limit = 4) {
+  const base = DB.units.length
+    ? DB.units.slice(0, limit).map(unit => {
+        const classItem = DB.classes.find(cls => cls.id === unit.classId);
+        const lessonCount = DB.lessons.filter(lesson => lesson.bookId === unit.id).length;
+        return {
+          title: unit.name || 'Untitled book',
+          meta: `${lessonCount} lesson${lessonCount === 1 ? '' : 's'}${classItem ? ` · ${classItem.name}` : ''}`,
+          icon: initials(unit.name || classItem?.name || 'K', 'K')
+        };
+      })
+    : DB.classes.slice(0, limit).map(cls => {
+        const lessonCount = DB.lessons.filter(lesson => lesson.classId === cls.id).length;
+        return {
+          title: cls.name || 'Untitled class',
+          meta: `${lessonCount} lesson${lessonCount === 1 ? '' : 's'}${cls.teacher ? ` · ${cls.teacher}` : ''}`,
+          icon: initials(cls.name || cls.teacher || 'K', 'K')
+        };
+      });
+
+  return base.slice(0, limit);
+}
+
+function renderRail(activeTab = 'today') {
+  const courseList = document.getElementById('rail-course-list');
+  const courseMeta = document.getElementById('rail-course-meta');
+  if (!courseList || !courseMeta) return;
+
+  const courses = topRailCourses();
+
+  courseMeta.textContent = `${courses.length} item${courses.length === 1 ? '' : 's'}`;
+  courseList.innerHTML = courses.length
+    ? courses.map(course => `
+        <div class="rail-course-item">
+          <div class="rail-course-icon">${esc(course.icon)}</div>
+          <div>
+            <div class="rail-progress-label">${esc(course.title)}</div>
+            <div class="rail-course-meta">${esc(course.meta)}</div>
+          </div>
+          <div class="rail-course-arrow">›</div>
+        </div>`).join('')
+    : `<div class="rail-course-meta">Create a class or add a book to build your course rail.</div>`;
+}
+
+function updateShellChrome(activeTab = 'today') {
+  const meta = TAB_META[activeTab] || TAB_META.today;
+  const kicker = document.getElementById('workspace-kicker');
+  const title = document.getElementById('workspace-title');
+  const subtitle = document.getElementById('workspace-subtitle');
+
+  if (kicker) kicker.textContent = meta.kicker;
+  if (title) title.textContent = meta.title;
+  if (subtitle) subtitle.textContent = meta.subtitle;
+
+  shellMetricValue('shell-metric-classes', String(DB.classes.length));
+  shellMetricValue('shell-metric-lessons', String(DB.lessons.length));
+  shellMetricValue('shell-metric-students', String(DB.students.length));
+
+  renderRail(activeTab);
+}
+
+function populateCurriculumOptions(selectedId = '') {
+  const select = document.getElementById('cls-curriculum');
+  if (!select) return;
+  select.innerHTML = CURRICULUM_MASTERS.map(master =>
+    `<option value="${esc(master.id)}"${master.id === selectedId ? ' selected' : ''}>${esc(master.name)}</option>`
+  ).join('');
+  updateCurriculumPreview();
+}
+
+function updateCurriculumPreview() {
+  const select = document.getElementById('cls-curriculum');
+  const preview = document.getElementById('cls-curriculum-preview');
+  const autoBuild = document.getElementById('cls-autobuild');
+  if (!select || !preview || !autoBuild) return;
+  const master = curriculumMasterById(select.value);
+  autoBuild.disabled = !master.id;
+  if (!master.id) {
+    autoBuild.checked = false;
+    preview.textContent = 'Manual setup: create books, units, lessons, quizzes, and reviews yourself after saving the class.';
+    return;
+  }
+  preview.textContent = autoBuild.checked
+    ? `${master.name}: ${master.hasUnitZero ? 'Unit 0 + Units 1-9' : 'Units 1-9'}, Student Book + Workbook + Grammar Book, unit quizzes, Review Exams after Units 3/6/9, ${master.lessons} total lessons at 50 minutes each.`
+    : `${master.name} selected. Auto-build is off, so you can save the class first and build the curriculum manually.`;
+}
+
 function pageIntro(eyebrow, title, copy, actions = '') {
   return `
     <div class="page-intro">
@@ -1448,16 +3147,15 @@ function updateHeroSummary() {
   const today = todayStr();
   const lessonsToday = DB.lessons.filter(l => l.date === today);
   const nextLesson = sortLessons(DB.lessons.filter(l => l.date > today))[0];
-  const heroDate = document.getElementById('app-hero-date');
-  const heroSummary = document.getElementById('app-hero-summary');
-  if (heroDate) heroDate.textContent = friendlyDateLong(today);
-  if (heroSummary) {
-    heroSummary.textContent = lessonsToday.length > 0
+  const subtitle = document.getElementById('workspace-subtitle');
+  if (subtitle && document.querySelector('.tab-btn.active')?.dataset.tab === 'today') {
+    subtitle.textContent = lessonsToday.length > 0
       ? `${lessonsToday.length} lesson${lessonsToday.length === 1 ? '' : 's'} on deck today.`
       : nextLesson
-        ? `Next lesson: ${friendlyDate(nextLesson.date)}${nextLesson.tstart ? ` at ${friendlyTime(nextLesson.tstart)}` : ''}.`
-        : 'No lessons scheduled yet.';
+        ? `Next lesson ${friendlyDate(nextLesson.date)}${nextLesson.tstart ? ` at ${friendlyTime(nextLesson.tstart)}` : ''}.`
+        : 'Welcome back!';
   }
+  updateShellChrome(document.querySelector('.tab-btn.active')?.dataset.tab || 'today');
 }
 
 function logForLesson(lessonId) {
@@ -1474,15 +3172,15 @@ function completionSummary(lessons) {
   const percent = total ? Math.round((completed / total) * 100) : 0;
 
   if (!total) {
-    return { key: 'planned', label: 'Planned', completed, total, percent };
+    return { key: 'planned', label: 'Setup Needed', completed, total, percent };
   }
   if (completed === 0) {
-    return { key: 'planned', label: 'Planned', completed, total, percent };
+    return { key: 'planned', label: 'Not Started', completed, total, percent };
   }
   if (completed === total) {
-    return { key: 'complete', label: 'Complete', completed, total, percent };
+    return { key: 'complete', label: 'All Lessons Logged', completed, total, percent };
   }
-  return { key: 'progress', label: 'In Progress', completed, total, percent };
+  return { key: 'progress', label: `${completed}/${total} Logged`, completed, total, percent };
 }
 
 function statusBadge(summary, suffix = '') {
@@ -1594,6 +3292,7 @@ function switchTab(name) {
     b.classList.toggle('active', b.dataset.tab === activeTopTab));
   document.querySelectorAll('.tab-content').forEach(c =>
     c.classList.toggle('active', c.id === 'tab-' + name));
+  updateShellChrome(name);
   if (name === 'today')    renderToday();
   if (name === 'classes')  renderClasses();
   if (name === 'log')      renderLog();
@@ -1612,64 +3311,137 @@ document.querySelectorAll('.tab-btn').forEach(btn =>
 function renderToday() {
   const today = todayStr();
   const todayLessons = sortLessons(DB.lessons.filter(l => l.date === today));
-  const upcoming = sortLessons(DB.lessons.filter(l => l.date > today));
-  let html = `
-    ${pageIntro('Daily View', friendlyDateLong(today), 'A clear read on what is being taught today, what needs logging, and what is coming next.')}
-    <div class="hero-stats">
-      ${heroStat(String(todayLessons.length), 'Lessons Today', todayLessons.length ? 'Ready to teach.' : 'Open day.')}
-      ${heroStat(String(DB.classes.length), 'Active Classes', DB.classes.length ? 'Across your timetable.' : 'Create your first class.')}
-      ${heroStat(upcoming[0] ? friendlyDate(upcoming[0].date) : '—', 'Next Lesson', upcoming[0] ? lessonDisplayName(upcoming[0]) : 'Nothing scheduled yet.')}
-    </div>`;
+  const upcoming = sortLessons(DB.lessons.filter(l => l.date >= today));
+  const weeklyLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const weeklyCounts = weeklyLabels.map(label => {
+    const count = upcoming.filter(lesson => {
+      const lessonLabel = new Date(`${lesson.date}T00:00:00`).toLocaleDateString('en-US', { weekday: 'short' });
+      return lessonLabel === label;
+    }).length;
+    return { label, count };
+  });
+  const peakCount = Math.max(...weeklyCounts.map(item => item.count), 1);
+  const todayLabel = new Date(`${today}T00:00:00`).toLocaleDateString('en-US', { weekday: 'short' });
+  const teacherNames = uniqueTeacherNames().slice(0, 5);
+  const courseThemes = [
+    'linear-gradient(135deg, rgba(163, 192, 255, 0.42), rgba(255,255,255,0.04))',
+    'linear-gradient(135deg, rgba(247, 198, 213, 0.34), rgba(255,255,255,0.04))',
+    'linear-gradient(135deg, rgba(255, 228, 182, 0.34), rgba(255,255,255,0.04))'
+  ];
+  const featuredCourses = (DB.units.length ? DB.units : DB.classes).slice(0, 3);
 
-  if (todayLessons.length === 0) {
-    html += `<div class="no-lessons-card">No lessons today</div>`;
-    if (upcoming.length > 0) {
-      const next = upcoming[0];
-      const cls  = DB.classes.find(c => c.id === next.classId);
-      const su   = DB.subunits.find(s => s.id === next.subunitId);
-      const book = su ? DB.units.find(u => u.id === su.bookId) : null;
-      html += `
-        <div class="next-preview">
-          <span class="label">Next Lesson</span>
-          <div style="font-weight:600;margin-bottom:4px;">${esc(lessonDisplayName(next))}</div>
-          <div class="preview-meta">
-            ${friendlyDate(next.date)}${next.tstart ? ' at ' + friendlyTime(next.tstart) : ''}
-            ${cls  ? ' · ' + esc(cls.name)               : ''}
-            ${book ? ' · ' + esc(book.name)              : ''}
-            ${su   ? ' · ' + esc(subunitDisplayName(su)) : ''}
+  const scheduleCards = upcoming.slice(0, 2).map(lesson => {
+    const cls = DB.classes.find(c => c.id === lesson.classId);
+    const log = DB.logs.find(item => item.lessonId === lesson.id);
+    return `
+      <div class="activity-mini-card">
+        <div class="mini-card-time">${lesson.tstart ? friendlyTime(lesson.tstart) : 'Plan'}</div>
+        <div class="mini-card-title">${esc(lessonDisplayName(lesson))}</div>
+        <div class="mini-card-meta">${cls ? esc(cls.name) : 'Class not assigned'}${lesson.date ? ` · ${friendlyDate(lesson.date)}` : ''}</div>
+        <div class="mini-card-meta">${log ? 'Logged and complete.' : 'Ready for teaching notes.'}</div>
+      </div>`;
+  }).join('');
+
+  let html = `
+    <div class="dashboard-shell">
+      <div class="dashboard-hero">
+        <section class="dashboard-panel">
+          <div class="dashboard-panel-head">
+            <div class="dashboard-welcome">
+              <div class="dashboard-caption">${friendlyDateLong(today)}</div>
+              <div class="dashboard-panel-title">My activity</div>
+              <div class="activity-hint">A softer read on classes, lesson rhythm, and what needs your attention next.</div>
+            </div>
+            <button class="mini-link" onclick="switchTab('classes')">See all <span>›</span></button>
           </div>
-        </div>`;
-    }
-  } else {
-    todayLessons.forEach(lesson => {
-      const cls  = DB.classes.find(c => c.id === lesson.classId);
-      const su   = DB.subunits.find(s => s.id === lesson.subunitId);
-      const book = su ? DB.units.find(u => u.id === su.bookId) : null;
-      const log  = DB.logs.find(g => g.lessonId === lesson.id);
-      const timeBadge = lesson.tstart
-        ? `<span class="badge badge-grey">${friendlyTime(lesson.tstart)}${cls && cls.tend ? ' – ' + friendlyTime(cls.tend) : ''}</span>`
-        : '';
-      html += `
-        <div class="lesson-card">
-          <div class="lesson-card-badges">
-            ${cls  ? `<span class="badge ${cls.teacher === 'Alba' ? 'badge-amber' : 'badge-blue'}">${esc(cls.name)}</span>` : ''}
-            ${cls  ? teacherBadge(cls.teacher) : ''}
-            ${log ? statusBadge({ key: 'complete', label: 'Complete' }) : statusBadge({ key: 'planned', label: 'Needs Log' })}
-            ${timeBadge}
-            ${book ? `<span class="badge badge-grey">${esc(book.name)}</span>` : ''}
-            ${su   ? `<span class="badge badge-grey">${esc(subunitDisplayName(su))}</span>` : ''}
+          <div class="activity-layout">
+            <div class="activity-bars">
+              ${weeklyCounts.map(item => {
+                const height = 24 + Math.round((item.count / peakCount) * 118);
+                const activeClass = item.label === todayLabel ? ' is-active' : '';
+                return `
+                  <div class="activity-day">
+                    <div class="activity-bar${activeClass}" style="height:${height}px;"></div>
+                    <div class="activity-day-label">${item.label}</div>
+                  </div>`;
+              }).join('')}
+            </div>
+            <div class="activity-mini-list">
+              ${scheduleCards || `
+                <div class="activity-mini-card">
+                  <div class="mini-card-time">Open day</div>
+                  <div class="mini-card-title">No lessons yet</div>
+                  <div class="mini-card-meta">Create a class, add a book, then map your first lesson.</div>
+                </div>`}
+            </div>
           </div>
-          <div class="lesson-card-title">${esc(lessonDisplayName(lesson))}</div>
-          ${lesson.plan ? `<div class="lesson-card-field"><strong>Teach:</strong> ${esc(lesson.plan)}</div>` : ''}
-          ${lesson.pos  ? `<div class="lesson-card-field"><strong>Start at:</strong> ${esc(lesson.pos)}</div>` : ''}
-          ${su && su.notes ? `<div class="unit-notes-strip"><strong>Focus:</strong> ${esc(su.notes)}</div>` : ''}
-          ${log
-            ? `<div class="log-notes-inline">Logged: ${esc(log.notes)}</div>`
-            : `<button class="btn btn-primary btn-sm mt-10" onclick="logFromToday('${lesson.id}')">Mark complete</button>`
-          }
-        </div>`;
-    });
-  }
+        </section>
+
+        <section class="dashboard-panel">
+          <div class="dashboard-panel-head">
+            <div>
+              <div class="dashboard-caption">Snapshot</div>
+              <div class="dashboard-panel-title small">Today at a glance</div>
+            </div>
+          </div>
+          <div class="hero-stats">
+            ${heroStat(String(todayLessons.length), 'Lessons Today', todayLessons.length ? 'Ready to teach.' : 'Open day.')}
+            ${heroStat(String(DB.classes.length), 'Classes', DB.classes.length ? 'Active in the system.' : 'Start by creating one class.')}
+            ${heroStat(String(DB.logs.length), 'Logs Saved', DB.logs.length ? 'Progress is being tracked.' : 'Nothing logged yet.')}
+          </div>
+        </section>
+      </div>
+
+      <div class="dashboard-bottom">
+        <section class="dashboard-panel">
+          <div class="dashboard-panel-head">
+            <div>
+              <div class="dashboard-panel-title small">Your teachers</div>
+            </div>
+            <button class="mini-link" onclick="switchTab('students')">See all <span>›</span></button>
+          </div>
+          <div class="teacher-row">
+            ${(teacherNames.length ? teacherNames : ['Tani', 'Alba']).map((teacher, index) => `
+              <div class="teacher-pill">
+                <div class="teacher-avatar">${esc(initials(teacher))}</div>
+                <div class="teacher-name">${esc(teacher)}</div>
+                <div class="teacher-meta">${index === 0 ? 'Lead teacher' : 'Faculty'}</div>
+              </div>`).join('')}
+            <div class="teacher-pill">
+              <div class="teacher-avatar">+</div>
+              <div class="teacher-name">Add</div>
+              <div class="teacher-meta">More staff</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-panel">
+          <div class="dashboard-panel-head">
+            <div>
+              <div class="dashboard-panel-title small">Popular courses</div>
+            </div>
+          </div>
+          <div class="course-grid">
+            ${featuredCourses.length ? featuredCourses.map((course, index) => {
+              const lessonCount = DB.lessons.filter(lesson => lesson.classId === course.id || lesson.bookId === course.id).length;
+              const title = course.name || `Course ${index + 1}`;
+              const label = DB.units.length ? (DB.classes.find(cls => cls.id === course.classId)?.name || 'Course') : 'Class';
+              return `
+                <article class="course-card" style="--course-bg:${courseThemes[index % courseThemes.length]};">
+                  <div class="course-card-tag">${esc(label)}</div>
+                  <div class="course-card-title">${esc(title)}</div>
+                  <div class="course-card-copy">${lessonCount || 0} lesson${lessonCount === 1 ? '' : 's'} mapped</div>
+                </article>`;
+            }).join('') : `
+              <article class="course-card">
+                <div class="course-card-tag">Knowledge</div>
+                <div class="course-card-title">Your first course will appear here</div>
+                <div class="course-card-copy">Add a class or book to start building the glass dashboard.</div>
+              </article>`}
+          </div>
+        </section>
+      </div>
+    </div>`;
 
   document.getElementById('tab-today').innerHTML = html;
   updateHeroSummary();
@@ -2058,55 +3830,59 @@ async function saveLog() {
 function renderStudents() {
   updateHeroSummary();
   const el = document.getElementById('tab-students');
+  const students = DB.students
+    .map(student => normalizeStudentRecord(student))
+    .sort((a, b) => studentPrimaryLabel(a).localeCompare(studentPrimaryLabel(b)));
   let html = `
-    ${pageIntro('Learner View', 'Students', 'Keep your roster close to lesson history and generate simple progress reports when needed.')}
+    ${pageIntro('Learner Registry', 'Students', 'Create shared student profiles here, attach lesson evidence over time, and generate weekly reports from the same record.',
+      `<button class="btn btn-primary" onclick="openStudentModal()">+ New Student Profile</button>`)}
     <div class="hero-stats">
-      ${heroStat(String(DB.students.length), 'Students', DB.students.length ? 'Across all classes.' : 'No students added yet.')}
-      ${heroStat(String(DB.studentnotes.length), 'Notes', DB.studentnotes.length ? 'Individual observations saved.' : 'No student notes yet.')}
-      ${heroStat(String(DB.enrollments.length), 'Enrollments', DB.enrollments.length ? 'Student-class links active.' : 'No enrollments yet.')}
+      ${heroStat(String(DB.students.length), 'Students', DB.students.length ? 'Shared profiles across the LMS.' : 'No students added yet.')}
+      ${heroStat(String(DB.studentnotes.length), 'Lesson Evidence', DB.studentnotes.length ? 'Teacher observations saved.' : 'No lesson evidence yet.')}
+      ${heroStat(String(DB.enrollments.length), 'Current Classes', DB.enrollments.length ? 'Active student-class links.' : 'No class links yet.')}
     </div>`;
 
-  if (DB.classes.length === 0) {
-    html += `<div class="empty-state-section">No classes yet. Add a class first.</div>`;
+  if (students.length === 0) {
+    html += `<div class="empty-state-section">No student profiles yet. Create the first student profile from here.</div>`;
   } else {
-    DB.classes.forEach(cls => {
-      const clsStudents = studentsForClass(cls.id);
+    html += `<div class="student-directory">`;
+    students.forEach(student => {
+      const currentClasses = classesForStudent(student.id);
+      const noteCount = DB.studentnotes.filter(n => n.studentId === student.id).length;
+      const attendanceCount = DB.attendances.filter(entry => entry.studentId === student.id).length;
+      const focusClassId = currentClasses[0]?.id || '';
       html += `
-        <div class="student-class-section">
-          <div class="student-class-heading">
-            ${esc(cls.name)} ${teacherBadge(cls.teacher)}
+        <div class="student-directory-card">
+          <div class="student-identity">
+            <div class="student-primary">${esc(studentPrimaryLabel(student))}</div>
+            <div class="student-secondary">${studentKoreanName(student) ? esc(studentKoreanName(student)) : 'No Korean name added yet.'}</div>
           </div>
-          <div class="student-list-inner">`;
-      if (clsStudents.length === 0) {
-        html += `<div class="empty-state-inline">No students yet.</div>`;
-      } else {
-        clsStudents.forEach(st => {
-          const noteCount = DB.studentnotes.filter(n => n.studentId === st.id).length;
-          const classCount = classesForStudent(st.id).length;
-          const attendanceCount = DB.attendances.filter(entry => entry.studentId === st.id).length;
-          const assessment = normalizeStudentAssessment(st);
-          html += `
-            <div class="student-row">
-              <div class="student-row-name">${esc(st.name)}</div>
-              <div class="student-row-meta">
-                <span class="badge badge-grey badge-sm">Phonics ${esc(assessment.phonics.current)}</span>
-                <span class="badge badge-grey badge-sm">General ${esc(assessment.general.current)}</span>
-                <span class="badge badge-grey badge-sm">${noteCount} note${noteCount !== 1 ? 's' : ''}</span>
-                <span class="badge badge-grey badge-sm">${attendanceCount} attendance</span>
-                <span class="badge badge-grey badge-sm">${classCount} class${classCount !== 1 ? 'es' : ''}</span>
-              </div>
-              <div class="student-row-actions">
-                <button class="btn btn-sm" onclick="openReport('${st.id}','${cls.id}')">Profile</button>
-                <button class="btn-ghost" onclick="deleteStudent('${st.id}','${cls.id}')" title="Remove from class">&#10005;</button>
-              </div>
-            </div>`;
-        });
-      }
-      html += `
-            <button class="btn btn-add" onclick="openStudentModal('${cls.id}')">+ Add Student</button>
+          <div class="student-directory-meta">
+            <div class="student-meta-block">
+              <div class="student-meta-label">DOB</div>
+              <div class="student-meta-value">${student.dob ? esc(friendlyDate(student.dob)) : 'Not added'}</div>
+            </div>
+            <div class="student-meta-block">
+              <div class="student-meta-label">Current Classes</div>
+              <div class="student-meta-value">${currentClasses.length ? esc(currentClasses.map(cls => cls.name).join(', ')) : 'No current classes'}</div>
+            </div>
+            <div class="student-meta-block">
+              <div class="student-meta-label">Past Classes</div>
+              <div class="student-meta-value">${student.pastClasses.length ? esc(student.pastClasses.join(', ')) : 'No past classes'}</div>
+            </div>
+            <div class="student-meta-block">
+              <div class="student-meta-label">Weekly Report</div>
+              <div class="student-meta-value">${noteCount} evidence note${noteCount === 1 ? '' : 's'} · ${attendanceCount} attendance record${attendanceCount === 1 ? '' : 's'}</div>
+            </div>
+          </div>
+          <div class="student-directory-actions">
+            <button class="btn" onclick="openStudentModal('${student.id}')">Edit Profile</button>
+            <button class="btn" onclick="openReport('${student.id}','${focusClassId}')">Student Record</button>
+            <button class="btn btn-primary" onclick="openStudentReport('${student.id}','${focusClassId}')">Weekly Report</button>
           </div>
         </div>`;
     });
+    html += `</div>`;
   }
   el.innerHTML = html;
 }
@@ -2190,28 +3966,69 @@ async function clearAllData() {
 // ════════════════════════════════════════════════════
 // STUDENTS
 // ════════════════════════════════════════════════════
-function openStudentModal(classId) {
-  document.getElementById('student-classId').value = classId;
-  document.getElementById('student-name').value    = '';
-  populateLevelOptions('Pre-CEFR');
-  refreshStudentOptions();
+function renderStudentClassPicker(selectedClassIds = []) {
+  const slot = document.getElementById('student-current-classes');
+  if (!slot) return;
+  if (!DB.classes.length) {
+    slot.innerHTML = `<div class="overview-note">Create classes first, then assign students here.</div>`;
+    return;
+  }
+  slot.innerHTML = DB.classes.map(cls => `
+    <button type="button" class="class-chip${selectedClassIds.includes(cls.id) ? ' active' : ''}" data-class-id="${cls.id}">
+      ${esc(cls.name)}
+    </button>`).join('');
+
+  slot.querySelectorAll('.class-chip').forEach(btn => {
+    btn.addEventListener('click', event => {
+      event.preventDefault();
+      btn.classList.toggle('active');
+    });
+  });
+}
+
+function openStudentModal(studentOrClassId = '') {
+  const student = studentOrClassId && studentOrClassId.startsWith('st_')
+    ? normalizeStudentRecord(getStudent(studentOrClassId))
+    : null;
+  const presetClassId = student ? '' : studentOrClassId;
+  const currentClassIds = student
+    ? classesForStudent(student.id).map(cls => cls.id)
+    : (presetClassId ? [presetClassId] : []);
+
+  document.getElementById('modal-student-title').textContent = student ? 'Edit Student Profile' : 'Add Student';
+  document.getElementById('student-id').value = student?.id || '';
+  document.getElementById('student-classId').value = presetClassId || '';
+  document.getElementById('student-english-name').value = studentEnglishName(student);
+  document.getElementById('student-korean-name').value = studentKoreanName(student);
+  document.getElementById('student-dob').value = student?.dob || '';
+  document.getElementById('student-past-classes').value = student?.pastClasses?.join(', ') || '';
+  populateLevelOptions(student ? normalizeLevelValue(student.level || 'Pre-CEFR', 'Pre-CEFR') : 'Pre-CEFR');
+  refreshStudentOptions(student ? [studentEnglishName(student)] : []);
+  renderStudentClassPicker(currentClassIds);
   document.getElementById('modal-student').style.display = 'flex';
 }
 
 function syncStudentModalLevel() {
-  const name = document.getElementById('student-name')?.value.trim().toLocaleLowerCase();
+  const name = document.getElementById('student-english-name')?.value.trim().toLocaleLowerCase();
   if (!name) return;
-  const existing = DB.students.find(entry => (entry.name || '').trim().toLocaleLowerCase() === name);
+  const existing = DB.students.find(entry => (studentEnglishName(entry) || '').trim().toLocaleLowerCase() === name);
   if (existing) populateLevelOptions(normalizeLevelValue(existing.level || 'Pre-CEFR', 'Pre-CEFR'));
 }
 
 async function saveStudent() {
-  const classId = document.getElementById('student-classId').value;
-  const name    = document.getElementById('student-name').value.trim();
-  const level   = document.getElementById('student-level').value || 'Pre-CEFR';
-  if (!name) { showToast('Please enter a student name.', 'error'); return; }
-  const normalizedName = name.toLocaleLowerCase();
-  let student = DB.students.find(entry => (entry.name || '').trim().toLocaleLowerCase() === normalizedName) || null;
+  const existingId = document.getElementById('student-id').value;
+  const englishName = document.getElementById('student-english-name').value.trim();
+  const koreanName = document.getElementById('student-korean-name').value.trim();
+  const dob = document.getElementById('student-dob').value;
+  const level = document.getElementById('student-level').value || 'Pre-CEFR';
+  const selectedClassIds = Array.from(document.querySelectorAll('#student-current-classes .class-chip.active')).map(btn => btn.dataset.classId);
+  const pastClasses = parsePastClasses(document.getElementById('student-past-classes').value);
+
+  if (!englishName) { showToast('Please enter an English name.', 'error'); return; }
+  const normalizedName = englishName.toLocaleLowerCase();
+  let student = existingId
+    ? normalizeStudentRecord(getStudent(existingId))
+    : (DB.students.find(entry => (studentEnglishName(entry) || '').trim().toLocaleLowerCase() === normalizedName) ? normalizeStudentRecord(DB.students.find(entry => (studentEnglishName(entry) || '').trim().toLocaleLowerCase() === normalizedName)) : null);
   const createdNew = !student;
 
   if (!student) {
@@ -2222,41 +4039,75 @@ async function saveStudent() {
       listening: { start: 'Pre-A1', current: 'Pre-A1' },
       speakingNotes: ''
     };
-    student = { id: 'st_' + Date.now(), name, level, assessment, reportCard: normalizeReportCard({ id: 'temp', name, level, assessment }) };
+    student = {
+      id: 'st_' + Date.now(),
+      name: englishName,
+      englishName,
+      koreanName,
+      dob,
+      pastClasses,
+      level,
+      assessment,
+      reportCard: normalizeReportCard({ id: 'temp', name: englishName, englishName, koreanName, dob, level, assessment, pastClasses })
+    };
     try {
       await api('POST', '/api/students', student);
       DB.students.push(student);
-      refreshStudentOptions([student.name]);
+      refreshStudentOptions([studentEnglishName(student)]);
     } catch (e) {
       showToast('Failed to save student.', 'error');
       return;
     }
-  } else if (student.level !== level) {
+  } else {
     const assessment = normalizeStudentAssessment(student);
     assessment.phonics.current = level;
-    student = buildAssessmentPayload({ ...student, name }, assessment);
+    student = buildAssessmentPayload({
+      ...student,
+      name: englishName,
+      englishName,
+      koreanName,
+      dob,
+      pastClasses,
+      diagnostics: student.diagnostics || [],
+      speakingLog: student.speakingLog || [],
+      reportCard: {
+        ...normalizeReportCard(student),
+        course: student.reportCard?.course || classesForStudent(student.id).map(cls => cls.name).join(', ')
+      }
+    }, assessment);
     try {
       await api('POST', '/api/students', student);
       DB.students = DB.students.map(entry => entry.id === student.id ? student : entry);
+      refreshStudentOptions([studentEnglishName(student)]);
     } catch (e) {
-      showToast('Failed to update student level.', 'error');
+      showToast('Failed to update student profile.', 'error');
       return;
     }
   }
 
-  if (enrollmentForStudentInClass(student.id, classId)) {
-    showToast('That student is already in this class.', 'info');
-    return;
-  }
-
-  const enrollment = { id: `en_${student.id}_${classId}`, studentId: student.id, classId };
   setBusy('save-student-btn', true);
   try {
-    await api('POST', '/api/enrollments', enrollment);
-    DB.enrollments.push(enrollment);
+    const existingEnrollments = DB.enrollments.filter(entry => entry.studentId === student.id);
+    const selectedSet = new Set(selectedClassIds);
+
+    for (const enrollment of existingEnrollments) {
+      if (!selectedSet.has(enrollment.classId)) {
+        await api('DELETE', `/api/enrollments/${enrollment.id}`);
+        DB.enrollments = DB.enrollments.filter(entry => entry.id !== enrollment.id);
+      }
+    }
+
+    for (const classId of selectedClassIds) {
+      if (!enrollmentForStudentInClass(student.id, classId)) {
+        const enrollment = { id: `en_${student.id}_${classId}`, studentId: student.id, classId };
+        await api('POST', '/api/enrollments', enrollment);
+        DB.enrollments.push(enrollment);
+      }
+    }
+
     closeModal('modal-student');
     renderStudents();
-    showToast(createdNew ? 'Student created and added to class.' : 'Student added to class.', 'success');
+    showToast(createdNew ? 'Student profile created.' : 'Student profile updated.', 'success');
   } catch(e) { showToast('Failed to enroll student.', 'error'); }
   finally { setBusy('save-student-btn', false); }
 }
@@ -2449,12 +4300,13 @@ function renderStudentProfilePage() {
       <div class="profile-header">
         <div>
           <div class="page-eyebrow">Student Profile</div>
-          <div class="page-title">${esc(student.name)}</div>
-          <div class="profile-subtitle">${focusClass ? `Focused from ${esc(focusClass.name)}.` : 'Global student record with progress, diagnostics, and history.'}</div>
+          <div class="page-title">${esc(studentPrimaryLabel(student))}</div>
+          <div class="profile-subtitle">${focusClass ? `Shared student record anchored to ${esc(focusClass.name)}.` : 'Shared student record with lesson evidence, diagnostics, and long-term history.'}</div>
+          <div class="student-secondary">${studentKoreanName(student) ? `Korean name: ${esc(studentKoreanName(student))}` : 'Korean name not added yet.'}${student.dob ? ` · DOB: ${esc(friendlyDate(student.dob))}` : ''}</div>
         </div>
         <div class="page-actions">
           <button class="btn" onclick="switchTab('students')">Back to Students</button>
-          <button class="btn" onclick="openStudentReport('${student.id}','${classId}')">Report Card</button>
+          <button class="btn" onclick="openStudentReport('${student.id}','${classId}')">Weekly Report</button>
           <button class="btn btn-primary" id="save-profile-btn" onclick="saveStudentProfilePage()">Save Profile</button>
         </div>
       </div>
@@ -2462,8 +4314,8 @@ function renderStudentProfilePage() {
       <div class="profile-section">
         <div class="profile-hero">
           <div class="profile-hero-story">
-            <div class="profile-story-title">Parent Story</div>
-            <div class="profile-story-body">This view is built to explain baseline, current level, and observed evidence in a way that is easier to share with parents after months or years of study.</div>
+            <div class="profile-story-title">Shared Record</div>
+            <div class="profile-story-body">This profile is the long-lived student record for the shared admin and teacher LMS. Lesson evidence, attendance, diagnostics, and weekly summaries all write back here.</div>
             <div class="profile-story-list">
               ${parentStory.map(item => `
                 <div class="profile-story-item">
@@ -2561,7 +4413,7 @@ function renderStudentProfilePage() {
       </div>
 
       <div class="profile-section">
-        <div class="profile-section-title">Lesson Notes History</div>
+        <div class="profile-section-title">Lesson Evidence History</div>
         ${lessonHistoryHtml}
       </div>
     </div>`;
@@ -2588,7 +4440,7 @@ async function saveStudentProfilePage() {
     await persistStudentRecord(updated);
     renderStudents();
     renderStudentProfilePage();
-    showToast('Student profile updated.', 'success');
+    showToast('Student record updated.', 'success');
   } catch (e) {
     showToast('Failed to update student profile.', 'error');
   } finally {
@@ -2703,7 +4555,7 @@ function renderStudentReportPage() {
   const student = normalizeStudentRecord(getStudent(currentStudentReport.studentId));
   if (!student) {
     container.innerHTML = `
-      ${pageIntro('Report Card', 'Student Not Found', 'The selected student record is no longer available.',
+      ${pageIntro('Weekly Report', 'Student Not Found', 'The selected student record is no longer available.',
         `<button class="btn" onclick="switchTab('students')">Back to Students</button>`)}
       <div class="no-lessons-card">Select a student from the Students tab.</div>`;
     return;
@@ -2745,23 +4597,24 @@ function renderStudentReportPage() {
     <div class="report-shell">
       <div class="profile-header">
         <div>
-          <div class="page-eyebrow">Report Card</div>
-          <div class="page-title">${esc(student.name)}</div>
-          <div class="profile-subtitle">A parent-facing report built from assessment levels, attendance, diagnostic evidence, and teacher notes.</div>
+          <div class="page-eyebrow">Weekly Report</div>
+          <div class="page-title">${esc(studentPrimaryLabel(student))}</div>
+          <div class="profile-subtitle">A shared weekly summary built from the student's long-term record, lesson evidence, attendance, and teacher notes.</div>
+          <div class="student-secondary">${studentKoreanName(student) ? `Korean name: ${esc(studentKoreanName(student))}` : 'Korean name not added yet.'}${student.dob ? ` · DOB: ${esc(friendlyDate(student.dob))}` : ''}</div>
         </div>
         <div class="page-actions">
           <button class="btn" onclick="openReport('${student.id}','${classId}')">Back to Profile</button>
           <button class="btn" onclick="printStudentReport()">Print</button>
-          <button class="btn btn-primary" id="save-report-btn" onclick="saveStudentReportPage()">Save Report</button>
+          <button class="btn btn-primary" id="save-report-btn" onclick="saveStudentReportPage()">Save Weekly Report</button>
         </div>
       </div>
 
       <div class="report-page">
         <div class="report-header">
           <div>
-            <div class="report-kicker">Online Placement</div>
-            <div class="report-brand">Student Report Card</div>
-            <div class="report-subbrand">A polished parent-facing summary of level, descriptor evidence, classroom progress, and next-step planning.</div>
+            <div class="report-kicker">Shared LMS Weekly Summary</div>
+            <div class="report-brand">Student Weekly Report</div>
+            <div class="report-subbrand">A polished weekly summary of level, descriptor evidence, classroom progress, and next-step planning.</div>
           </div>
           <div class="report-badge-stack">
             <div class="report-pill">${esc(focusClass ? focusClass.name : 'Global Record')}</div>
@@ -3199,8 +5052,8 @@ function buildPrintableReportDocument(student, focusClass, reportData) {
       <div class="masthead">
         <div>
           <div class="kicker">Online Placement</div>
-          <div class="title">Student Report Card</div>
-          <div class="subtitle">A parent-facing summary of CEFR placement, classroom evidence, diagnostic review, and next-step learning priorities.</div>
+          <div class="title">Student Weekly Report</div>
+          <div class="subtitle">A weekly summary of CEFR placement, classroom evidence, diagnostic review, and next-step learning priorities.</div>
         </div>
         <div class="meta-pills">
           <div class="pill">${esc(focusClass ? focusClass.name : 'Global Record')}</div>
@@ -3362,11 +5215,123 @@ async function saveStudentReportPage() {
     await persistStudentRecord(updated);
     renderStudents();
     renderStudentReportPage();
-    showToast('Report card saved.', 'success');
+    showToast('Weekly report saved.', 'success');
   } catch (e) {
     showToast('Failed to save report card.', 'error');
   } finally {
     setBusy('save-report-btn', false);
+  }
+}
+
+function buildOurWorldCurriculumPayload(cls, master) {
+  const dayIndexes = classDayIndexes(cls.days);
+  let currentDate = nextClassDate(cls.start, dayIndexes);
+  let lessonSequence = 1;
+  const timestamp = Date.now();
+  const book = {
+    id: `u_${timestamp}_${master.id}`,
+    classId: cls.id,
+    name: `${master.name} Curriculum`,
+    notes: 'Curriculum master: Student Book + Workbook + Grammar Book. Lesson duration: 50 minutes. Frequency: 5 days per week.'
+  };
+  const subunits = [];
+  const lessons = [];
+
+  const addLesson = (subunit, lessonNo, template, unitLabel) => {
+    const material = materialLabel(template.sources);
+    lessons.push({
+      id: `l_${timestamp}_${master.level}_${lessonSequence}`,
+      subunitId: subunit.id,
+      bookId: book.id,
+      classId: cls.id,
+      name: `${unitLabel} Lesson ${lessonNo} - ${template.title}`,
+      date: currentDate,
+      tstart: cls.tstart || '',
+      plan: `${template.title}. Materials: ${material}.`,
+      pos: `${master.name} · ${unitLabel} · Lesson ${lessonNo}`,
+      lessonType: template.type,
+      materialSource: template.sources,
+      durationMinutes: 50,
+      sequence: lessonSequence
+    });
+    lessonSequence += 1;
+    currentDate = nextLessonDate(currentDate, dayIndexes);
+  };
+
+  const addReviewLesson = (subunit, reviewNumber, title, type) => {
+    const unitLabel = subunit.number ? `Unit ${subunit.number}` : 'Review';
+    lessons.push({
+      id: `l_${timestamp}_${master.level}_${lessonSequence}`,
+      subunitId: subunit.id,
+      bookId: book.id,
+      classId: cls.id,
+      name: title,
+      date: currentDate,
+      tstart: cls.tstart || '',
+      plan: '20 min written test + 30 min review activity. Materials: Assessment.',
+      pos: `${master.name} · After ${unitLabel}`,
+      lessonType: type,
+      materialSource: ['assessment'],
+      durationMinutes: 50,
+      sequence: lessonSequence,
+      reviewNumber
+    });
+    lessonSequence += 1;
+    currentDate = nextLessonDate(currentDate, dayIndexes);
+  };
+
+  if (master.hasUnitZero) {
+    const unitZero = {
+      id: `su_${timestamp}_${master.level}_0`,
+      bookId: book.id,
+      classId: cls.id,
+      number: 0,
+      name: 'Unit 0 - Starter Unit',
+      notes: '5-lesson onboarding unit: greetings, classroom language, core vocabulary, review, and placement confirmation.'
+    };
+    subunits.push(unitZero);
+    OW_UNIT_ZERO_LESSONS.forEach((template, index) => addLesson(unitZero, index + 1, template, 'Unit 0'));
+  }
+
+  for (let unitNumber = 1; unitNumber <= 9; unitNumber += 1) {
+    const subunit = {
+      id: `su_${timestamp}_${master.level}_${unitNumber}`,
+      bookId: book.id,
+      classId: cls.id,
+      number: unitNumber,
+      name: `Unit ${unitNumber}`,
+      notes: '12-lesson Our World unit sequence with vocabulary, grammar, reading, writing, project, and unit quiz.'
+    };
+    subunits.push(subunit);
+    OW_BASE_LESSONS.forEach((template, index) => addLesson(subunit, index + 1, template, `Unit ${unitNumber}`));
+
+    if ([3, 6, 9].includes(unitNumber)) {
+      const reviewNumber = unitNumber / 3;
+      addReviewLesson(
+        subunit,
+        reviewNumber,
+        reviewNumber === 3 ? 'Review Exam 3 + Level Assessment' : `Review Exam ${reviewNumber}`,
+        reviewNumber === 3 ? 'level_assessment' : 'review_exam'
+      );
+    }
+  }
+
+  return { book, subunits, lessons };
+}
+
+async function createCurriculumFromMaster(cls, masterId) {
+  const master = curriculumMasterById(masterId);
+  if (!master.id) return;
+  const payload = buildOurWorldCurriculumPayload(cls, master);
+  await api('POST', '/api/units', payload.book);
+  DB.units.push(payload.book);
+  for (const subunit of payload.subunits) {
+    await api('POST', '/api/subunits', subunit);
+    DB.subunits.push(subunit);
+  }
+  for (const lesson of payload.lessons) {
+    await api('POST', '/api/lessons', lesson);
+    DB.lessons.push(lesson);
   }
 }
 
@@ -3378,10 +5343,12 @@ function openClassModal(existingId) {
   document.getElementById('cls-name').value       = cls ? cls.name : '';
   document.getElementById('cls-teacher').value    = cls ? cls.teacher : 'Tani';
   document.getElementById('cls-start').value      = cls ? cls.start : '';
-  document.getElementById('cls-tstart').value     = cls ? (cls.tstart || '') : '';
-  document.getElementById('cls-tend').value       = cls ? (cls.tend || '') : '';
+  document.getElementById('cls-tstart').value     = cls ? (cls.tstart || '') : '15:00';
+  document.getElementById('cls-tend').value       = cls ? (cls.tend || '') : '15:50';
+  document.getElementById('curriculum-setup-step').style.display = cls ? 'none' : 'block';
+  populateCurriculumOptions('');
   document.querySelectorAll('#cls-days .day-toggle').forEach(b =>
-    b.classList.toggle('active', cls ? (cls.days || []).includes(b.dataset.day) : false));
+    b.classList.toggle('active', cls ? (cls.days || []).includes(b.dataset.day) : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(b.dataset.day)));
   document.getElementById('modal-class').style.display = 'flex';
 }
 
@@ -3436,8 +5403,13 @@ document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
 });
 
 document.querySelectorAll('#cls-days .day-toggle').forEach(btn => {
-  btn.addEventListener('click', () => btn.classList.toggle('active'));
+  btn.addEventListener('click', event => {
+    event.preventDefault();
+    btn.classList.toggle('active');
+  });
 });
+
+document.getElementById('cls-autobuild')?.addEventListener('change', updateCurriculumPreview);
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
@@ -3458,22 +5430,49 @@ async function saveClass() {
   const tstart  = document.getElementById('cls-tstart').value;
   const tend    = document.getElementById('cls-tend').value;
   const days    = Array.from(document.querySelectorAll('#cls-days .day-toggle.active')).map(b => b.dataset.day);
+  const curriculumId = document.getElementById('cls-curriculum')?.value || '';
+  const shouldAutoBuild = !existingId && curriculumId && document.getElementById('cls-autobuild')?.checked;
 
   if (!name)  { showToast('Please enter a class name.', 'error'); return; }
   if (!teacher) { showToast('Please enter a teacher name.', 'error'); return; }
   if (!start) { showToast('Please enter a start date.', 'error'); return; }
+  if (shouldAutoBuild && !days.length) {
+    showToast('Choose at least one class day before auto-building the curriculum.', 'error');
+    return;
+  }
 
-  const cls = { id: existingId || ('c_' + Date.now()), name, teacher, start, tstart, tend, days };
+  const selectedMaster = curriculumMasterById(curriculumId);
+  const cls = {
+    id: existingId || ('c_' + Date.now()),
+    name,
+    teacher,
+    start,
+    tstart,
+    tend,
+    days,
+    curriculumMasterId: shouldAutoBuild ? selectedMaster.id : undefined,
+    curriculumName: shouldAutoBuild ? selectedMaster.name : undefined,
+    lessonDurationMinutes: shouldAutoBuild ? 50 : undefined
+  };
   setBusy('save-class-btn', true);
   try {
     await api('POST', '/api/classes', cls);
     if (existingId) { DB.classes = DB.classes.map(c => c.id === existingId ? cls : c); }
-    else { DB.classes.push(cls); }
+    else {
+      DB.classes.push(cls);
+      if (shouldAutoBuild) {
+        await createCurriculumFromMaster(cls, curriculumId);
+        expandedClasses[cls.id] = true;
+      }
+    }
     refreshTeacherOptions([teacher]);
     closeModal('modal-class');
     renderClasses();
-    showToast(existingId ? 'Class updated.' : 'Class created.', 'success');
-  } catch(e) { showToast('Failed to save class.', 'error'); }
+    const message = shouldAutoBuild
+      ? `${cls.name} created with ${selectedMaster.lessons} planned lessons.`
+      : (existingId ? 'Class updated.' : 'Class created.');
+    showToast(message, 'success');
+  } catch(e) { showToast(shouldAutoBuild ? 'Class saved, but curriculum build failed.' : 'Failed to save class.', 'error'); }
   finally { setBusy('save-class-btn', false); }
 }
 
@@ -3640,6 +5639,7 @@ function setBusy(btnId, busy, originalText) {
 // ════════════════════════════════════════════════════
 async function init() {
   document.getElementById('tab-today').innerHTML = `<div class="loading-state">Loading…</div>`;
+  updateShellChrome('today');
   updateHeroSummary();
   try {
     await loadData();

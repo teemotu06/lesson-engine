@@ -1983,6 +1983,490 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.86));
     }
 
+    /* ── Class workspace redesign ── */
+    .class-directory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .class-directory-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 250px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.72);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(91,106,245,0.18), transparent 34%),
+        linear-gradient(145deg, rgba(255,255,255,0.94), rgba(246,248,253,0.82));
+      box-shadow: 0 22px 60px rgba(39, 48, 94, 0.10), inset 0 1px 0 rgba(255,255,255,0.85);
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .class-directory-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(91,106,245,0.24);
+      box-shadow: 0 28px 70px rgba(39, 48, 94, 0.14), inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    .class-card-topline,
+    .workspace-tabs,
+    .unit-card-head,
+    .lesson-drawer-head,
+    .lesson-drawer-row,
+    .workspace-section-head,
+    .class-workspace-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .class-card-topline {
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .class-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #5b6af5, #14b8a6);
+      box-shadow: 0 10px 28px rgba(91,106,245,0.28);
+    }
+
+    .class-directory-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.32rem;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      color: #111827;
+      margin-bottom: 10px;
+      overflow-wrap: anywhere;
+    }
+
+    .class-directory-meta {
+      display: grid;
+      gap: 6px;
+      color: #667085;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    .class-next-card {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(148,163,184,0.18);
+      margin: 16px 0;
+    }
+
+    .class-next-label,
+    .workspace-mini-label,
+    .unit-micro,
+    .lesson-drawer-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: #667085;
+    }
+
+    .class-next-title {
+      margin-top: 4px;
+      font-weight: 800;
+      color: #101828;
+      overflow-wrap: anywhere;
+    }
+
+    .class-directory-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .class-workspace {
+      display: grid;
+      gap: 18px;
+    }
+
+    .class-workspace-hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding: 24px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.74);
+      background:
+        radial-gradient(circle at 10% 4%, rgba(91,106,245,0.20), transparent 30%),
+        radial-gradient(circle at 88% 12%, rgba(20,184,166,0.18), transparent 28%),
+        linear-gradient(145deg, rgba(255,255,255,0.95), rgba(245,247,252,0.82));
+      box-shadow: 0 26px 76px rgba(39,48,94,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    .workspace-back {
+      width: max-content;
+      margin-bottom: 12px;
+      color: #475467;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(148,163,184,0.20);
+    }
+
+    .class-workspace-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: 0.9;
+      letter-spacing: -0.07em;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    .class-workspace-subtitle {
+      max-width: 70ch;
+      color: #667085;
+      font-weight: 600;
+    }
+
+    .class-workspace-actions {
+      justify-content: flex-end;
+      align-self: start;
+    }
+
+    .class-workspace-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+    .workspace-metric {
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(148,163,184,0.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+      min-width: 0;
+    }
+
+    .workspace-metric-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: #111827;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .workspace-tabs {
+      padding: 6px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(148,163,184,0.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.78);
+    }
+
+    .workspace-tab {
+      border: 0;
+      border-radius: 15px;
+      padding: 10px 14px;
+      background: transparent;
+      color: #667085;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .workspace-tab.active {
+      color: #101828;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 10px 24px rgba(39,48,94,0.08);
+    }
+
+    .workspace-panel {
+      padding: 20px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 18px 54px rgba(39,48,94,0.08), inset 0 1px 0 rgba(255,255,255,0.86);
+    }
+
+    .workspace-section-head {
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .workspace-section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #111827;
+    }
+
+    .class-overview-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 1.05fr) minmax(260px, 0.95fr);
+      gap: 16px;
+    }
+
+    .next-lesson-focus {
+      padding: 20px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(91,106,245,0.18), transparent 34%),
+        linear-gradient(145deg, rgba(255,255,255,0.92), rgba(246,248,253,0.84));
+      border: 1px solid rgba(148,163,184,0.16);
+    }
+
+    .next-lesson-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.55rem;
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      color: #111827;
+      margin: 8px 0 10px;
+      overflow-wrap: anywhere;
+    }
+
+    .next-lesson-meta {
+      color: #667085;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .week-strip {
+      display: grid;
+      gap: 10px;
+    }
+
+    .week-lesson-row,
+    .compact-list-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.64);
+      border: 1px solid rgba(148,163,184,0.14);
+    }
+
+    .week-date-chip {
+      min-width: 46px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      text-align: center;
+      color: #344054;
+      background: rgba(91,106,245,0.08);
+      font-weight: 800;
+      font-size: 11px;
+    }
+
+    .compact-title {
+      color: #111827;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .compact-meta {
+      color: #667085;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .curriculum-workbench {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.48fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .unit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .curriculum-unit-card {
+      padding: 16px;
+      min-height: 178px;
+      border: 1px solid rgba(148,163,184,0.16);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.66);
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .curriculum-unit-card:hover,
+    .curriculum-unit-card.active {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.92);
+      border-color: rgba(91,106,245,0.25);
+      box-shadow: 0 18px 40px rgba(39,48,94,0.10);
+    }
+
+    .unit-card-head {
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .unit-number-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(91,106,245,0.10);
+      color: #4f46e5;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .curriculum-unit-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #111827;
+      margin-bottom: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .material-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .material-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(20,184,166,0.09);
+      color: #0f766e;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .lesson-drawer {
+      position: sticky;
+      top: 16px;
+      padding: 16px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(148,163,184,0.18);
+      box-shadow: 0 20px 54px rgba(39,48,94,0.10), inset 0 1px 0 rgba(255,255,255,0.88);
+    }
+
+    .lesson-drawer-head {
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .lesson-list {
+      display: grid;
+      gap: 8px;
+      max-height: 430px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .lesson-drawer-row {
+      width: 100%;
+      border: 1px solid rgba(148,163,184,0.14);
+      border-radius: 16px;
+      padding: 10px;
+      background: rgba(248,250,252,0.78);
+      text-align: left;
+      cursor: pointer;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .lesson-drawer-row:hover,
+    .lesson-drawer-row.active {
+      background: #fff;
+      border-color: rgba(91,106,245,0.25);
+      transform: translateY(-1px);
+    }
+
+    .lesson-index {
+      width: 30px;
+      height: 30px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      background: rgba(91,106,245,0.10);
+      color: #4f46e5;
+      font-weight: 900;
+      font-size: 11px;
+    }
+
+    .lesson-drawer-title {
+      font-weight: 800;
+      color: #111827;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .lesson-detail-card {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(246,248,253,0.9), rgba(255,255,255,0.86));
+      border: 1px solid rgba(148,163,184,0.14);
+    }
+
+    .lesson-detail-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.18rem;
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      color: #111827;
+      margin: 6px 0 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .lesson-detail-grid {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .lesson-detail-item {
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(148,163,184,0.12);
+    }
+
+    .student-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .student-mini-card {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.68);
+      border: 1px solid rgba(148,163,184,0.14);
+    }
+
     @media (max-width: 1240px) {
       .app-shell {
         padding: 14px;
@@ -2018,6 +2502,20 @@
 
       .course-grid {
         grid-template-columns: 1fr;
+      }
+
+      .class-workspace-hero,
+      .class-overview-grid,
+      .curriculum-workbench {
+        grid-template-columns: 1fr;
+      }
+
+      .class-workspace-actions {
+        justify-content: flex-start;
+      }
+
+      .lesson-drawer {
+        position: static;
       }
 
       .student-directory-card {
@@ -2061,6 +2559,19 @@
       .metric-pill {
         min-width: calc(50% - 6px);
         flex-basis: calc(50% - 6px);
+      }
+
+      .class-workspace-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .workspace-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+      }
+
+      .workspace-tab {
+        white-space: nowrap;
       }
 
       .student-directory-meta {
@@ -2423,6 +2934,7 @@ let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
 let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
+let currentClassWorkspace = { classId: null, tab: 'overview', unitId: null, lessonId: null };
 let currentStudentProfile = { studentId: null, classId: null };
 let currentStudentReport = { studentId: null, classId: null };
 const LEVEL_OPTIONS = ['Pre-CEFR', 'Pre-A1', 'A1.1', 'A1.2', 'A1.3', 'A2.1', 'A2.2', 'A2.3', 'B1.1', 'B1.2', 'B1.3', 'B2.1', 'B2.2', 'B2.3', 'C1'];
@@ -3458,218 +3970,494 @@ function logFromToday(lessonId) {
 function renderClasses() {
   updateHeroSummary();
   const el = document.getElementById('tab-classes');
+  if (currentClassWorkspace.classId && DB.classes.some(cls => cls.id === currentClassWorkspace.classId)) {
+    el.innerHTML = renderClassWorkspace();
+    return;
+  }
+  currentClassWorkspace = { classId: null, tab: 'overview', unitId: null, lessonId: null };
+  el.innerHTML = renderClassDirectory();
+}
+
+function renderClassDirectory() {
+  const totalLessons = DB.lessons.length;
+  const totalLogged = completedLessonCount(DB.lessons);
   let html = `
-    ${pageIntro('Curriculum Map', 'Classes', 'Your teaching structure lives here: classes, books, units, lesson sequence, and pacing.',
+    ${pageIntro('Courses', 'Classes', 'A clean starting point for every shared admin and teacher workflow.',
       `<button class="btn btn-primary" onclick="openClassModal()">+ New Class</button>`)}
     <div class="hero-stats">
-      ${heroStat(String(DB.classes.length), 'Classes', DB.classes.length ? 'Scheduled and tracked.' : 'Create your first class.')}
-      ${heroStat(String(DB.units.length), 'Books', DB.units.length ? 'Materials in play.' : 'No books added yet.')}
-      ${heroStat(String(DB.lessons.length), 'Lessons', DB.lessons.length ? 'Mapped across classes.' : 'No lessons scheduled.')}
+      ${heroStat(String(DB.classes.length), 'Classes', DB.classes.length ? 'Open one class to work.' : 'Create your first class.')}
+      ${heroStat(String(DB.students.length), 'Students', DB.students.length ? 'Shared learner profiles.' : 'Add students from the Students tab.')}
+      ${heroStat(`${totalLogged}/${totalLessons}`, 'Lessons Logged', totalLessons ? 'Across all classes.' : 'No curriculum mapped yet.')}
     </div>`;
 
-  if (DB.classes.length === 0) {
-    html += `<div class="empty-state-section">No classes yet. Create your first class.</div>`;
-  } else {
-    DB.classes.forEach(cls => {
-      const isOpen     = !!expandedClasses[cls.id];
-      const clsLessons = DB.lessons.filter(l => l.classId === cls.id);
-      const clsBooks   = sortBooks(DB.units.filter(u => u.classId === cls.id));
-      const endDate    = classEndDate(cls.id);
-      const summary    = completionSummary(clsLessons);
-      const nextLesson = nextPendingLesson(clsLessons);
-      const lastDone   = mostRecentCompletedLesson(clsLessons);
+  if (!DB.classes.length) {
+    return html + `<div class="empty-state-section">No classes yet. Create your first class and choose a curriculum master.</div>`;
+  }
 
-      html += `
-        <div class="card">
-          <div class="card-header" onclick="toggleClass('${cls.id}')">
-            ${chevronSvg(isOpen)}
-            <div class="card-title">${esc(cls.name)}</div>
-            ${teacherBadge(cls.teacher)}
-            ${statusBadge(summary)}
-            ${(cls.days || []).map(d => `<span class="badge badge-day">${esc(d)}</span>`).join('')}
-            <span class="badge badge-grey">${clsLessons.length} lesson${clsLessons.length !== 1 ? 's' : ''}</span>
-            <span class="date-range">ends ${friendlyDate(endDate)}</span>
+  html += `<div class="class-directory-grid">`;
+  DB.classes.forEach((cls, index) => {
+    const clsLessons = DB.lessons.filter(l => l.classId === cls.id);
+    const summary = completionSummary(clsLessons);
+    const nextLesson = nextPendingLesson(clsLessons);
+    const studentCount = studentsForClass(cls.id).length;
+    const curriculum = classCurriculumLabel(cls);
+    html += `
+      <article class="class-directory-card" onclick="openClassWorkspace('${cls.id}')">
+        <div class="class-card-topline">
+          <div class="class-avatar">${esc(classInitials(cls.name, index))}</div>
+          ${statusBadge(summary)}
+        </div>
+        <div class="class-directory-title">${esc(cls.name || 'Untitled Class')}</div>
+        <div class="class-directory-meta">
+          <div>${esc(curriculum)}</div>
+          <div>${esc((cls.days || []).join(', ') || 'Days not set')} · ${friendlyTime(cls.tstart)}${cls.tend ? `-${friendlyTime(cls.tend)}` : ''}</div>
+          <div>${esc(cls.teacher || 'No teacher')} · ${studentCount} student${studentCount === 1 ? '' : 's'}</div>
+        </div>
+        <div class="class-next-card">
+          <div class="class-next-label">Next lesson</div>
+          <div class="class-next-title">${nextLesson ? esc(lessonDisplayName(nextLesson)) : (clsLessons.length ? 'All lessons logged' : 'Curriculum not built')}</div>
+          <div class="compact-meta">${nextLesson ? `${friendlyDate(nextLesson.date)}${nextLesson.tstart ? ` at ${friendlyTime(nextLesson.tstart)}` : ''}` : 'Open the class workspace for setup.'}</div>
+        </div>
+        ${progressMarkup(summary, 'lessons')}
+        <div class="class-directory-footer">
+          <button class="btn btn-secondary" onclick="event.stopPropagation();openClassWorkspace('${cls.id}')">Open Class</button>
+          <div class="page-actions">
             <button class="btn-edit" onclick="event.stopPropagation();openClassModal('${cls.id}')" title="Edit">${editSvg()}</button>
             <button class="btn-ghost" onclick="event.stopPropagation();deleteClass('${cls.id}')" title="Delete">&#10005;</button>
-          </div>`;
-
-      if (isOpen) {
-        html += `
-          <div class="card-body">
-            <div class="class-meta">
-              <div class="info-row">
-                <span><span class="label">Start</span> ${friendlyDate(cls.start)}</span>
-                <span><span class="label">Time</span> ${friendlyTime(cls.tstart)}${cls.tend ? ' – ' + friendlyTime(cls.tend) : ''}</span>
-              </div>
-            </div>
-            <div class="overview-grid">
-              <div class="overview-card">
-                <div class="label">Completion</div>
-                <div class="overview-value">${summary.label}</div>
-                <div class="overview-note">Teachers complete lessons by saving a log.</div>
-                ${progressMarkup(summary, 'lessons')}
-              </div>
-              <div class="overview-card">
-                <div class="label">Next To Log</div>
-                <div class="overview-value">${nextLesson ? esc(lessonDisplayName(nextLesson)) : 'All logged'}</div>
-                <div class="overview-note">${nextLesson ? `${friendlyDate(nextLesson.date)}${nextLesson.tstart ? ` at ${friendlyTime(nextLesson.tstart)}` : ''}` : 'This class is fully completed for now.'}</div>
-              </div>
-              <div class="overview-card">
-                <div class="label">Last Completed</div>
-                <div class="overview-value">${lastDone ? esc(lessonDisplayName(lastDone)) : 'Nothing logged yet'}</div>
-                <div class="overview-note">${lastDone ? friendlyDate(lastDone.date) : 'Status will move once teachers start logging.'}</div>
-              </div>
-            </div>
-            <div class="units-container">
-              <div class="label mb-8">Books</div>`;
-
-        if (clsBooks.length === 0) {
-          html += `<div class="empty-state-inline">No books yet.</div>`;
-        } else {
-          clsBooks.forEach(book => { html += renderBookCard(book); });
-        }
-
-        html += `
-              <button class="btn btn-add" onclick="openBookModal('${cls.id}')">+ Add Book</button>
-            </div>
-          </div>`;
-      }
-      html += `</div>`;
-    });
-  }
-  el.innerHTML = html;
+          </div>
+        </div>
+      </article>`;
+  });
+  return html + `</div>`;
 }
 
-// ─── Book card (Level 2) ──────────────────────────────────────────────────────
-function renderBookCard(book) {
-  const isOpen      = !!expandedBooks[book.id];
-  const bookSubs    = sortSubunits(DB.subunits.filter(s => s.bookId === book.id));
-  const bookLessons = DB.lessons.filter(l => l.bookId === book.id);
-  const range       = bookDateRange(book.id);
-  const summary     = completionSummary(bookLessons);
+function renderClassWorkspace() {
+  const cls = DB.classes.find(item => item.id === currentClassWorkspace.classId);
+  if (!cls) return renderClassDirectory();
+  const clsLessons = sortLessons(DB.lessons.filter(l => l.classId === cls.id));
+  const summary = completionSummary(clsLessons);
+  const nextLesson = nextPendingLesson(clsLessons);
+  const studentCount = studentsForClass(cls.id).length;
+  const unitCount = classSubunits(cls.id).length;
+  const endDate = classEndDate(cls.id);
+  const tabs = ['overview', 'curriculum', 'students', 'reports', 'settings'];
+  const tabLabels = { overview: 'Overview', curriculum: 'Curriculum', students: 'Students', reports: 'Reports', settings: 'Settings' };
 
-  let html = `
-    <div class="unit-card">
-      <div class="card-header" onclick="toggleBook('${book.id}')">
-        ${chevronSvg(isOpen)}
-        <div class="card-title">${esc(book.name || 'Untitled Book')}</div>
+  return `
+    <div class="class-workspace">
+      <section class="class-workspace-hero">
+        <div>
+          <button class="btn workspace-back" onclick="closeClassWorkspace()">Back to Courses</button>
+          <div class="page-eyebrow">${esc(classCurriculumLabel(cls))}</div>
+          <div class="class-workspace-title">${esc(cls.name || 'Untitled Class')}</div>
+          <div class="class-workspace-subtitle">${esc((cls.days || []).join(', ') || 'Days not set')} · ${friendlyTime(cls.tstart)}${cls.tend ? `-${friendlyTime(cls.tend)}` : ''} · ${esc(cls.teacher || 'No teacher assigned')}</div>
+        </div>
+        <div class="class-workspace-actions">
+          ${nextLesson ? `<button class="btn btn-primary" onclick="logFromToday('${nextLesson.id}')">Log Next Lesson</button>` : ''}
+          <button class="btn" onclick="openStudentModal()">Add Student</button>
+          <button class="btn" onclick="openClassModal('${cls.id}')">Edit Class</button>
+        </div>
+      </section>
+
+      <div class="class-workspace-metrics">
+        ${workspaceMetric(summary.label, 'Progress')}
+        ${workspaceMetric(String(clsLessons.length), 'Lessons')}
+        ${workspaceMetric(String(unitCount), 'Units')}
+        ${workspaceMetric(String(studentCount), 'Students')}
+      </div>
+
+      <div class="workspace-tabs">
+        ${tabs.map(tab => `<button class="workspace-tab${currentClassWorkspace.tab === tab ? ' active' : ''}" onclick="selectClassWorkspaceTab('${tab}')">${tabLabels[tab]}</button>`).join('')}
+      </div>
+
+      ${renderClassWorkspacePanel(cls)}
+    </div>`;
+}
+
+function renderClassWorkspacePanel(cls) {
+  if (currentClassWorkspace.tab === 'curriculum') return renderClassCurriculumPanel(cls);
+  if (currentClassWorkspace.tab === 'students') return renderClassStudentsPanel(cls);
+  if (currentClassWorkspace.tab === 'reports') return renderClassReportsPanel(cls);
+  if (currentClassWorkspace.tab === 'settings') return renderClassSettingsPanel(cls);
+  return renderClassOverviewPanel(cls);
+}
+
+function renderClassOverviewPanel(cls) {
+  const lessons = sortLessons(DB.lessons.filter(l => l.classId === cls.id));
+  const nextLesson = nextPendingLesson(lessons);
+  const today = todayStr();
+  const weekEnd = addDays(today, 6);
+  const weekLessons = lessons.filter(lesson => lesson.date >= today && lesson.date <= weekEnd).slice(0, 6);
+  const logs = DB.logs
+    .filter(log => lessons.some(lesson => lesson.id === log.lessonId))
+    .slice()
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+    .slice(0, 5);
+
+  return `
+    <section class="workspace-panel">
+      <div class="class-overview-grid">
+        <div class="next-lesson-focus">
+          <div class="workspace-mini-label">Teacher action</div>
+          <div class="next-lesson-title">${nextLesson ? esc(lessonDisplayName(nextLesson)) : 'No lesson waiting to log'}</div>
+          <div class="next-lesson-meta">${nextLesson ? `${friendlyDate(nextLesson.date)}${nextLesson.tstart ? ` at ${friendlyTime(nextLesson.tstart)}` : ''} · ${esc(lessonContext(nextLesson))}` : 'Create or auto-build a curriculum to start the workflow.'}</div>
+          <div class="page-actions">
+            ${nextLesson ? `<button class="btn btn-primary" onclick="logFromToday('${nextLesson.id}')">Log Lesson</button>
+            <button class="btn" onclick="jumpToLesson('${nextLesson.subunitId}','${nextLesson.id}')">View in Curriculum</button>` : `<button class="btn btn-primary" onclick="selectClassWorkspaceTab('curriculum')">Open Curriculum</button>`}
+          </div>
+        </div>
+        <div class="workspace-panel" style="box-shadow:none;">
+          <div class="workspace-section-head">
+            <div>
+              <div class="workspace-mini-label">This week</div>
+              <div class="workspace-section-title">Upcoming lessons</div>
+            </div>
+          </div>
+          <div class="week-strip">
+            ${weekLessons.length ? weekLessons.map(renderWeekLessonRow).join('') : `<div class="empty-state-inline">No lessons scheduled this week.</div>`}
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="workspace-panel">
+      <div class="workspace-section-head">
+        <div>
+          <div class="workspace-mini-label">Class memory</div>
+          <div class="workspace-section-title">Recent logs</div>
+        </div>
+        <button class="btn" onclick="switchTab('log')">Open Log</button>
+      </div>
+      <div class="week-strip">
+        ${logs.length ? logs.map(log => `<div class="compact-list-row">
+          <div class="week-date-chip">${esc(shortDateLabel(log.date))}</div>
+          <div>
+            <div class="compact-title">${esc(log.lessonName || 'Lesson log')}</div>
+            <div class="compact-meta">${esc(log.notes || 'No notes recorded.')}</div>
+          </div>
+          ${statusBadge({ key: 'complete', label: 'Logged' })}
+        </div>`).join('') : `<div class="empty-state-inline">No logs yet. The next saved log will appear here.</div>`}
+      </div>
+    </section>`;
+}
+
+function renderClassCurriculumPanel(cls) {
+  const units = classSubunits(cls.id);
+  const firstUnit = units[0];
+  if (!currentClassWorkspace.unitId || !units.some(unit => unit.id === currentClassWorkspace.unitId)) {
+    currentClassWorkspace.unitId = firstUnit ? firstUnit.id : null;
+    currentClassWorkspace.lessonId = null;
+  }
+
+  return `
+    <section class="workspace-panel">
+      <div class="workspace-section-head">
+        <div>
+          <div class="workspace-mini-label">Curriculum</div>
+          <div class="workspace-section-title">Units and lessons</div>
+        </div>
+        <div class="page-actions">
+          ${firstBookForClass(cls.id) ? `<button class="btn" onclick="openSubunitModal('${firstBookForClass(cls.id).id}','${cls.id}')">Add Unit</button>` : `<button class="btn" onclick="openBookModal('${cls.id}')">Add Curriculum</button>`}
+        </div>
+      </div>
+      ${units.length ? `<div class="curriculum-workbench">
+        <div class="unit-grid">
+          ${units.map(unit => renderCurriculumUnitCard(unit)).join('')}
+        </div>
+        ${renderLessonDrawer(cls)}
+      </div>` : `<div class="empty-state-section">No curriculum is attached to this class yet. Add a curriculum master from class creation, or add a curriculum container manually.</div>`}
+    </section>`;
+}
+
+function renderCurriculumUnitCard(unit) {
+  const lessons = sortLessons(DB.lessons.filter(lesson => lesson.subunitId === unit.id));
+  const summary = completionSummary(lessons);
+  const range = subunitDateRange(unit.id);
+  const next = nextPendingLesson(lessons);
+  const isActive = currentClassWorkspace.unitId === unit.id;
+  return `
+    <article class="curriculum-unit-card${isActive ? ' active' : ''}" onclick="selectCurriculumUnit('${unit.id}')">
+      <div class="unit-card-head">
+        <span class="unit-number-pill">${esc(unit.number === 0 ? 'Unit 0' : unit.number ? `Unit ${unit.number}` : 'Unit')}</span>
         ${statusBadge(summary)}
-        <span class="badge badge-grey badge-sm">${bookLessons.length} lesson${bookLessons.length !== 1 ? 's' : ''}</span>
-        ${range.start ? `<span class="date-range">${friendlyDate(range.start)} → ${friendlyDate(range.end)}</span>` : ''}
-        <button class="btn-edit" onclick="event.stopPropagation();openBookModal('${book.id}')" title="Edit">${editSvg()}</button>
-        <button class="btn-ghost" onclick="event.stopPropagation();deleteBook('${book.id}')" title="Delete">&#10005;</button>
-      </div>`;
-
-  if (isOpen) {
-    html += `<div class="card-body">`;
-    if (book.notes) {
-      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;"><strong>Focus:</strong> ${esc(book.notes)}</div>`;
-    }
-    if (bookLessons.length > 0) {
-      html += progressMarkup(summary, 'lessons');
-    }
-    if (bookSubs.length === 0) {
-      html += `<div class="empty-state-inline">No units yet.</div>`;
-    } else {
-      bookSubs.forEach(su => { html += renderSubunitCard(su); });
-    }
-    html += `
-        <button class="btn btn-add" onclick="openSubunitModal('${book.id}','${book.classId}')">+ Add Unit</button>
-      </div>`;
-  }
-
-  html += `</div>`;
-  return html;
+      </div>
+      <div class="curriculum-unit-title">${esc(unit.name || subunitDisplayName(unit))}</div>
+      <div class="unit-micro">${range.start ? `${friendlyDate(range.start)} to ${friendlyDate(range.end)}` : 'No dates yet'}</div>
+      <div class="compact-meta">${next ? `Next: ${esc(lessonDisplayName(next))}` : (lessons.length ? 'All lessons logged.' : 'No lessons yet.')}</div>
+      ${progressMarkup(summary, 'lessons')}
+      <div class="material-chip-row">${unitMaterialSources(lessons).map(source => `<span class="material-chip">${esc(materialLabel([source]))}</span>`).join('')}</div>
+    </article>`;
 }
 
-// ─── Subunit card (Level 3) ───────────────────────────────────────────────────
-function renderSubunitCard(su) {
-  const isOpen     = !!expandedSubunits[su.id];
-  const suLessons  = sortLessons(DB.lessons.filter(l => l.subunitId === su.id));
-  const range      = subunitDateRange(su.id);
-  const today      = todayStr();
-  const summary    = completionSummary(suLessons);
-
-  let html = `
-    <div class="subunit-card">
-      <div class="card-header" onclick="toggleSubunit('${su.id}')">
-        ${chevronSvg(isOpen)}
-        <div class="card-title">${esc(subunitDisplayName(su))}</div>
-        ${statusBadge(summary)}
-        <span class="badge badge-grey badge-sm">${suLessons.length} lesson${suLessons.length !== 1 ? 's' : ''}</span>
-        ${range.start ? `<span class="date-range">${friendlyDate(range.start)} → ${friendlyDate(range.end)}</span>` : ''}
-        <button class="btn-edit" onclick="event.stopPropagation();openSubunitModal('${su.id}')" title="Edit">${editSvg()}</button>
-        <button class="btn-ghost" onclick="event.stopPropagation();deleteSubunit('${su.id}')" title="Delete">&#10005;</button>
-      </div>`;
-
-  if (isOpen) {
-    html += `<div class="card-body">`;
-    if (su.notes) {
-      html += `<div class="unit-notes-strip" style="margin:8px 0 10px;"><strong>Focus:</strong> ${esc(su.notes)}</div>`;
-    }
-    if (suLessons.length > 0) {
-      html += progressMarkup(summary, 'lessons');
-    }
-    if (suLessons.length === 0) {
-      html += `<div class="empty-state-inline">No lessons yet.</div>`;
-    } else {
-      suLessons.forEach(lesson => {
-        const isToday    = lesson.date === today;
-        const isLessonOpen = !!expandedLessons[lesson.id];
-        const isComplete = !!logForLesson(lesson.id);
-        const detailRows = [
-          lesson.date   ? `<div class="lesson-detail-row"><span class="label">Date</span><span>${friendlyDate(lesson.date)}${lesson.tstart ? ' at ' + friendlyTime(lesson.tstart) : ''}</span></div>` : '',
-          lesson.plan   ? `<div class="lesson-detail-row"><span class="label">Teach</span><span>${esc(lesson.plan)}</span></div>` : '',
-          lesson.pos    ? `<div class="lesson-detail-row"><span class="label">Start at</span><span>${esc(lesson.pos)}</span></div>` : ''
-        ].filter(Boolean).join('');
-        const classStudents = studentsForClass(su.classId);
-        const snRows = classStudents.length === 0 ? '' : `
-          <div class="sn-section">
-            <div class="sn-section-label">Student Notes</div>
-            ${classStudents.map(st => {
-              const note = DB.studentnotes.find(n => n.studentId === st.id && n.lessonId === lesson.id);
-              return `<div class="sn-row">
-                <div class="sn-row-name">${esc(st.name)}</div>
-                ${note
-                  ? `<div class="sn-row-note">${esc(note.note)}</div>
-                     <button class="btn-ghost" onclick="deleteStudentNote('${note.id}')" title="Remove note" style="font-size:11px;">&#10005;</button>`
-                  : `<div class="sn-row-note empty">no note</div>
-                     <button class="sn-add-btn" onclick="openStudentNoteModal('${st.id}','${lesson.id}','${su.classId}',null)">+ Add</button>`
-                }
-              </div>`;
-            }).join('')}
-          </div>`;
-        html += `
-          <div class="lesson-item">
-            <div class="lesson-row" onclick="toggleLesson('${lesson.id}')">
-              ${chevronSvg(isLessonOpen)}
-              <div class="lesson-dot ${dotClass(lesson.date)}"></div>
-              <div class="lesson-row-name">
-                ${esc(lessonDisplayName(lesson))}
-                ${isToday ? `<span class="badge badge-today">Today</span>` : ''}
-              </div>
-              ${isComplete ? statusBadge({ key: 'complete', label: 'Complete' }) : statusBadge({ key: 'planned', label: 'Needs Log' })}
-              <div class="lesson-row-meta">${lesson.date ? friendlyDate(lesson.date) : ''}${lesson.tstart ? ' ' + friendlyTime(lesson.tstart) : ''}</div>
-              <button class="btn-edit" onclick="event.stopPropagation();openLessonModal(null,null,null,'${lesson.id}')" title="Edit">${editSvg()}</button>
-              <button class="btn-ghost" onclick="event.stopPropagation();deleteLesson('${lesson.id}')" title="Delete">&#10005;</button>
-            </div>
-            ${isLessonOpen ? `<div class="lesson-detail">${detailRows || '<span class="text-empty">No details recorded.</span>'}${snRows}</div>` : ''}
-          </div>`;
-      });
-    }
-    html += `
-        <button class="btn btn-add" onclick="openLessonModal('${su.id}','${su.bookId}','${su.classId}')">+ Add Lesson</button>
-      </div>`;
+function renderLessonDrawer(cls) {
+  const unit = DB.subunits.find(item => item.id === currentClassWorkspace.unitId);
+  if (!unit) return `<aside class="lesson-drawer"><div class="empty-state-inline">Select a unit to see lessons.</div></aside>`;
+  const lessons = sortLessons(DB.lessons.filter(lesson => lesson.subunitId === unit.id));
+  if (!currentClassWorkspace.lessonId || !lessons.some(lesson => lesson.id === currentClassWorkspace.lessonId)) {
+    currentClassWorkspace.lessonId = lessons[0]?.id || null;
   }
-
-  html += `</div>`;
-  return html;
+  const selected = lessons.find(lesson => lesson.id === currentClassWorkspace.lessonId);
+  return `
+    <aside class="lesson-drawer">
+      <div class="lesson-drawer-head">
+        <div>
+          <div class="lesson-drawer-label">${esc(subunitDisplayName(unit))}</div>
+          <div class="workspace-section-title">Lessons</div>
+        </div>
+        <button class="btn" onclick="openLessonModal('${unit.id}','${unit.bookId}','${cls.id}')">Add</button>
+      </div>
+      <div class="lesson-list">
+        ${lessons.length ? lessons.map((lesson, index) => renderLessonDrawerRow(lesson, index)).join('') : `<div class="empty-state-inline">No lessons in this unit yet.</div>`}
+      </div>
+      ${selected ? renderLessonDetailCard(selected) : ''}
+    </aside>`;
 }
 
-function toggleClass(id)   { expandedClasses[id]  = !expandedClasses[id];  renderClasses(); }
+function renderLessonDrawerRow(lesson, index) {
+  const isActive = currentClassWorkspace.lessonId === lesson.id;
+  const isComplete = !!logForLesson(lesson.id);
+  return `
+    <button class="lesson-drawer-row${isActive ? ' active' : ''}" onclick="selectCurriculumLesson('${lesson.id}')">
+      <div class="lesson-index">${index + 1}</div>
+      <div style="min-width:0; flex:1;">
+        <div class="lesson-drawer-title">${esc(lessonDisplayName(lesson))}</div>
+        <div class="compact-meta">${lesson.date ? friendlyDate(lesson.date) : 'No date'}${lesson.tstart ? ` · ${friendlyTime(lesson.tstart)}` : ''}</div>
+      </div>
+      ${isComplete ? statusBadge({ key: 'complete', label: 'Done' }) : statusBadge({ key: 'planned', label: 'Log' })}
+    </button>`;
+}
+
+function renderLessonDetailCard(lesson) {
+  const noteCount = DB.studentnotes.filter(note => note.lessonId === lesson.id).length;
+  return `
+    <div class="lesson-detail-card">
+      <div class="lesson-drawer-label">${esc(lessonTypeLabel(lesson.lessonType))}</div>
+      <div class="lesson-detail-title">${esc(lessonDisplayName(lesson))}</div>
+      <div class="material-chip-row">${lessonMaterialSources(lesson).map(source => `<span class="material-chip">${esc(materialLabel([source]))}</span>`).join('')}</div>
+      <div class="lesson-detail-grid">
+        <div class="lesson-detail-item">
+          <div class="lesson-drawer-label">When</div>
+          <div class="compact-title">${lesson.date ? friendlyDate(lesson.date) : 'No date'}${lesson.tstart ? ` at ${friendlyTime(lesson.tstart)}` : ''}</div>
+        </div>
+        <div class="lesson-detail-item">
+          <div class="lesson-drawer-label">Teach</div>
+          <div class="compact-meta">${esc(lesson.plan || 'No teaching plan recorded.')}</div>
+        </div>
+        <div class="lesson-detail-item">
+          <div class="lesson-drawer-label">Position</div>
+          <div class="compact-meta">${esc(lesson.pos || 'No book position recorded.')}</div>
+        </div>
+        <div class="lesson-detail-item">
+          <div class="lesson-drawer-label">Student notes</div>
+          <div class="compact-meta">${noteCount} note${noteCount === 1 ? '' : 's'} attached to this lesson.</div>
+        </div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-primary" onclick="logFromToday('${lesson.id}')">Log Lesson</button>
+        <button class="btn" onclick="openLessonModal(null,null,null,'${lesson.id}')">Edit</button>
+      </div>
+    </div>`;
+}
+
+function renderClassStudentsPanel(cls) {
+  const students = studentsForClass(cls.id);
+  return `
+    <section class="workspace-panel">
+      <div class="workspace-section-head">
+        <div>
+          <div class="workspace-mini-label">Roster</div>
+          <div class="workspace-section-title">Students in this class</div>
+        </div>
+        <button class="btn btn-primary" onclick="openStudentModal()">Add Student</button>
+      </div>
+      ${students.length ? `<div class="student-mini-grid">
+        ${students.map(student => `<div class="student-mini-card">
+          <div class="compact-title">${esc(studentPrimaryLabel(student))}</div>
+          <div class="compact-meta">${studentKoreanName(student) ? esc(studentKoreanName(student)) + ' · ' : ''}${student.dob ? 'DOB ' + friendlyDate(student.dob) : 'DOB not set'}</div>
+          <div class="page-actions mt-10">
+            <button class="btn" onclick="openStudentProfile('${student.id}','${cls.id}')">Profile</button>
+            <button class="btn" onclick="openStudentReport('${student.id}','${cls.id}')">Report</button>
+          </div>
+        </div>`).join('')}
+      </div>` : `<div class="empty-state-section">No students are enrolled in this class yet. Add them from the Students tab or student modal.</div>`}
+    </section>`;
+}
+
+function renderClassReportsPanel(cls) {
+  const students = studentsForClass(cls.id);
+  return `
+    <section class="workspace-panel">
+      <div class="workspace-section-head">
+        <div>
+          <div class="workspace-mini-label">Weekly reporting</div>
+          <div class="workspace-section-title">Generate reports from student profiles</div>
+        </div>
+      </div>
+      <div class="week-strip">
+        ${students.length ? students.map(student => `<div class="compact-list-row">
+          <div class="class-avatar" style="width:36px;height:36px;border-radius:13px;">${esc(initials(studentPrimaryLabel(student)))}</div>
+          <div>
+            <div class="compact-title">${esc(studentPrimaryLabel(student))}</div>
+            <div class="compact-meta">${esc(studentKoreanName(student) || 'Korean name not added')} · ${student.dob ? friendlyDate(student.dob) : 'DOB not set'}</div>
+          </div>
+          <button class="btn" onclick="openStudentReport('${student.id}','${cls.id}')">Weekly Report</button>
+        </div>`).join('') : `<div class="empty-state-inline">Add students before generating weekly reports.</div>`}
+      </div>
+    </section>`;
+}
+
+function renderClassSettingsPanel(cls) {
+  const books = sortBooks(DB.units.filter(book => book.classId === cls.id));
+  return `
+    <section class="workspace-panel">
+      <div class="workspace-section-head">
+        <div>
+          <div class="workspace-mini-label">Settings</div>
+          <div class="workspace-section-title">Class setup and curriculum resources</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn" onclick="openClassModal('${cls.id}')">Edit Class</button>
+          <button class="btn" onclick="openBookModal('${cls.id}')">Add Curriculum</button>
+        </div>
+      </div>
+      <div class="overview-grid">
+        <div class="overview-card">
+          <div class="label">Schedule</div>
+          <div class="overview-value">${esc((cls.days || []).join(', ') || 'Not set')}</div>
+          <div class="overview-note">${friendlyDate(cls.start)} · ${friendlyTime(cls.tstart)}${cls.tend ? `-${friendlyTime(cls.tend)}` : ''}</div>
+        </div>
+        <div class="overview-card">
+          <div class="label">Curriculum Containers</div>
+          <div class="overview-value">${books.length}</div>
+          <div class="overview-note">Hidden from the main workflow; used as curriculum data containers.</div>
+        </div>
+      </div>
+      <div class="week-strip mt-14">
+        ${books.length ? books.map(book => `<div class="compact-list-row">
+          <div class="week-date-chip">Book</div>
+          <div>
+            <div class="compact-title">${esc(book.name || 'Untitled Curriculum')}</div>
+            <div class="compact-meta">${esc(book.notes || 'No notes.')}</div>
+          </div>
+          <button class="btn" onclick="openBookModal('${book.id}')">Edit</button>
+        </div>`).join('') : `<div class="empty-state-inline">No curriculum container exists yet.</div>`}
+      </div>
+    </section>`;
+}
+
+function workspaceMetric(value, label) {
+  return `<div class="workspace-metric"><div class="workspace-metric-value">${esc(value)}</div><div class="workspace-mini-label">${esc(label)}</div></div>`;
+}
+
+function renderWeekLessonRow(lesson) {
+  return `<div class="week-lesson-row">
+    <div class="week-date-chip">${esc(shortDateLabel(lesson.date))}</div>
+    <div>
+      <div class="compact-title">${esc(lessonDisplayName(lesson))}</div>
+      <div class="compact-meta">${esc(lessonContext(lesson))}${lesson.tstart ? ` · ${friendlyTime(lesson.tstart)}` : ''}</div>
+    </div>
+    <button class="btn" onclick="jumpToLesson('${lesson.subunitId}','${lesson.id}')">View</button>
+  </div>`;
+}
+
+function classSubunits(classId) {
+  return sortSubunits(DB.subunits.filter(unit => unit.classId === classId));
+}
+
+function firstBookForClass(classId) {
+  return sortBooks(DB.units.filter(book => book.classId === classId))[0] || null;
+}
+
+function classCurriculumLabel(cls) {
+  if (cls.curriculumName) return cls.curriculumName;
+  const book = firstBookForClass(cls.id);
+  return book ? (book.name || 'Custom Curriculum') : 'No curriculum yet';
+}
+
+function classInitials(name, index = 0) {
+  const result = initials(name || '');
+  return result || String(index + 1);
+}
+
+function lessonContext(lesson) {
+  const unit = DB.subunits.find(item => item.id === lesson.subunitId);
+  const book = DB.units.find(item => item.id === lesson.bookId);
+  return [unit ? subunitDisplayName(unit) : '', book ? book.name : ''].filter(Boolean).join(' · ');
+}
+
+function lessonTypeLabel(type) {
+  const labels = {
+    unit_opener: 'Unit Opener',
+    vocabulary: 'Vocabulary',
+    vocabulary_review: 'Vocabulary Review',
+    song: 'Song',
+    grammar: 'Grammar',
+    grammar_practice: 'Grammar Practice',
+    reading_1: 'Reading 1',
+    reading_2: 'Reading 2',
+    writing: 'Writing',
+    project: 'Project',
+    quiz: 'Quiz',
+    review_exam: 'Review Exam',
+    level_assessment: 'Level Assessment',
+    placement_quiz: 'Placement Quiz'
+  };
+  return labels[type] || 'Lesson';
+}
+
+function lessonMaterialSources(lesson) {
+  return Array.isArray(lesson.materialSource) && lesson.materialSource.length ? lesson.materialSource : ['student_book'];
+}
+
+function unitMaterialSources(lessons) {
+  const order = ['student_book', 'workbook', 'grammar_book', 'assessment'];
+  const set = new Set(lessons.flatMap(lessonMaterialSources));
+  return order.filter(source => set.has(source));
+}
+
+function shortDateLabel(dateStr) {
+  if (!dateStr) return 'Plan';
+  return new Date(`${dateStr}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function openClassWorkspace(classId) {
+  currentClassWorkspace = { classId, tab: 'overview', unitId: null, lessonId: null };
+  renderClasses();
+}
+
+function closeClassWorkspace() {
+  currentClassWorkspace = { classId: null, tab: 'overview', unitId: null, lessonId: null };
+  renderClasses();
+}
+
+function selectClassWorkspaceTab(tab) {
+  currentClassWorkspace.tab = tab;
+  renderClasses();
+}
+
+function selectCurriculumUnit(unitId) {
+  currentClassWorkspace.unitId = unitId;
+  currentClassWorkspace.lessonId = null;
+  currentClassWorkspace.tab = 'curriculum';
+  renderClasses();
+}
+
+function selectCurriculumLesson(lessonId) {
+  currentClassWorkspace.lessonId = lessonId;
+  currentClassWorkspace.tab = 'curriculum';
+  renderClasses();
+}
+
+function jumpToLesson(unitId, lessonId) {
+  currentClassWorkspace.tab = 'curriculum';
+  currentClassWorkspace.unitId = unitId;
+  currentClassWorkspace.lessonId = lessonId;
+  renderClasses();
+}
+
+function toggleClass(id)   { openClassWorkspace(id); }
 function toggleBook(id)    { expandedBooks[id]     = !expandedBooks[id];    renderClasses(); }
-function toggleSubunit(id) { expandedSubunits[id]  = !expandedSubunits[id]; renderClasses(); }
-function toggleLesson(id)  { expandedLessons[id]   = !expandedLessons[id];  renderClasses(); }
+function toggleSubunit(id) { selectCurriculumUnit(id); }
+function toggleLesson(id)  { selectCurriculumLesson(id); }
 
 // ════════════════════════════════════════════════════
 // LOG TAB

@@ -986,17 +986,18 @@
       position: relative;
       z-index: 1;
       min-height: 100vh;
-      padding: 18px 22px;
+      padding: 12px;
     }
 
     .app-chrome {
-      max-width: 1480px;
+      max-width: min(1920px, calc(100vw - 24px));
+      width: 100%;
       min-height: calc(100vh - 36px);
       margin: 0 auto;
       padding: 0;
       display: grid;
-      grid-template-columns: 220px minmax(0, 1fr) 310px;
-      gap: 18px;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 12px;
     }
 
     .glass-panel,
@@ -1039,8 +1040,9 @@
     .sidebar-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
+      gap: 9px;
+      padding: 10px 8px;
+      min-width: 0;
     }
 
     .sidebar-brand-mark {
@@ -1050,8 +1052,8 @@
     }
 
     .brand-dot {
-      width: 13px;
-      height: 13px;
+      width: 11px;
+      height: 11px;
       border-radius: 999px;
       background: #111827;
       display: block;
@@ -1059,22 +1061,25 @@
     }
 
     .brand-dot-secondary {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       opacity: 0.92;
     }
 
     .brand-dot-tertiary {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       opacity: 0.78;
     }
 
     .sidebar-brand-text {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.55rem;
+      min-width: 0;
+      font-size: 1.28rem;
       font-weight: 700;
       letter-spacing: -0.04em;
+      line-height: 1;
+      overflow-wrap: anywhere;
     }
 
     .sidebar-nav {
@@ -1163,6 +1168,7 @@
 
     .shell-main {
       min-width: 0;
+      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -1186,15 +1192,15 @@
 
     .workspace-title-row {
       display: flex;
-      align-items: baseline;
-      gap: 12px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
     }
 
     .workspace-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2rem, 4vw, 2.7rem);
-      line-height: 0.95;
+      font-size: clamp(1.9rem, 3.4vw, 2.45rem);
+      line-height: 1;
       letter-spacing: -0.05em;
       font-weight: 700;
       color: #101828;
@@ -1204,6 +1210,7 @@
       color: var(--ink-soft);
       font-size: 0.95rem;
       font-weight: 500;
+      line-height: 1.35;
     }
 
     .workspace-metrics {
@@ -1268,7 +1275,7 @@
     }
 
     .shell-rail {
-      display: flex;
+      display: none;
       flex-direction: column;
       gap: 16px;
       padding: 18px;
@@ -1325,7 +1332,6 @@
 
     .rail-progress-meta,
     .rail-course-meta,
-    .course-card-copy,
     .teacher-meta,
     .mini-card-meta,
     .activity-hint,
@@ -1388,6 +1394,7 @@
 
     .tab-content.active {
       display: block;
+      width: 100%;
     }
 
     .dashboard-shell {
@@ -1551,6 +1558,118 @@
       gap: 18px;
     }
 
+    .ops-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .ops-card {
+      grid-column: span 4;
+      min-width: 0;
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(255,255,255,0.76);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.58);
+    }
+
+    .ops-card.wide {
+      grid-column: span 8;
+    }
+
+    .ops-card.full {
+      grid-column: span 12;
+    }
+
+    .ops-list {
+      display: grid;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .ops-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 17px;
+      background: rgba(248,250,252,0.72);
+      border: 1px solid rgba(148,163,184,0.14);
+      min-width: 0;
+    }
+
+    .ops-row.clickable {
+      cursor: pointer;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .ops-row.clickable:hover {
+      background: rgba(255,255,255,0.9);
+      border-color: rgba(91,106,245,0.22);
+      transform: translateY(-1px);
+    }
+
+    .ops-row-main {
+      min-width: 0;
+    }
+
+    .ops-row-title {
+      color: #111827;
+      font-weight: 850;
+      line-height: 1.16;
+      overflow-wrap: anywhere;
+    }
+
+    .ops-row-meta {
+      margin-top: 3px;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .ops-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(91,106,245,0.10);
+      color: #4f46e5;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+
+    .ops-pill.warn {
+      background: rgba(245,158,11,0.13);
+      color: #a15c00;
+    }
+
+    .ops-pill.danger {
+      background: rgba(239,68,68,0.12);
+      color: #b42318;
+    }
+
+    .ops-pill.good {
+      background: rgba(34,197,94,0.12);
+      color: #067647;
+    }
+
+    .ops-empty {
+      padding: 14px;
+      border-radius: 18px;
+      color: #667085;
+      background: rgba(248,250,252,0.62);
+      border: 1px dashed rgba(148,163,184,0.32);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
     .teacher-row {
       display: flex;
       gap: 18px;
@@ -1593,56 +1712,60 @@
       text-align: center;
     }
 
-    .course-grid {
+    .course-strip {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 14px;
+      gap: 10px;
     }
 
-    .course-card {
-      min-height: 160px;
-      padding: 16px;
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.62));
-      border: 1px solid rgba(255,255,255,0.82);
-      position: relative;
-      overflow: hidden;
+    .course-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.54);
+      border: 1px solid rgba(148,163,184,0.14);
+      cursor: pointer;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
     }
 
-    .course-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.16), transparent 40%),
-        var(--course-bg, linear-gradient(135deg, rgba(94,107,255,0.18), rgba(94,107,255,0.02)));
-      opacity: 0.9;
-      pointer-events: none;
+    .course-row:hover {
+      background: rgba(255,255,255,0.84);
+      border-color: rgba(91,106,245,0.22);
+      transform: translateY(-1px);
     }
 
-    .course-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .course-card-tag {
-      display: inline-flex;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.82);
-      color: #3c4657;
-      font-size: 0.78rem;
-      font-weight: 800;
-      margin-bottom: 56px;
-    }
-
-    .course-card-title {
+    .course-row-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #4f46e5;
+      background: rgba(91,106,245,0.10);
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.12rem;
-      line-height: 1.05;
+      font-weight: 900;
+    }
+
+    .course-row-copy {
+      min-width: 0;
+    }
+
+    .course-row-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      line-height: 1.1;
       letter-spacing: -0.04em;
-      margin-bottom: 6px;
+      font-weight: 800;
       color: #111827;
+      overflow-wrap: anywhere;
+    }
+
+    .course-row-meta {
+      margin-top: 3px;
+      color: #667085;
+      font-size: 12px;
     }
 
     .page-intro {
@@ -1797,6 +1920,23 @@
       background: rgba(94,107,255,0.08);
       border: 1px solid rgba(94,107,255,0.14);
     }
+
+    .curriculum-preview-block { display: flex; flex-direction: column; gap: 4px; }
+    .curriculum-preview-name { font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+    .curriculum-preview-structure { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 4px; }
+    .curriculum-preview-lessons { font-size: 0.85rem; color: var(--ink-soft); }
+    .curriculum-preview-hint { font-size: 0.82rem; color: var(--ink-soft); font-style: italic; margin-top: 4px; }
+    .curriculum-preview-schedule {
+      display: flex;
+      gap: 8px;
+      font-size: 0.85rem;
+      align-items: baseline;
+    }
+    .curriculum-preview-label { color: var(--ink-soft); min-width: 110px; flex-shrink: 0; }
+    .curriculum-preview-value { color: var(--ink); }
+    .curriculum-preview-enddate .curriculum-preview-label,
+    .curriculum-preview-enddate .curriculum-preview-value { font-weight: 600; }
+    .curriculum-preview-enddate .curriculum-preview-value em { font-weight: 400; font-style: normal; color: var(--ink-soft); }
 
     .toggle-row {
       display: flex;
@@ -1986,7 +2126,7 @@
     /* ── Class workspace redesign ── */
     .class-directory-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 16px;
     }
 
@@ -2202,6 +2342,15 @@
       background: rgba(255,255,255,0.78);
       border: 1px solid rgba(255,255,255,0.72);
       box-shadow: 0 18px 54px rgba(39,48,94,0.08), inset 0 1px 0 rgba(255,255,255,0.86);
+      min-width: 0;
+    }
+
+    .surface-card {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid rgba(148,163,184,0.14);
+      min-width: 0;
     }
 
     .workspace-section-head {
@@ -2263,6 +2412,7 @@
       border-radius: 16px;
       background: rgba(255,255,255,0.64);
       border: 1px solid rgba(148,163,184,0.14);
+      min-width: 0;
     }
 
     .week-date-chip {
@@ -2290,14 +2440,14 @@
 
     .curriculum-workbench {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.48fr);
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.38fr);
       gap: 16px;
       align-items: start;
     }
 
     .unit-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 12px;
     }
 
@@ -2381,7 +2531,7 @@
       gap: 8px;
       max-height: 430px;
       overflow: auto;
-      padding-right: 4px;
+      padding: 2px 4px 2px 2px;
     }
 
     .lesson-drawer-row {
@@ -2393,12 +2543,21 @@
       text-align: left;
       cursor: pointer;
       transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+      min-width: 0;
+    }
+
+    .lesson-row-copy {
+      min-width: 0;
+      flex: 1;
     }
 
     .lesson-drawer-row:hover,
     .lesson-drawer-row.active {
       background: #fff;
       border-color: rgba(91,106,245,0.25);
+    }
+
+    .lesson-drawer-row:hover {
       transform: translateY(-1px);
     }
 
@@ -2465,6 +2624,56 @@
       border-radius: 16px;
       background: rgba(255,255,255,0.68);
       border: 1px solid rgba(148,163,184,0.14);
+      min-width: 0;
+    }
+
+    .report-avatar-small {
+      width: 36px;
+      height: 36px;
+      border-radius: 13px;
+      font-size: 0.75rem;
+    }
+
+    .unit-number-field {
+      flex: 0 1 110px;
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    .school-account-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.8fr) minmax(320px, 1.2fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .holiday-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .holiday-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.66);
+      border: 1px solid rgba(148,163,184,0.14);
+    }
+
+    .holiday-date-chip {
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #4f46e5;
+      background: rgba(91,106,245,0.10);
+      font-weight: 900;
+      font-size: 11px;
+      white-space: nowrap;
     }
 
     @media (max-width: 1240px) {
@@ -2492,21 +2701,25 @@
 
       .workspace-header,
       .dashboard-hero,
-      .activity-layout {
+      .activity-layout,
+      .ops-grid {
         grid-template-columns: 1fr;
+      }
+
+      .ops-card,
+      .ops-card.wide,
+      .ops-card.full {
+        grid-column: 1;
       }
 
       .workspace-header {
         flex-direction: column;
       }
 
-      .course-grid {
-        grid-template-columns: 1fr;
-      }
-
       .class-workspace-hero,
       .class-overview-grid,
-      .curriculum-workbench {
+      .curriculum-workbench,
+      .school-account-grid {
         grid-template-columns: 1fr;
       }
 
@@ -2581,6 +2794,29 @@
       .activity-bars {
         gap: 8px;
       }
+
+      .class-directory-grid,
+      .unit-grid,
+      .student-mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .week-lesson-row,
+      .compact-list-row,
+      .holiday-row {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .class-directory-footer,
+      .workspace-section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .class-workspace-metrics {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -2620,13 +2856,13 @@
           <span class="tab-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </span>
-          <span>Students</span>
+          <span>People</span>
         </button>
         <button class="tab-btn" data-tab="settings">
           <span class="tab-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           </span>
-          <span>Statistics</span>
+          <span>Settings</span>
         </button>
       </div>
 
@@ -2672,7 +2908,7 @@
             </div>
             <div class="metric-copy">
               <strong id="shell-metric-students">0</strong>
-              <span>Students</span>
+              <span>People</span>
             </div>
           </div>
         </div>
@@ -2806,7 +3042,7 @@
     <input type="hidden" id="subunit-bookId">
     <input type="hidden" id="subunit-classId">
     <div class="form-row">
-      <div class="form-group" style="flex:0 0 90px;">
+      <div class="form-group unit-number-field">
         <label class="form-label">Unit No.</label>
         <input type="number" id="subunit-number" class="form-input" min="1" step="1" placeholder="1">
       </div>
@@ -2928,7 +3164,7 @@
 // ════════════════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════════════════
-let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [] };
+let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [], schoolSettings: { id: 'school', schoolName: '', holidays: [] } };
 let expandedClasses  = {};
 let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
@@ -2983,10 +3219,10 @@ const TAB_META = {
   today: { kicker: 'Home', title: 'Knowledge', subtitle: 'Welcome back!' },
   classes: { kicker: 'All courses', title: 'Curriculum map', subtitle: 'Build the structure behind every class.' },
   log: { kicker: 'Schedule', title: 'Lesson log', subtitle: 'Capture what happened and what comes next.' },
-  students: { kicker: 'Students', title: 'Learner profiles', subtitle: 'Track each student with calmer visibility.' },
-  'student-profile': { kicker: 'Students', title: 'Student profile', subtitle: 'Detailed notes, diagnostics, and progress.' },
-  'student-report': { kicker: 'Students', title: 'Student report', subtitle: 'Printable parent-facing progress summary.' },
-  settings: { kicker: 'Statistics', title: 'System settings', subtitle: 'Keep the engine tidy and export-ready.' }
+  students: { kicker: 'People', title: 'People database', subtitle: 'Create profiles once, then enroll people into any class.' },
+  'student-profile': { kicker: 'People', title: 'Student profile', subtitle: 'Detailed notes, diagnostics, and progress.' },
+  'student-report': { kicker: 'People', title: 'Student report', subtitle: 'Printable parent-facing progress summary.' },
+  settings: { kicker: 'School Account', title: 'School settings', subtitle: 'Manage holidays, backups, and system-wide planning.' }
 };
 const SKILL_LEVEL_FIELDS = ['phonics', 'general', 'reading', 'listening'];
 const SKILL_LABELS = {
@@ -3078,7 +3314,7 @@ async function api(method, path, body) {
 }
 
 async function loadData() {
-  const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances] = await Promise.all([
+  const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances, schoolSettings] = await Promise.all([
     api('GET', '/api/classes'),
     api('GET', '/api/units'),
     api('GET', '/api/subunits'),
@@ -3088,6 +3324,7 @@ async function loadData() {
     api('GET', '/api/enrollments'),
     api('GET', '/api/studentnotes'),
     api('GET', '/api/attendances'),
+    api('GET', '/api/school-settings').catch(() => ({ id: 'school', schoolName: '', holidays: [] })),
   ]);
   DB = {
     classes:      classes      || [],
@@ -3098,7 +3335,8 @@ async function loadData() {
     students:     students     || [],
     enrollments:  enrollments  || [],
     studentnotes: studentnotes || [],
-    attendances:  attendances  || []
+    attendances:  attendances  || [],
+    schoolSettings: normalizeSchoolSettings(schoolSettings)
   };
 }
 
@@ -3113,6 +3351,23 @@ function todayStr() {
 }
 
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function normalizeSchoolSettings(settings = {}) {
+  const holidays = Array.isArray(settings.holidays) ? settings.holidays : [];
+  const seenDates = new Set();
+  return {
+    id: 'school',
+    schoolName: settings.schoolName || '',
+    holidays: holidays
+      .map(item => ({
+        id: item.id || `hol_${item.date || Date.now()}`,
+        date: item.date || '',
+        name: item.name || 'School Holiday'
+      }))
+      .filter(item => item.date && !seenDates.has(item.date) && seenDates.add(item.date))
+      .sort((a, b) => (a.date || '').localeCompare(b.date || ''))
+  };
+}
 const MONTHS_LONG  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS_LONG    = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
@@ -3187,12 +3442,42 @@ function sortSubunits(subs) {
 }
 
 function sortLessons(lessons, descending = false) {
-  const sorted = lessons.slice().sort((a, b) =>
+  const sorted = lessons.slice().sort((a, b) => {
+    const aSequence = lessonOrderValue(a);
+    const bSequence = lessonOrderValue(b);
+    return (a.date || '').localeCompare(b.date || '') ||
+      (a.tstart || '').localeCompare(b.tstart || '') ||
+      aSequence - bSequence ||
+      (a.name || '').localeCompare(b.name || '');
+  });
+  return descending ? sorted.reverse() : sorted;
+}
+
+function lessonOrderValue(lesson) {
+  if (Number.isFinite(Number(lesson.sequence))) return Number(lesson.sequence);
+  const match = String(lesson.name || '').match(/Lesson\s+(\d+)/i);
+  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+}
+
+function sortUnitLessons(lessons) {
+  return lessons.slice().sort((a, b) =>
+    lessonOrderValue(a) - lessonOrderValue(b) ||
     (a.date || '').localeCompare(b.date || '') ||
-    (a.tstart || '').localeCompare(b.tstart || '') ||
     (a.name || '').localeCompare(b.name || '')
   );
-  return descending ? sorted.reverse() : sorted;
+}
+
+function sortClassScheduleLessons(classId) {
+  const unitOrder = new Map(classSubunits(classId).map((unit, index) => [unit.id, index]));
+  return DB.lessons
+    .filter(lesson => lesson.classId === classId)
+    .slice()
+    .sort((a, b) =>
+      (unitOrder.get(a.subunitId) ?? Number.MAX_SAFE_INTEGER) - (unitOrder.get(b.subunitId) ?? Number.MAX_SAFE_INTEGER) ||
+      lessonOrderValue(a) - lessonOrderValue(b) ||
+      (a.date || '').localeCompare(b.date || '') ||
+      (a.name || '').localeCompare(b.name || '')
+    );
 }
 
 // ─── Date ranges ─────────────────────────────────────────────────────────────
@@ -3356,20 +3641,36 @@ function materialLabel(sources = []) {
   return sources.map(source => labels[source] || source).join(' + ');
 }
 
+function schoolHolidayDates() {
+  return new Set((DB.schoolSettings?.holidays || []).map(holiday => holiday.date).filter(Boolean));
+}
+
+function isSchoolHoliday(dateStr, holidayDates = schoolHolidayDates()) {
+  return holidayDates.has(dateStr);
+}
+
+function localDateString(date) {
+  return date.getFullYear() + '-' +
+    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+    String(date.getDate()).padStart(2, '0');
+}
+
 function nextClassDate(currentDate, dayIndexes) {
   const daySet = new Set(dayIndexes);
-  const date = new Date(`${currentDate}T00:00:00`);
-  for (let i = 0; i < 14; i += 1) {
-    if (daySet.has(date.getDay())) return date.toISOString().slice(0, 10);
+  const holidayDates = schoolHolidayDates();
+  const date = parseLocalDate(currentDate);
+  for (let i = 0; i < 370; i += 1) {
+    const dateStr = localDateString(date);
+    if (daySet.has(date.getDay()) && !isSchoolHoliday(dateStr, holidayDates)) return dateStr;
     date.setDate(date.getDate() + 1);
   }
   return currentDate;
 }
 
 function addDays(dateStr, count) {
-  const date = new Date(`${dateStr}T00:00:00`);
+  const date = parseLocalDate(dateStr);
   date.setDate(date.getDate() + count);
-  return date.toISOString().slice(0, 10);
+  return localDateString(date);
 }
 
 function nextLessonDate(previousDate, dayIndexes) {
@@ -3626,12 +3927,86 @@ function updateCurriculumPreview() {
   autoBuild.disabled = !master.id;
   if (!master.id) {
     autoBuild.checked = false;
-    preview.textContent = 'Manual setup: create books, units, lessons, quizzes, and reviews yourself after saving the class.';
+    preview.innerHTML = '<span class="curriculum-preview-hint">Manual setup: create books, units, lessons, quizzes, and reviews yourself after saving the class.</span>';
     return;
   }
-  preview.textContent = autoBuild.checked
-    ? `${master.name}: ${master.hasUnitZero ? 'Unit 0 + Units 1-9' : 'Units 1-9'}, Student Book + Workbook + Grammar Book, unit quizzes, Review Exams after Units 3/6/9, ${master.lessons} total lessons at 50 minutes each.`
-    : `${master.name} selected. Auto-build is off, so you can save the class first and build the curriculum manually.`;
+
+  if (!autoBuild.checked) {
+    preview.innerHTML = `<span class="curriculum-preview-hint">${esc(master.name)} selected. Auto-build is off — save the class first, then build the curriculum manually.</span>`;
+    return;
+  }
+
+  // Gather start date and selected teaching days
+  const startVal = (document.getElementById('cls-start')?.value || '').trim();
+  const activeDayBtns = document.querySelectorAll('#cls-days .day-toggle.active');
+  const selectedDays = Array.from(activeDayBtns).map(btn => btn.dataset.day);
+  const dayIndexes = classDayIndexes(selectedDays);
+
+  // Curriculum structure line
+  const structure = `${master.hasUnitZero ? 'Unit 0 + Units 1–9' : 'Units 1–9'} · Student Book + Workbook + Grammar Book · unit quizzes · Review Exams after Units 3/6/9`;
+
+  if (!startVal || selectedDays.length === 0) {
+    // Show curriculum info but prompt for missing inputs
+    const missing = [];
+    if (!startVal) missing.push('start date');
+    if (selectedDays.length === 0) missing.push('teaching days');
+    preview.innerHTML = `
+      <div class="curriculum-preview-block">
+        <div class="curriculum-preview-name">${esc(master.name)}</div>
+        <div class="curriculum-preview-structure">${esc(structure)}</div>
+        <div class="curriculum-preview-lessons">${master.lessons} lessons · 50 min each</div>
+        <div class="curriculum-preview-hint">Choose a ${missing.join(' and ')} to see the projected end date.</div>
+      </div>`;
+    return;
+  }
+
+  // Simulate lesson scheduling to find end date
+  const holidayDates = schoolHolidayDates();
+  let date = startVal;
+  // First lesson lands on or after start date
+  date = nextClassDate(date, dayIndexes);
+  const firstLessonDate = date;
+  for (let i = 1; i < master.lessons; i++) {
+    date = nextLessonDate(date, dayIndexes);
+  }
+  const lastLessonDate = date;
+
+  // Compute total weeks (approximate)
+  const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+  const startMs = parseLocalDate(firstLessonDate).getTime();
+  const endMs = parseLocalDate(lastLessonDate).getTime();
+  const totalWeeks = Math.round((endMs - startMs) / msPerWeek);
+
+  // Format dates for display
+  function fmtDate(d) {
+    const [y, m, day] = d.split('-');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${parseInt(day, 10)} ${months[parseInt(m, 10) - 1]} ${y}`;
+  }
+
+  const dayNames = selectedDays.join(', ');
+
+  preview.innerHTML = `
+    <div class="curriculum-preview-block">
+      <div class="curriculum-preview-name">${esc(master.name)}</div>
+      <div class="curriculum-preview-structure">${esc(structure)}</div>
+      <div class="curriculum-preview-schedule">
+        <span class="curriculum-preview-label">Lessons</span>
+        <span class="curriculum-preview-value">${master.lessons} · 50 min each</span>
+      </div>
+      <div class="curriculum-preview-schedule">
+        <span class="curriculum-preview-label">Teaching days</span>
+        <span class="curriculum-preview-value">${esc(dayNames)} (${selectedDays.length} day${selectedDays.length !== 1 ? 's' : ''}/week)</span>
+      </div>
+      <div class="curriculum-preview-schedule">
+        <span class="curriculum-preview-label">First lesson</span>
+        <span class="curriculum-preview-value">${fmtDate(firstLessonDate)}</span>
+      </div>
+      <div class="curriculum-preview-schedule curriculum-preview-enddate">
+        <span class="curriculum-preview-label">Last lesson</span>
+        <span class="curriculum-preview-value">${fmtDate(lastLessonDate)} <em>(~${totalWeeks} weeks)</em></span>
+      </div>
+    </div>`;
 }
 
 function pageIntro(eyebrow, title, copy, actions = '') {
@@ -3820,138 +4195,233 @@ document.querySelectorAll('.tab-btn').forEach(btn =>
 // ════════════════════════════════════════════════════
 // TODAY TAB
 // ════════════════════════════════════════════════════
+function lessonClass(lesson) {
+  return DB.classes.find(cls => cls.id === lesson.classId) || null;
+}
+
+function lessonIsAssessment(lesson) {
+  const type = lesson.lessonType || '';
+  return ['quiz', 'review_exam', 'level_assessment', 'placement_quiz'].includes(type) ||
+    /quiz|review|assessment|exam/i.test(lesson.name || '');
+}
+
+function daysBetweenDateStrings(start, end) {
+  const a = parseLocalDate(start);
+  const b = parseLocalDate(end);
+  if (!a || !b) return 0;
+  return Math.round((b.getTime() - a.getTime()) / 86400000);
+}
+
+function weekdayShort(dateStr) {
+  const d = parseLocalDate(dateStr);
+  return d ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d.getDay()] : '';
+}
+
+function evidenceDate(entry) {
+  if (entry.date) return entry.date;
+  const lesson = DB.lessons.find(item => item.id === entry.lessonId);
+  return lesson?.date || '';
+}
+
+function lessonActionStatus(lesson, today = todayStr()) {
+  if (logForLesson(lesson.id)) return { label: 'Logged', tone: 'good' };
+  if (lesson.date < today) return { label: 'Needs log', tone: 'danger' };
+  if (lesson.date === today) return { label: 'Today', tone: 'warn' };
+  return { label: shortDateLabel(lesson.date), tone: '' };
+}
+
+function dashboardOpsRow({ title, meta, pill, tone = '', onclick = '' }) {
+  const clickable = onclick ? ' clickable' : '';
+  const action = onclick ? ` onclick="${onclick}"` : '';
+  return `
+    <div class="ops-row${clickable}"${action}>
+      <div class="ops-row-main">
+        <div class="ops-row-title">${esc(title)}</div>
+        <div class="ops-row-meta">${esc(meta)}</div>
+      </div>
+      <div class="ops-pill ${tone}">${esc(pill)}</div>
+    </div>`;
+}
+
+function dashboardCard(title, caption, rows, emptyText, actionHtml = '', extraClass = '') {
+  return `
+    <section class="ops-card ${extraClass}">
+      <div class="dashboard-panel-head">
+        <div>
+          <div class="dashboard-caption">${esc(caption)}</div>
+          <div class="dashboard-panel-title small">${esc(title)}</div>
+        </div>
+        ${actionHtml}
+      </div>
+      <div class="ops-list">
+        ${rows.length ? rows.join('') : `<div class="ops-empty">${esc(emptyText)}</div>`}
+      </div>
+    </section>`;
+}
+
+function dashboardTeachingRows(today) {
+  return sortLessons(DB.lessons.filter(lesson => lesson.date === today)).slice(0, 6).map(lesson => {
+    const cls = lessonClass(lesson);
+    const status = lessonActionStatus(lesson, today);
+    const meta = `${cls ? cls.name : 'No class'} · ${lesson.tstart ? friendlyTime(lesson.tstart) : 'Time not set'} · ${lessonTypeLabel(lesson.lessonType)}`;
+    return dashboardOpsRow({
+      title: lessonDisplayName(lesson),
+      meta,
+      pill: status.label,
+      tone: status.tone,
+      onclick: `logFromToday('${lesson.id}')`
+    });
+  });
+}
+
+function dashboardUnloggedRows(today) {
+  return sortLessons(DB.lessons.filter(lesson => lesson.date && lesson.date < today && !logForLesson(lesson.id))).slice(0, 6).map(lesson => {
+    const cls = lessonClass(lesson);
+    const days = Math.max(1, Math.abs(daysBetweenDateStrings(today, lesson.date)));
+    return dashboardOpsRow({
+      title: lessonDisplayName(lesson),
+      meta: `${cls ? cls.name : 'No class'} · ${friendlyDate(lesson.date)} · ${days} day${days === 1 ? '' : 's'} overdue`,
+      pill: 'Log',
+      tone: 'danger',
+      onclick: `logFromToday('${lesson.id}')`
+    });
+  });
+}
+
+function dashboardAssessmentRows(today) {
+  return sortLessons(DB.lessons.filter(lesson => lesson.date >= today && lessonIsAssessment(lesson))).slice(0, 6).map(lesson => {
+    const cls = lessonClass(lesson);
+    return dashboardOpsRow({
+      title: lessonDisplayName(lesson),
+      meta: `${cls ? cls.name : 'No class'} · ${friendlyDate(lesson.date)} · ${lessonTypeLabel(lesson.lessonType)}`,
+      pill: weekdayShort(lesson.date),
+      tone: lesson.date === today ? 'warn' : '',
+      onclick: `openClassWorkspace('${lesson.classId}'); switchTab('classes');`
+    });
+  });
+}
+
+function classHealthRows(today) {
+  return DB.classes.slice(0, 6).map(cls => {
+    const lessons = DB.lessons.filter(lesson => lesson.classId === cls.id);
+    const overdue = lessons.filter(lesson => lesson.date && lesson.date < today && !logForLesson(lesson.id)).length;
+    const students = studentsForClass(cls.id).length;
+    const end = classEndDate(cls.id);
+    const endingSoon = end && end >= today && daysBetweenDateStrings(today, end) <= 14;
+    let pill = 'On track';
+    let tone = 'good';
+    if (!lessons.length) { pill = 'No curriculum'; tone = 'warn'; }
+    else if (!students) { pill = 'No people'; tone = 'warn'; }
+    else if (overdue) { pill = `${overdue} unlogged`; tone = 'danger'; }
+    else if (endingSoon) { pill = 'Ending soon'; tone = 'warn'; }
+    const next = nextPendingLesson(lessons);
+    return dashboardOpsRow({
+      title: cls.name || 'Untitled class',
+      meta: `${students} enrolled · ${lessons.length} lessons · ${next ? `Next ${friendlyDate(next.date)}` : 'No pending lesson'}`,
+      pill,
+      tone,
+      onclick: `openClassWorkspace('${cls.id}'); switchTab('classes');`
+    });
+  });
+}
+
+function peopleAlertRows() {
+  const rows = [];
+  DB.students.forEach(student => {
+    const normalized = normalizeStudentRecord(student);
+    const classes = classesForStudent(student.id);
+    const missing = [
+      normalized.koreanName ? '' : 'Korean name',
+      normalized.englishName ? '' : 'English name',
+      normalized.dob ? '' : 'DOB'
+    ].filter(Boolean);
+    if (!classes.length || missing.length) {
+      rows.push(dashboardOpsRow({
+        title: studentPrimaryLabel(normalized),
+        meta: classes.length ? `Missing ${missing.join(', ')}` : 'Not enrolled in any current class',
+        pill: classes.length ? 'Profile' : 'Enroll',
+        tone: classes.length ? 'warn' : 'danger',
+        onclick: `openStudentProfile('${student.id}')`
+      }));
+    }
+  });
+  return rows.slice(0, 6);
+}
+
+function weeklyReportRows(today) {
+  const start = addDays(today, -6);
+  return DB.students
+    .filter(student => classesForStudent(student.id).length)
+    .slice(0, 6)
+    .map(student => {
+      const classes = classesForStudent(student.id);
+      const notes = DB.studentnotes.filter(note => {
+        const date = evidenceDate(note);
+        return note.studentId === student.id && date && date >= start && date <= today;
+      });
+      const attendance = DB.attendances.filter(item => {
+        const date = evidenceDate(item);
+        return item.studentId === student.id && date && date >= start && date <= today;
+      });
+      return dashboardOpsRow({
+        title: studentPrimaryLabel(normalizeStudentRecord(student)),
+        meta: `${classes.map(cls => cls.name).slice(0, 2).join(', ')} · ${notes.length} notes · ${attendance.length} attendance records`,
+        pill: 'Report',
+        tone: notes.length || attendance.length ? 'good' : 'warn',
+        onclick: `openStudentReport('${student.id}', '${classes[0]?.id || ''}')`
+      });
+    });
+}
+
+function schoolCalendarRows(today) {
+  const upcomingHolidays = (DB.schoolSettings?.holidays || []).filter(holiday => holiday.date >= today);
+  return upcomingHolidays.slice(0, 4).map(holiday => {
+    const affected = DB.lessons.filter(lesson => lesson.date === holiday.date).length;
+    return dashboardOpsRow({
+      title: holiday.name || 'School Holiday',
+      meta: `${friendlyDate(holiday.date)} · ${affected ? `${affected} lesson${affected === 1 ? '' : 's'} still on this date` : 'Lessons skip this date'}`,
+      pill: affected ? 'Update' : weekdayShort(holiday.date),
+      tone: affected ? 'danger' : 'good',
+      onclick: `switchTab('settings')`
+    });
+  });
+}
+
 function renderToday() {
   const today = todayStr();
   const todayLessons = sortLessons(DB.lessons.filter(l => l.date === today));
-  const upcoming = sortLessons(DB.lessons.filter(l => l.date >= today));
-  const weeklyLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const weeklyCounts = weeklyLabels.map(label => {
-    const count = upcoming.filter(lesson => {
-      const lessonLabel = new Date(`${lesson.date}T00:00:00`).toLocaleDateString('en-US', { weekday: 'short' });
-      return lessonLabel === label;
-    }).length;
-    return { label, count };
-  });
-  const peakCount = Math.max(...weeklyCounts.map(item => item.count), 1);
-  const todayLabel = new Date(`${today}T00:00:00`).toLocaleDateString('en-US', { weekday: 'short' });
-  const teacherNames = uniqueTeacherNames().slice(0, 5);
-  const courseThemes = [
-    'linear-gradient(135deg, rgba(163, 192, 255, 0.42), rgba(255,255,255,0.04))',
-    'linear-gradient(135deg, rgba(247, 198, 213, 0.34), rgba(255,255,255,0.04))',
-    'linear-gradient(135deg, rgba(255, 228, 182, 0.34), rgba(255,255,255,0.04))'
-  ];
-  const featuredCourses = (DB.units.length ? DB.units : DB.classes).slice(0, 3);
-
-  const scheduleCards = upcoming.slice(0, 2).map(lesson => {
-    const cls = DB.classes.find(c => c.id === lesson.classId);
-    const log = DB.logs.find(item => item.lessonId === lesson.id);
-    return `
-      <div class="activity-mini-card">
-        <div class="mini-card-time">${lesson.tstart ? friendlyTime(lesson.tstart) : 'Plan'}</div>
-        <div class="mini-card-title">${esc(lessonDisplayName(lesson))}</div>
-        <div class="mini-card-meta">${cls ? esc(cls.name) : 'Class not assigned'}${lesson.date ? ` · ${friendlyDate(lesson.date)}` : ''}</div>
-        <div class="mini-card-meta">${log ? 'Logged and complete.' : 'Ready for teaching notes.'}</div>
-      </div>`;
-  }).join('');
+  const unlogged = DB.lessons.filter(lesson => lesson.date && lesson.date < today && !logForLesson(lesson.id));
+  const upcomingAssessments = DB.lessons.filter(lesson => lesson.date >= today && lessonIsAssessment(lesson));
+  const activeClasses = DB.classes.filter(cls => DB.lessons.some(lesson => lesson.classId === cls.id));
+  const nextHoliday = (DB.schoolSettings?.holidays || []).find(holiday => holiday.date >= today);
 
   let html = `
     <div class="dashboard-shell">
-      <div class="dashboard-hero">
-        <section class="dashboard-panel">
-          <div class="dashboard-panel-head">
-            <div class="dashboard-welcome">
-              <div class="dashboard-caption">${friendlyDateLong(today)}</div>
-              <div class="dashboard-panel-title">My activity</div>
-              <div class="activity-hint">A softer read on classes, lesson rhythm, and what needs your attention next.</div>
-            </div>
-            <button class="mini-link" onclick="switchTab('classes')">See all <span>›</span></button>
+      <section class="dashboard-panel">
+        <div class="dashboard-panel-head">
+          <div>
+            <div class="dashboard-caption">${friendlyDateLong(today)}</div>
+            <div class="dashboard-panel-title">School operations</div>
+            <div class="activity-hint">A shared admin and teacher view of today, missing logs, reports, assessments, and calendar risks.</div>
           </div>
-          <div class="activity-layout">
-            <div class="activity-bars">
-              ${weeklyCounts.map(item => {
-                const height = 24 + Math.round((item.count / peakCount) * 118);
-                const activeClass = item.label === todayLabel ? ' is-active' : '';
-                return `
-                  <div class="activity-day">
-                    <div class="activity-bar${activeClass}" style="height:${height}px;"></div>
-                    <div class="activity-day-label">${item.label}</div>
-                  </div>`;
-              }).join('')}
-            </div>
-            <div class="activity-mini-list">
-              ${scheduleCards || `
-                <div class="activity-mini-card">
-                  <div class="mini-card-time">Open day</div>
-                  <div class="mini-card-title">No lessons yet</div>
-                  <div class="mini-card-meta">Create a class, add a book, then map your first lesson.</div>
-                </div>`}
-            </div>
-          </div>
-        </section>
+          <button class="mini-link" onclick="switchTab('classes')">Open courses <span>›</span></button>
+        </div>
+        <div class="hero-stats">
+          ${heroStat(String(todayLessons.length), 'Lessons Today', todayLessons.length ? 'Ready to teach.' : 'No classes today.')}
+          ${heroStat(String(unlogged.length), 'Needs Logging', unlogged.length ? 'Clear these first.' : 'All past lessons are logged.')}
+          ${heroStat(String(upcomingAssessments.length), 'Upcoming Assessments', upcomingAssessments.length ? 'Prepare review plans.' : 'No assessments scheduled.')}
+          ${heroStat(String(activeClasses.length), 'Active Classes', activeClasses.length ? `${DB.students.length} people in database.` : 'Create a class to begin.')}
+        </div>
+      </section>
 
-        <section class="dashboard-panel">
-          <div class="dashboard-panel-head">
-            <div>
-              <div class="dashboard-caption">Snapshot</div>
-              <div class="dashboard-panel-title small">Today at a glance</div>
-            </div>
-          </div>
-          <div class="hero-stats">
-            ${heroStat(String(todayLessons.length), 'Lessons Today', todayLessons.length ? 'Ready to teach.' : 'Open day.')}
-            ${heroStat(String(DB.classes.length), 'Classes', DB.classes.length ? 'Active in the system.' : 'Start by creating one class.')}
-            ${heroStat(String(DB.logs.length), 'Logs Saved', DB.logs.length ? 'Progress is being tracked.' : 'Nothing logged yet.')}
-          </div>
-        </section>
-      </div>
-
-      <div class="dashboard-bottom">
-        <section class="dashboard-panel">
-          <div class="dashboard-panel-head">
-            <div>
-              <div class="dashboard-panel-title small">Your teachers</div>
-            </div>
-            <button class="mini-link" onclick="switchTab('students')">See all <span>›</span></button>
-          </div>
-          <div class="teacher-row">
-            ${(teacherNames.length ? teacherNames : ['Tani', 'Alba']).map((teacher, index) => `
-              <div class="teacher-pill">
-                <div class="teacher-avatar">${esc(initials(teacher))}</div>
-                <div class="teacher-name">${esc(teacher)}</div>
-                <div class="teacher-meta">${index === 0 ? 'Lead teacher' : 'Faculty'}</div>
-              </div>`).join('')}
-            <div class="teacher-pill">
-              <div class="teacher-avatar">+</div>
-              <div class="teacher-name">Add</div>
-              <div class="teacher-meta">More staff</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="dashboard-panel">
-          <div class="dashboard-panel-head">
-            <div>
-              <div class="dashboard-panel-title small">Popular courses</div>
-            </div>
-          </div>
-          <div class="course-grid">
-            ${featuredCourses.length ? featuredCourses.map((course, index) => {
-              const lessonCount = DB.lessons.filter(lesson => lesson.classId === course.id || lesson.bookId === course.id).length;
-              const title = course.name || `Course ${index + 1}`;
-              const label = DB.units.length ? (DB.classes.find(cls => cls.id === course.classId)?.name || 'Course') : 'Class';
-              return `
-                <article class="course-card" style="--course-bg:${courseThemes[index % courseThemes.length]};">
-                  <div class="course-card-tag">${esc(label)}</div>
-                  <div class="course-card-title">${esc(title)}</div>
-                  <div class="course-card-copy">${lessonCount || 0} lesson${lessonCount === 1 ? '' : 's'} mapped</div>
-                </article>`;
-            }).join('') : `
-              <article class="course-card">
-                <div class="course-card-tag">Knowledge</div>
-                <div class="course-card-title">Your first course will appear here</div>
-                <div class="course-card-copy">Add a class or book to start building the glass dashboard.</div>
-              </article>`}
-          </div>
-        </section>
+      <div class="ops-grid">
+        ${dashboardCard("Today's teaching queue", 'Teach', dashboardTeachingRows(today), 'No lessons are scheduled for today. Use Courses to review the next class date.', `<button class="mini-link" onclick="switchTab('log')">Lesson log <span>›</span></button>`, 'wide')}
+        ${dashboardCard('Calendar', 'School account', schoolCalendarRows(today), nextHoliday ? 'Upcoming holidays are already clear of lesson dates.' : 'No upcoming holidays added yet.', `<button class="mini-link" onclick="switchTab('settings')">Settings <span>›</span></button>`)}
+        ${dashboardCard('Unlogged lessons', 'Action needed', dashboardUnloggedRows(today), 'No missed lesson logs. Past lessons are clean.', `<button class="mini-link" onclick="switchTab('log')">Open log <span>›</span></button>`, 'wide')}
+        ${dashboardCard('Class health', 'Courses', classHealthRows(today), 'No classes yet. Create a class and choose a curriculum master.', `<button class="mini-link" onclick="switchTab('classes')">Courses <span>›</span></button>`)}
+        ${dashboardCard('Upcoming assessments', 'Planning', dashboardAssessmentRows(today), 'No quizzes, review exams, or level assessments coming up.', '', 'wide')}
+        ${dashboardCard('People alerts', 'Students', peopleAlertRows(), 'All student profiles are enrolled and have the required basics.', `<button class="mini-link" onclick="switchTab('students')">People <span>›</span></button>`)}
+        ${dashboardCard('Weekly report queue', 'Reports', weeklyReportRows(today), 'Enroll students into classes to generate weekly report queues.', `<button class="mini-link" onclick="switchTab('students')">Reports <span>›</span></button>`, 'full')}
       </div>
     </div>`;
 
@@ -4106,7 +4576,7 @@ function renderClassOverviewPanel(cls) {
             <button class="btn" onclick="jumpToLesson('${nextLesson.subunitId}','${nextLesson.id}')">View in Curriculum</button>` : `<button class="btn btn-primary" onclick="selectClassWorkspaceTab('curriculum')">Open Curriculum</button>`}
           </div>
         </div>
-        <div class="workspace-panel" style="box-shadow:none;">
+        <div class="surface-card">
           <div class="workspace-section-head">
             <div>
               <div class="workspace-mini-label">This week</div>
@@ -4169,7 +4639,7 @@ function renderClassCurriculumPanel(cls) {
 }
 
 function renderCurriculumUnitCard(unit) {
-  const lessons = sortLessons(DB.lessons.filter(lesson => lesson.subunitId === unit.id));
+  const lessons = sortUnitLessons(DB.lessons.filter(lesson => lesson.subunitId === unit.id));
   const summary = completionSummary(lessons);
   const range = subunitDateRange(unit.id);
   const next = nextPendingLesson(lessons);
@@ -4191,7 +4661,7 @@ function renderCurriculumUnitCard(unit) {
 function renderLessonDrawer(cls) {
   const unit = DB.subunits.find(item => item.id === currentClassWorkspace.unitId);
   if (!unit) return `<aside class="lesson-drawer"><div class="empty-state-inline">Select a unit to see lessons.</div></aside>`;
-  const lessons = sortLessons(DB.lessons.filter(lesson => lesson.subunitId === unit.id));
+  const lessons = sortUnitLessons(DB.lessons.filter(lesson => lesson.subunitId === unit.id));
   if (!currentClassWorkspace.lessonId || !lessons.some(lesson => lesson.id === currentClassWorkspace.lessonId)) {
     currentClassWorkspace.lessonId = lessons[0]?.id || null;
   }
@@ -4218,7 +4688,7 @@ function renderLessonDrawerRow(lesson, index) {
   return `
     <button class="lesson-drawer-row${isActive ? ' active' : ''}" onclick="selectCurriculumLesson('${lesson.id}')">
       <div class="lesson-index">${index + 1}</div>
-      <div style="min-width:0; flex:1;">
+      <div class="lesson-row-copy">
         <div class="lesson-drawer-title">${esc(lessonDisplayName(lesson))}</div>
         <div class="compact-meta">${lesson.date ? friendlyDate(lesson.date) : 'No date'}${lesson.tstart ? ` · ${friendlyTime(lesson.tstart)}` : ''}</div>
       </div>
@@ -4259,26 +4729,36 @@ function renderLessonDetailCard(lesson) {
 }
 
 function renderClassStudentsPanel(cls) {
-  const students = studentsForClass(cls.id);
+  const enrolled = studentsForClass(cls.id);
+  const enrolledIds = new Set(enrolled.map(student => student.id));
+  const people = DB.students
+    .map(student => normalizeStudentRecord(student))
+    .sort((a, b) => studentPrimaryLabel(a).localeCompare(studentPrimaryLabel(b)));
   return `
     <section class="workspace-panel">
       <div class="workspace-section-head">
         <div>
-          <div class="workspace-mini-label">Roster</div>
-          <div class="workspace-section-title">Students in this class</div>
+          <div class="workspace-mini-label">People database</div>
+          <div class="workspace-section-title">Enroll people in this class</div>
         </div>
-        <button class="btn btn-primary" onclick="openStudentModal()">Add Student</button>
+        <button class="btn btn-primary" onclick="openStudentModal('${cls.id}')">Add Person</button>
       </div>
-      ${students.length ? `<div class="student-mini-grid">
-        ${students.map(student => `<div class="student-mini-card">
+      ${people.length ? `<div class="student-mini-grid">
+        ${people.map(student => {
+          const isEnrolled = enrolledIds.has(student.id);
+          return `<div class="student-mini-card">
           <div class="compact-title">${esc(studentPrimaryLabel(student))}</div>
           <div class="compact-meta">${studentKoreanName(student) ? esc(studentKoreanName(student)) + ' · ' : ''}${student.dob ? 'DOB ' + friendlyDate(student.dob) : 'DOB not set'}</div>
           <div class="page-actions mt-10">
             <button class="btn" onclick="openStudentProfile('${student.id}','${cls.id}')">Profile</button>
             <button class="btn" onclick="openStudentReport('${student.id}','${cls.id}')">Report</button>
+            ${isEnrolled
+              ? `<button class="btn btn-danger" onclick="removePersonFromClass('${student.id}','${cls.id}')">Remove</button>`
+              : `<button class="btn btn-primary" onclick="enrollPersonInClass('${student.id}','${cls.id}')">Enroll</button>`}
           </div>
-        </div>`).join('')}
-      </div>` : `<div class="empty-state-section">No students are enrolled in this class yet. Add them from the Students tab or student modal.</div>`}
+        </div>`;
+        }).join('')}
+      </div>` : `<div class="empty-state-section">No people exist yet. Create the first person profile and enroll them into this class.</div>`}
     </section>`;
 }
 
@@ -4294,7 +4774,7 @@ function renderClassReportsPanel(cls) {
       </div>
       <div class="week-strip">
         ${students.length ? students.map(student => `<div class="compact-list-row">
-          <div class="class-avatar" style="width:36px;height:36px;border-radius:13px;">${esc(initials(studentPrimaryLabel(student)))}</div>
+          <div class="class-avatar report-avatar-small">${esc(initials(studentPrimaryLabel(student)))}</div>
           <div>
             <div class="compact-title">${esc(studentPrimaryLabel(student))}</div>
             <div class="compact-meta">${esc(studentKoreanName(student) || 'Korean name not added')} · ${student.dob ? friendlyDate(student.dob) : 'DOB not set'}</div>
@@ -4416,7 +4896,8 @@ function unitMaterialSources(lessons) {
 
 function shortDateLabel(dateStr) {
   if (!dateStr) return 'Plan';
-  return new Date(`${dateStr}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const date = parseLocalDate(dateStr);
+  return `${MONTHS_SHORT[date.getMonth()]} ${date.getDate()}`;
 }
 
 function openClassWorkspace(classId) {
@@ -4622,10 +5103,10 @@ function renderStudents() {
     .map(student => normalizeStudentRecord(student))
     .sort((a, b) => studentPrimaryLabel(a).localeCompare(studentPrimaryLabel(b)));
   let html = `
-    ${pageIntro('Learner Registry', 'Students', 'Create shared student profiles here, attach lesson evidence over time, and generate weekly reports from the same record.',
-      `<button class="btn btn-primary" onclick="openStudentModal()">+ New Student Profile</button>`)}
+    ${pageIntro('People Database', 'People', 'Create a permanent person profile once, then enroll or remove that person from any class without deleting their record.',
+      `<button class="btn btn-primary" onclick="openStudentModal()">+ New Person Profile</button>`)}
     <div class="hero-stats">
-      ${heroStat(String(DB.students.length), 'Students', DB.students.length ? 'Shared profiles across the LMS.' : 'No students added yet.')}
+      ${heroStat(String(DB.students.length), 'People', DB.students.length ? 'Shared profiles across the LMS.' : 'No people added yet.')}
       ${heroStat(String(DB.studentnotes.length), 'Lesson Evidence', DB.studentnotes.length ? 'Teacher observations saved.' : 'No lesson evidence yet.')}
       ${heroStat(String(DB.enrollments.length), 'Current Classes', DB.enrollments.length ? 'Active student-class links.' : 'No class links yet.')}
     </div>`;
@@ -4680,13 +5161,62 @@ function renderStudents() {
 // ════════════════════════════════════════════════════
 function renderSettings() {
   updateHeroSummary();
+  const settings = normalizeSchoolSettings(DB.schoolSettings);
+  const holidayRows = settings.holidays.length
+    ? settings.holidays.map(holiday => `
+      <div class="holiday-row">
+        <div class="holiday-date-chip">${esc(shortDateLabel(holiday.date))}</div>
+        <div>
+          <div class="compact-title">${esc(holiday.name || 'School Holiday')}</div>
+          <div class="compact-meta">${esc(friendlyDate(holiday.date))}</div>
+        </div>
+        <button class="btn-ghost" onclick="removeHoliday('${holiday.id}')" title="Remove holiday">&#10005;</button>
+      </div>`).join('')
+    : `<div class="empty-state-inline">No holidays added yet. Add public holidays, school closures, or academy breaks here.</div>`;
   document.getElementById('tab-settings').innerHTML = `
-    ${pageIntro('System', 'Settings', 'Backup your work, check scope at a glance, and manage the app safely.')}
+    ${pageIntro('School Account', 'School Settings', 'Manage school holidays and shared system data for every admin and teacher.')}
+    <div class="settings-section">
+      <div class="settings-section-title">School Calendar</div>
+      <div class="school-account-grid">
+        <div class="settings-card">
+          <div class="profile-section-title">School Account</div>
+          <div class="form-group mt-10">
+            <label class="form-label">School Name</label>
+            <input id="school-name" class="form-input" value="${esc(settings.schoolName)}" placeholder="e.g. Online Placement Academy">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Holiday Date</label>
+              <input type="date" id="holiday-date" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Holiday Name</label>
+              <input id="holiday-name" class="form-input" placeholder="e.g. Chuseok Break">
+            </div>
+          </div>
+          <div class="section-actions">
+            <button class="btn" onclick="addHoliday()">Add Holiday</button>
+            <button class="btn btn-primary" id="save-school-btn" onclick="saveSchoolSettings()">Save School Account</button>
+          </div>
+          <div class="overview-note mt-14">New classes automatically skip these dates. Existing classes are updated only when you press Update All Classes.</div>
+        </div>
+        <div class="settings-card">
+          <div class="workspace-section-head">
+            <div>
+              <div class="profile-section-title">Holiday Dates</div>
+              <div class="overview-note">Lessons landing on these dates will move to the next valid class day.</div>
+            </div>
+            <button class="btn btn-primary" id="update-classes-btn" onclick="updateAllClassSchedules()">Update All Classes</button>
+          </div>
+          <div class="holiday-list">${holidayRows}</div>
+        </div>
+      </div>
+    </div>
     <div class="settings-section">
       <div class="settings-section-title">Stats</div>
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-number">${DB.classes.length}</div><div class="stat-label">Classes</div></div>
-        <div class="stat-card"><div class="stat-number">${DB.students.length}</div><div class="stat-label">Students</div></div>
+        <div class="stat-card"><div class="stat-number">${DB.students.length}</div><div class="stat-label">People</div></div>
         <div class="stat-card"><div class="stat-number">${DB.enrollments.length}</div><div class="stat-label">Enrollments</div></div>
         <div class="stat-card"><div class="stat-number">${DB.units.length}</div><div class="stat-label">Books</div></div>
         <div class="stat-card"><div class="stat-number">${DB.subunits.length}</div><div class="stat-label">Units</div></div>
@@ -4698,13 +5228,110 @@ function renderSettings() {
       <div class="section-actions">
         <button class="btn btn-primary" onclick="exportData()">Export Backup</button>
         <button class="btn" onclick="document.getElementById('import-file').click()">Import Backup</button>
-        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
+        <input type="file" id="import-file" accept=".json" class="hidden-input" onchange="importData(event)">
       </div>
     </div>
     <div class="settings-section">
       <div class="settings-section-title">Danger Zone</div>
       <button class="btn btn-danger" onclick="clearAllData()">Clear All Data</button>
     </div>`;
+}
+
+async function persistSchoolSettings(settings) {
+  DB.schoolSettings = normalizeSchoolSettings(settings);
+  await api('POST', '/api/school-settings', DB.schoolSettings);
+}
+
+async function saveSchoolSettings() {
+  const settings = normalizeSchoolSettings({
+    ...DB.schoolSettings,
+    schoolName: document.getElementById('school-name')?.value.trim() || ''
+  });
+  setBusy('save-school-btn', true);
+  try {
+    await persistSchoolSettings(settings);
+    renderSettings();
+    showToast('School account saved.', 'success');
+  } catch (e) {
+    showToast('Failed to save school account.', 'error');
+  } finally {
+    setBusy('save-school-btn', false);
+  }
+}
+
+async function addHoliday() {
+  const date = document.getElementById('holiday-date')?.value || '';
+  const name = document.getElementById('holiday-name')?.value.trim() || 'School Holiday';
+  if (!date) {
+    showToast('Choose a holiday date.', 'error');
+    return;
+  }
+  const settings = normalizeSchoolSettings({
+    ...DB.schoolSettings,
+    schoolName: document.getElementById('school-name')?.value.trim() || DB.schoolSettings?.schoolName || '',
+    holidays: [
+      ...(DB.schoolSettings?.holidays || []).filter(holiday => holiday.date !== date),
+      { id: `hol_${date.replaceAll('-', '')}`, date, name }
+    ]
+  });
+  try {
+    await persistSchoolSettings(settings);
+    renderSettings();
+    showToast('Holiday added. Press Update All Classes to recalculate existing schedules.', 'success');
+  } catch (e) {
+    showToast('Failed to add holiday.', 'error');
+  }
+}
+
+async function removeHoliday(holidayId) {
+  const settings = normalizeSchoolSettings({
+    ...DB.schoolSettings,
+    holidays: (DB.schoolSettings?.holidays || []).filter(holiday => holiday.id !== holidayId)
+  });
+  try {
+    await persistSchoolSettings(settings);
+    renderSettings();
+    showToast('Holiday removed. Press Update All Classes to recalculate existing schedules.', 'success');
+  } catch (e) {
+    showToast('Failed to remove holiday.', 'error');
+  }
+}
+
+function recalculateClassLessonDates(cls) {
+  const dayIndexes = classDayIndexes(cls.days);
+  let currentDate = nextClassDate(cls.start, dayIndexes);
+  return sortClassScheduleLessons(cls.id).map(lesson => {
+    const updated = { ...lesson, date: currentDate, tstart: lesson.tstart || cls.tstart || '' };
+    currentDate = nextLessonDate(currentDate, dayIndexes);
+    return updated;
+  });
+}
+
+async function updateAllClassSchedules() {
+  if (!DB.classes.length) {
+    showToast('No classes to update.', 'error');
+    return;
+  }
+  if (!confirm('Recalculate all lesson dates using each class start date, class days, and school holidays?')) return;
+
+  setBusy('update-classes-btn', true);
+  try {
+    const updatedLessons = DB.classes.flatMap(cls => recalculateClassLessonDates(cls));
+    for (const lesson of updatedLessons) {
+      await api('POST', '/api/lessons', lesson);
+      DB.lessons = DB.lessons.map(entry => entry.id === lesson.id ? lesson : entry);
+    }
+    renderSettings();
+    renderClasses();
+    renderLog();
+    renderToday();
+    updateHeroSummary();
+    showToast(`Updated ${updatedLessons.length} lesson date${updatedLessons.length === 1 ? '' : 's'}.`, 'success');
+  } catch (e) {
+    showToast('Failed to update class schedules.', 'error');
+  } finally {
+    setBusy('update-classes-btn', false);
+  }
 }
 
 async function exportData() {
@@ -4741,7 +5368,7 @@ async function clearAllData() {
   if (!confirm('Final confirmation: permanently delete all classes, books, units, lessons, students, and logs?')) return;
   try {
     await api('DELETE', '/api/clear');
-    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [] };
+    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [], schoolSettings: { id: 'school', schoolName: '', holidays: [] } };
     refreshTeacherOptions();
     refreshStudentOptions();
     renderSettings();
@@ -4900,6 +5527,36 @@ async function saveStudent() {
   finally { setBusy('save-student-btn', false); }
 }
 
+async function enrollPersonInClass(studentId, classId) {
+  if (enrollmentForStudentInClass(studentId, classId)) return;
+  const enrollment = { id: `en_${studentId}_${classId}`, studentId, classId };
+  try {
+    await api('POST', '/api/enrollments', enrollment);
+    DB.enrollments.push(enrollment);
+    renderClasses();
+    renderStudents();
+    showToast('Person enrolled in class.', 'success');
+  } catch (e) {
+    showToast('Failed to enroll person.', 'error');
+  }
+}
+
+async function removePersonFromClass(studentId, classId) {
+  const student = getStudent(studentId);
+  const enrollment = enrollmentForStudentInClass(studentId, classId);
+  if (!student || !enrollment) return;
+  if (!confirm(`Remove "${studentPrimaryLabel(student)}" from this class? The person profile will stay in the database.`)) return;
+  try {
+    await api('DELETE', `/api/enrollments/${enrollment.id}`);
+    DB.enrollments = DB.enrollments.filter(entry => entry.id !== enrollment.id);
+    renderClasses();
+    renderStudents();
+    showToast('Person removed from class.', 'success');
+  } catch (e) {
+    showToast('Failed to remove person from class.', 'error');
+  }
+}
+
 async function deleteStudent(studentId, classId) {
   const st = getStudent(studentId);
   const enrollment = enrollmentForStudentInClass(studentId, classId);
@@ -4962,6 +5619,10 @@ async function deleteStudentNote(noteId) {
 function openReport(studentId, classId) {
   currentStudentProfile = { studentId, classId };
   switchTab('student-profile');
+}
+
+function openStudentProfile(studentId, classId = '') {
+  openReport(studentId, classId);
 }
 
 function openStudentReport(studentId, classId) {
@@ -6194,9 +6855,11 @@ document.querySelectorAll('#cls-days .day-toggle').forEach(btn => {
   btn.addEventListener('click', event => {
     event.preventDefault();
     btn.classList.toggle('active');
+    updateCurriculumPreview();
   });
 });
 
+document.getElementById('cls-start')?.addEventListener('change', updateCurriculumPreview);
 document.getElementById('cls-autobuild')?.addEventListener('change', updateCurriculumPreview);
 
 document.addEventListener('keydown', e => {

@@ -843,6 +843,32 @@
       padding-right: 4px;
     }
 
+    .unit-plan-list {
+      display: grid;
+      gap: 8px;
+      max-height: 240px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .unit-plan-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 92px;
+      gap: 8px;
+      align-items: center;
+      padding: 8px;
+      border-radius: 10px;
+      background: rgba(248,250,252,0.68);
+      border: 1px solid rgba(148,163,184,0.16);
+    }
+
+    .unit-plan-name {
+      color: #111827;
+      font-size: 12px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
     .lesson-report-fields {
       display: grid;
       gap: 10px;
@@ -5218,16 +5244,48 @@ function previewMasterLessonCountFromUnit() {
   currentMasterLessonIndex = current;
 }
 
-function syncDefaultLessonCountToUnit() {
-  const defaultInput = document.getElementById('master-lessons-per-unit');
-  const unitInput = document.getElementById('master-unit-lesson-count');
-  if (!defaultInput || !unitInput) return;
-  unitInput.value = defaultInput.value;
-  previewMasterLessonCountFromUnit();
+function customUnitNumbersFromControls() {
+  const unitCount = parsePositiveInt(document.getElementById('master-unit-count')?.value) || 1;
+  const hasUnitZero = !!document.getElementById('master-has-unit-zero')?.checked;
+  const startUnit = hasUnitZero ? 0 : 1;
+  const endUnit = hasUnitZero ? unitCount - 1 : unitCount;
+  const units = [];
+  for (let unitNumber = startUnit; unitNumber <= endUnit; unitNumber += 1) units.push(unitNumber);
+  return units;
 }
 
-function useDefaultLessonCountForUnit() {
-  syncDefaultLessonCountToUnit();
+function renderCustomUnitPlanRows(master, units = null) {
+  const rowValues = new Map(Array.from(document.querySelectorAll('.master-unit-plan-count')).map(input => [
+    String(input.dataset.unitNumber),
+    input.value
+  ]));
+  return (units || curriculumMasterOutline(master).map(unit => unit.number)).map(unitNumber => {
+    const existingValue = rowValues.get(String(unitNumber));
+    const metadata = masterUnitMetadata(master, unitNumber);
+    const lessonCount = parsePositiveInt(existingValue) || metadata.lessonCount || master.lessonsPerUnit || 1;
+    const label = metadata.name || (unitNumber === 0 ? 'Unit 0' : `Unit ${unitNumber}`);
+    return `
+      <div class="unit-plan-row">
+        <div class="unit-plan-name">${esc(label)}</div>
+        <input class="form-input master-unit-plan-count" type="number" min="1" step="1" data-unit-number="${esc(unitNumber)}" value="${esc(lessonCount)}" oninput="syncActiveUnitLessonCountFromPlan()">
+      </div>`;
+  }).join('');
+}
+
+function previewMasterUnitPlan() {
+  const container = document.getElementById('master-unit-plan');
+  if (!container) return;
+  const master = curriculumMasterById(document.getElementById('master-program-select')?.value || currentMasterCurriculumId);
+  container.innerHTML = renderCustomUnitPlanRows(master, customUnitNumbersFromControls());
+  syncActiveUnitLessonCountFromPlan();
+}
+
+function syncActiveUnitLessonCountFromPlan() {
+  const unitInput = document.getElementById('master-unit-lesson-count');
+  const activeRow = document.querySelector(`.master-unit-plan-count[data-unit-number="${currentMasterUnitNumber}"]`);
+  if (!unitInput || !activeRow) return;
+  unitInput.value = activeRow.value || '1';
+  previewMasterLessonCountFromUnit();
 }
 
 async function deleteCustomProgram() {
@@ -5324,12 +5382,27 @@ async function saveMasterCurriculumEdits() {
   if (selectedMaster.custom || masterEntry.custom) {
     masterEntry.custom = true;
     masterEntry.unitCount = parsePositiveInt(document.getElementById('master-unit-count')?.value) || masterEntry.unitCount || 1;
-    masterEntry.lessonsPerUnit = parsePositiveInt(document.getElementById('master-lessons-per-unit')?.value) || masterEntry.lessonsPerUnit || 1;
+    masterEntry.lessonsPerUnit = 1;
     masterEntry.hasUnitZero = !!document.getElementById('master-has-unit-zero')?.checked;
+  }
+  if (selectedMaster.custom || masterEntry.custom) {
+    document.querySelectorAll('.master-unit-plan-count').forEach(input => {
+      const planUnitKey = String(input.dataset.unitNumber);
+      const plannedCount = parsePositiveInt(input.value) || 1;
+      masterEntry.units[planUnitKey] = {
+        ...(masterEntry.units[planUnitKey] || {}),
+        lessons: { ...((masterEntry.units[planUnitKey] || {}).lessons || {}) },
+        lessonCount: plannedCount
+      };
+    });
   }
   unitEntry.name = document.getElementById('master-unit-name')?.value.trim() || '';
   if (selectedMaster.custom || masterEntry.custom) {
-    unitEntry.lessonCount = parsePositiveInt(document.getElementById('master-unit-lesson-count')?.value) || masterEntry.lessonsPerUnit || 1;
+    const planInput = document.querySelector(`.master-unit-plan-count[data-unit-number="${unitNumber}"]`);
+    unitEntry.lessonCount = parsePositiveInt(planInput?.value) ||
+      parsePositiveInt(document.getElementById('master-unit-lesson-count')?.value) ||
+      masterEntry.lessonsPerUnit ||
+      1;
   }
   unitEntry.objective = document.getElementById('master-unit-objective')?.value.trim() || '';
   unitEntry.outcome = document.getElementById('master-unit-outcome')?.value.trim() || '';
@@ -5451,21 +5524,22 @@ function renderMasterCurriculum() {
               <input id="master-program-name" class="form-input" value="${esc(master.name)}">
             </div>
             ${master.custom ? `
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">Units</label>
-                  <input id="master-unit-count" type="number" min="1" step="1" class="form-input" value="${esc(master.unitCount || 1)}">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Default Lesson Count</label>
-                  <input id="master-lessons-per-unit" type="number" min="1" step="1" class="form-input" value="${esc(master.lessonsPerUnit || 1)}" oninput="syncDefaultLessonCountToUnit()">
-                  <div class="log-student-help">Fallback for units without their own count.</div>
-                </div>
+              <div class="form-group">
+                <label class="form-label">Units</label>
+                <input id="master-unit-count" type="number" min="1" step="1" class="form-input" value="${esc(master.unitCount || 1)}" oninput="previewMasterUnitPlan()">
               </div>
               <label class="toggle-row">
-                <input type="checkbox" id="master-has-unit-zero"${master.hasUnitZero ? ' checked' : ''}>
+                <input type="checkbox" id="master-has-unit-zero"${master.hasUnitZero ? ' checked' : ''} onchange="previewMasterUnitPlan()">
                 <span>Include Unit 0 starter unit</span>
               </label>
+              <input id="master-lessons-per-unit" type="hidden" value="${esc(master.lessonsPerUnit || 1)}">
+              <div class="form-group form-group-spaced">
+                <label class="form-label">Unit Lesson Plan</label>
+                <div class="metadata-panel-copy">Set each unit's lesson count here. Save to refresh the Unit and Lesson dropdowns.</div>
+                <div id="master-unit-plan" class="unit-plan-list">
+                  ${renderCustomUnitPlanRows(master)}
+                </div>
+              </div>
             ` : `
               <input id="master-unit-count" type="hidden" value="${esc(master.hasUnitZero ? 10 : 9)}">
               <input id="master-lessons-per-unit" type="hidden" value="${esc(master.hasUnitZero ? 12 : 12)}">
@@ -5502,14 +5576,7 @@ function renderMasterCurriculum() {
               <label class="form-label">Unit Name</label>
               <input id="master-unit-name" class="form-input" value="${esc(activeUnit.metadata.name)}">
             </div>
-            ${master.custom ? `
-              <div class="form-group">
-                <label class="form-label">Lessons in This Unit</label>
-                <input id="master-unit-lesson-count" type="number" min="1" step="1" class="form-input" value="${esc(activeUnit.metadata.lessonCount || activeUnit.lessons.length)}" oninput="previewMasterLessonCountFromUnit()">
-                <div class="log-student-help">Controls the Lesson dropdown for this unit.</div>
-                <button class="btn mt-10" type="button" onclick="useDefaultLessonCountForUnit()">Use Default</button>
-              </div>
-            ` : `<input id="master-unit-lesson-count" type="hidden" value="${esc(activeUnit.lessons.length)}">`}
+            <input id="master-unit-lesson-count" type="hidden" value="${esc(activeUnit.metadata.lessonCount || activeUnit.lessons.length)}">
             <div class="form-group">
               <label class="form-label">Unit Objective</label>
               <textarea id="master-unit-objective" class="form-input report-textarea">${esc(activeUnit.metadata.objective)}</textarea>

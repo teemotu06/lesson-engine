@@ -617,6 +617,445 @@
     }
 
     /* ── Log tab ── */
+    .master-curriculum-shell {
+      display: grid;
+      gap: 14px;
+    }
+
+    .master-program-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .master-program-card,
+    .master-unit-card,
+    .master-lesson-row,
+    .metadata-panel {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(148,163,184,0.16);
+      box-shadow: 0 16px 34px rgba(134,148,169,0.12), inset 0 1px 0 rgba(255,255,255,0.78);
+    }
+
+    .master-program-card {
+      min-width: 0;
+      border-radius: 22px;
+      padding: 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 180ms ease, transform 180ms ease, background 180ms ease;
+    }
+
+    .master-program-card:hover,
+    .master-program-card.active {
+      background: rgba(255,255,255,0.94);
+      border-color: rgba(91,106,245,0.28);
+      transform: translateY(-1px);
+    }
+
+    .master-program-name,
+    .master-unit-title,
+    .metadata-panel-title {
+      color: #111827;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .master-program-name {
+      font-size: 1.05rem;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .master-program-meta,
+    .master-unit-meta,
+    .master-lesson-meta {
+      color: #667085;
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.4;
+    }
+
+    .metadata-guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metadata-panel {
+      min-width: 0;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: none;
+    }
+
+    .metadata-panel-title {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .metadata-panel-copy {
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .master-outline {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1.45fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .master-side-column,
+    .master-editor-column {
+      display: grid;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .master-editor-column {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .master-unit-list,
+    .master-lesson-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .master-unit-card {
+      border-radius: 22px;
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color 180ms ease, background 180ms ease;
+    }
+
+    .master-unit-card.active,
+    .master-unit-card:hover {
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(91,106,245,0.26);
+    }
+
+    .master-unit-title {
+      font-size: 1.08rem;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .master-objective {
+      margin-top: 10px;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .master-lesson-row {
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .master-lesson-head {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .master-lesson-title {
+      color: #111827;
+      font-weight: 850;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .skill-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .skill-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(91,106,245,0.09);
+      color: #4f46e5;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .skill-registry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .skill-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      padding: 7px 8px;
+      border-radius: 8px;
+      background: rgba(248,250,252,0.6);
+      border: 1px solid rgba(148,163,184,0.16);
+      color: #111827;
+      font-size: 11px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .skill-check input {
+      flex: 0 0 auto;
+      accent-color: #5b6af5;
+    }
+
+    .skill-registry-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 0;
+      border-top: 1px solid rgba(148,163,184,0.14);
+    }
+
+    .skill-registry-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .skill-registry-name {
+      color: #111827;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .skill-registry-compact {
+      max-height: 190px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .lesson-report-fields {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .report-curriculum-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .report-curriculum-item {
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(148,163,184,0.12);
+    }
+
+    .report-curriculum-title {
+      color: #111827;
+      font-weight: 850;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .report-curriculum-copy {
+      margin-top: 5px;
+      color: #475467;
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .log-form {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.68));
+      border: 1px solid rgba(255,255,255,0.78);
+      box-shadow: 0 20px 40px rgba(134, 148, 169, 0.14), inset 0 1px 0 rgba(255,255,255,0.78);
+      min-width: 0;
+    }
+
+    .log-form .overview-note {
+      margin: 0;
+      max-width: 68ch;
+      line-height: 1.5;
+    }
+
+    .log-picker-grid {
+      display: grid;
+      grid-template-columns: minmax(120px, 0.45fr) repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    .log-picker-grid .form-group,
+    .log-form > .form-group {
+      margin-bottom: 0;
+    }
+
+    .log-form .form-label,
+    .log-student-notes .label,
+    .log-history-label {
+      display: block;
+      margin: 0 0 7px;
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #667085;
+    }
+
+    .log-form .form-input {
+      min-height: 44px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(148,163,184,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.76);
+      color: #111827;
+      font-weight: 650;
+    }
+
+    .log-form select.form-input {
+      appearance: none;
+      padding-right: 38px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #667085 50%),
+        linear-gradient(135deg, #667085 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) 50%,
+        calc(100% - 13px) 50%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    .log-form select.form-input:disabled {
+      color: #98a2b3;
+      background-color: rgba(248,250,252,0.72);
+      cursor: not-allowed;
+    }
+
+    #log-notes {
+      min-height: 94px;
+      border-radius: 16px;
+      font-weight: 500;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    .log-selection-summary {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(91,106,245,0.08);
+      border: 1px solid rgba(91,106,245,0.14);
+      color: #475467;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .log-selection-summary strong {
+      color: #111827;
+      font-weight: 800;
+    }
+
+    .log-student-notes {
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(248,250,252,0.74);
+      border: 1px solid rgba(148,163,184,0.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+    }
+
+    .log-student-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .log-form .log-student-card {
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(148,163,184,0.14);
+      box-shadow: none;
+    }
+
+    .log-form .log-student-card .form-group {
+      margin-bottom: 10px;
+    }
+
+    .log-student-name {
+      margin-bottom: 10px;
+      color: #111827;
+      font-weight: 850;
+      line-height: 1.2;
+    }
+
+    .log-student-note {
+      min-height: 84px;
+      font-weight: 500;
+    }
+
+    .log-student-help {
+      margin-top: 8px;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .log-history-label {
+      margin-top: 2px;
+    }
+
+    .log-history {
+      display: grid;
+      gap: 10px;
+    }
+
+    .log-item {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(148,163,184,0.14);
+    }
+
+    .log-item-meta {
+      margin-bottom: 5px;
+      color: #667085;
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .log-item-title {
+      color: #111827;
+      font-weight: 850;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .log-item-notes {
+      margin-top: 7px;
+      color: #475467;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
     .log-entry {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -649,6 +1088,26 @@
       border-radius: var(--radius-sm);
       padding: 8px 12px;
       margin-top: 8px;
+    }
+
+    @media (max-width: 920px) {
+      .metadata-guide-grid,
+      .master-outline {
+        grid-template-columns: 1fr;
+      }
+
+      .master-editor-column {
+        grid-template-columns: 1fr;
+      }
+
+      .log-picker-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .log-form {
+        padding: 16px;
+        border-radius: 22px;
+      }
     }
 
     /* ── Stats ── */
@@ -2846,6 +3305,12 @@
           </span>
           <span>Courses</span>
         </button>
+        <button class="tab-btn" data-tab="curriculum">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M8 6h8"/><path d="M8 10h6"/></svg>
+          </span>
+          <span>Curriculum</span>
+        </button>
         <button class="tab-btn" data-tab="log">
           <span class="tab-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h12"/><path d="M8 12h12"/><path d="M8 18h12"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
@@ -2917,6 +3382,7 @@
       <div class="content-shell">
         <div id="tab-today" class="tab-content active"></div>
         <div id="tab-classes" class="tab-content"></div>
+        <div id="tab-curriculum" class="tab-content"></div>
         <div id="tab-log" class="tab-content"></div>
         <div id="tab-students" class="tab-content"></div>
         <div id="tab-student-profile" class="tab-content"></div>
@@ -3055,6 +3521,18 @@
       <label class="form-label">Notes</label>
       <textarea id="subunit-notes" class="form-input" placeholder="e.g. Students weak on sh/ch digraphs"></textarea>
     </div>
+    <div class="form-group">
+      <label class="form-label">Unit Objective</label>
+      <textarea id="subunit-objective" class="form-input" placeholder="e.g. Students build confidence using greetings and classroom language."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Unit Outcome</label>
+      <textarea id="subunit-outcome" class="form-input" placeholder="e.g. Students can greet others and follow basic classroom instructions."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Skills / Tags</label>
+      <input type="text" id="subunit-skills" class="form-input" placeholder="Speaking, Listening, Vocabulary">
+    </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-subunit')">Cancel</button>
       <button class="btn btn-primary" id="save-subunit-btn" onclick="saveSubunit()">Save</button>
@@ -3087,6 +3565,18 @@
     <div class="form-group">
       <label class="form-label">What to Teach / Cover</label>
       <textarea id="lesson-plan" class="form-input" placeholder="e.g. Phonics drill p.18, reading activity"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Lesson Objective</label>
+      <textarea id="lesson-objective" class="form-input" placeholder="e.g. Students can use greeting phrases in a short exchange."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Learning Outcome</label>
+      <textarea id="lesson-outcome" class="form-input" placeholder="e.g. Students can say hello, goodbye, and introduce themselves with support."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Skills / Tags</label>
+      <input type="text" id="lesson-skills" class="form-input" placeholder="Speaking, Listening, Vocabulary">
     </div>
     <div class="form-group">
       <label class="form-label">Starting Position in Book</label>
@@ -3170,7 +3660,11 @@ let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
 let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
+let currentLogSelection = { year: '', classId: '', unitId: '', lessonId: '' };
 let currentClassWorkspace = { classId: null, tab: 'overview', unitId: null, lessonId: null };
+let currentMasterCurriculumId = 'our_world_l1';
+let currentMasterUnitNumber = null;
+let currentMasterLessonIndex = 0;
 let currentStudentProfile = { studentId: null, classId: null };
 let currentStudentReport = { studentId: null, classId: null };
 const LEVEL_OPTIONS = ['Pre-CEFR', 'Pre-A1', 'A1.1', 'A1.2', 'A1.3', 'A2.1', 'A2.2', 'A2.3', 'B1.1', 'B1.2', 'B1.3', 'B2.1', 'B2.2', 'B2.3', 'C1'];
@@ -3196,10 +3690,105 @@ const OW_UNIT_ZERO_LESSONS = [
   { title: 'Review + Practice', type: 'vocabulary_review', sources: ['workbook'] },
   { title: 'Placement Confirmation Quiz', type: 'placement_quiz', sources: ['assessment'] }
 ];
+const LESSON_TYPE_METADATA = {
+  unit_opener: {
+    skills: ['Speaking', 'Listening', 'Vocabulary', 'Classroom Language'],
+    objective: 'Introduce the unit topic, activate prior knowledge, and practice key classroom language.',
+    outcome: 'Students can understand the unit context and use simple language connected to the topic.'
+  },
+  vocabulary: {
+    skills: ['Vocabulary', 'Listening', 'Speaking'],
+    objective: 'Teach and practice the target vocabulary for the unit topic.',
+    outcome: 'Students can recognize and use the target words in controlled classroom tasks.'
+  },
+  vocabulary_review: {
+    skills: ['Vocabulary', 'Speaking', 'Review'],
+    objective: 'Recycle vocabulary through guided practice and short communicative tasks.',
+    outcome: 'Students can recall key words with greater accuracy and use them with support.'
+  },
+  song: {
+    skills: ['Listening', 'Pronunciation', 'Fluency'],
+    objective: 'Use rhythm and repetition to strengthen listening, pronunciation, and phrase memory.',
+    outcome: 'Students can join in with the target language and reproduce key phrases more confidently.'
+  },
+  grammar: {
+    skills: ['Grammar', 'Speaking', 'Accuracy'],
+    objective: 'Present and practice the target grammar pattern in meaningful examples.',
+    outcome: 'Students can form simple sentences using the target grammar pattern.'
+  },
+  grammar_practice: {
+    skills: ['Grammar', 'Writing', 'Accuracy'],
+    objective: 'Consolidate the target grammar through workbook or grammar-book practice.',
+    outcome: 'Students can apply the target grammar pattern with improving accuracy.'
+  },
+  reading_1: {
+    skills: ['Reading', 'Vocabulary', 'Comprehension'],
+    objective: 'Read a supported text and identify key vocabulary and main ideas.',
+    outcome: 'Students can understand the main idea and selected details from the reading text.'
+  },
+  reading_2: {
+    skills: ['Reading', 'Comprehension', 'Critical Thinking'],
+    objective: 'Extend reading comprehension through a second text or workbook passage.',
+    outcome: 'Students can answer comprehension questions and connect details to the unit topic.'
+  },
+  writing: {
+    skills: ['Writing', 'Grammar', 'Vocabulary'],
+    objective: 'Guide students to produce short written language using unit vocabulary and grammar.',
+    outcome: 'Students can write short controlled sentences connected to the unit topic.'
+  },
+  project: {
+    skills: ['Speaking', 'Project', 'Collaboration'],
+    objective: 'Apply unit language through a project, presentation, or collaborative task.',
+    outcome: 'Students can use the unit language to complete and share a simple project.'
+  },
+  quiz: {
+    skills: ['Assessment', 'Vocabulary', 'Grammar'],
+    objective: 'Check understanding of the unit vocabulary, grammar, and comprehension work.',
+    outcome: 'Students demonstrate what they have retained and what needs review.'
+  },
+  review_exam: {
+    skills: ['Assessment', 'Review', 'Accuracy'],
+    objective: 'Review and assess learning across three units.',
+    outcome: 'Students show cumulative progress and identify targets for the next cycle.'
+  },
+  level_assessment: {
+    skills: ['Assessment', 'Review', 'Progress'],
+    objective: 'Assess progress across the level and prepare next-level recommendations.',
+    outcome: 'Students demonstrate level-wide strengths and areas for continued practice.'
+  },
+  placement_quiz: {
+    skills: ['Assessment', 'Placement', 'Review'],
+    objective: 'Confirm starting level and check readiness for the main unit sequence.',
+    outcome: 'Students show whether they are ready to continue with the planned level.'
+  }
+};
 const CURRICULUM_MASTERS = [
   { id: '', name: 'No curriculum master - build manually', level: null, lessons: 0 },
   ...[1, 2, 3].map(level => ({ id: `our_world_l${level}`, name: `Our World Level ${level}`, level, lessons: 116, hasUnitZero: true })),
   ...[4, 5, 6].map(level => ({ id: `our_world_l${level}`, name: `Our World Level ${level}`, level, lessons: 111, hasUnitZero: false }))
+];
+const DEFAULT_SKILL_REGISTRY = [
+  'Speaking',
+  'Listening',
+  'Vocabulary',
+  'Grammar',
+  'Reading',
+  'Writing',
+  'Pronunciation',
+  'Phonics',
+  'Fluency',
+  'Accuracy',
+  'Comprehension',
+  'Classroom Language',
+  'Project',
+  'Assessment',
+  'Review',
+  'Confidence',
+  'Participation',
+  'Collaboration',
+  'Critical Thinking',
+  'Planning',
+  'Organization'
 ];
 const LEVEL_GROUPS = [
   { band: 'Pre-A1', levels: ['Pre-A1'] },
@@ -3218,6 +3807,7 @@ const LEGACY_LEVEL_MAP = {
 const TAB_META = {
   today: { kicker: 'Home', title: 'Knowledge', subtitle: 'Welcome back!' },
   classes: { kicker: 'All courses', title: 'Curriculum map', subtitle: 'Build the structure behind every class.' },
+  curriculum: { kicker: 'Master curriculum', title: 'Curriculum library', subtitle: 'Program structure, objectives, outcomes, and report skills.' },
   log: { kicker: 'Schedule', title: 'Lesson log', subtitle: 'Capture what happened and what comes next.' },
   students: { kicker: 'People', title: 'People database', subtitle: 'Create profiles once, then enroll people into any class.' },
   'student-profile': { kicker: 'People', title: 'Student profile', subtitle: 'Detailed notes, diagnostics, and progress.' },
@@ -3358,6 +3948,12 @@ function normalizeSchoolSettings(settings = {}) {
   return {
     id: 'school',
     schoolName: settings.schoolName || '',
+    curriculumMasters: settings.curriculumMasters && typeof settings.curriculumMasters === 'object'
+      ? settings.curriculumMasters
+      : {},
+    skillsRegistry: Array.isArray(settings.skillsRegistry)
+      ? uniqueList(settings.skillsRegistry.map(item => typeof item === 'string' ? item : item?.name).filter(Boolean))
+      : [],
     holidays: holidays
       .map(item => ({
         id: item.id || `hol_${item.date || Date.now()}`,
@@ -3413,6 +4009,236 @@ function esc(str) {
 function parsePositiveInt(val) {
   const n = Number.parseInt(val, 10);
   return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+function parseListInput(value) {
+  return String(value || '')
+    .split(/[,;\n]/)
+    .map(item => item.trim())
+    .filter(Boolean);
+}
+
+function joinListInput(items) {
+  return Array.isArray(items) ? items.join(', ') : '';
+}
+
+function skillRegistry() {
+  return uniqueList([
+    ...DEFAULT_SKILL_REGISTRY,
+    ...(DB.schoolSettings?.skillsRegistry || [])
+  ]).sort((a, b) => a.localeCompare(b));
+}
+
+function selectedSkillsFromRegistry(scope) {
+  return Array.from(document.querySelectorAll(`.skill-registry-input[data-scope="${scope}"]:checked`))
+    .map(input => input.value)
+    .filter(Boolean);
+}
+
+function skillPicker(scope, selected = []) {
+  const selectedSet = new Set((selected || []).map(item => String(item).toLowerCase()));
+  return `
+    <div class="skill-registry-grid">
+      ${skillRegistry().map(skill => `
+        <label class="skill-check">
+          <input class="skill-registry-input" data-scope="${esc(scope)}" type="checkbox" value="${esc(skill)}"${selectedSet.has(skill.toLowerCase()) ? ' checked' : ''}>
+          <span>${esc(skill)}</span>
+        </label>
+      `).join('')}
+    </div>`;
+}
+
+async function addSkillToRegistry() {
+  const input = document.getElementById('new-skill-name');
+  const name = input?.value.trim() || '';
+  if (!name) {
+    showToast('Enter a skill name.', 'error');
+    return;
+  }
+  const currentSettings = normalizeSchoolSettings(DB.schoolSettings);
+  const skillsRegistry = uniqueList([...(currentSettings.skillsRegistry || []), name]);
+  try {
+    await persistSchoolSettings({ ...currentSettings, skillsRegistry });
+    renderMasterCurriculum();
+    showToast('Skill added.', 'success');
+  } catch (e) {
+    showToast('Failed to add skill.', 'error');
+  }
+}
+
+async function deleteSkillFromRegistry(skill) {
+  if (DEFAULT_SKILL_REGISTRY.some(item => item.toLowerCase() === String(skill).toLowerCase())) return;
+  const currentSettings = normalizeSchoolSettings(DB.schoolSettings);
+  const skillsRegistry = (currentSettings.skillsRegistry || []).filter(item => item.toLowerCase() !== String(skill).toLowerCase());
+  try {
+    await persistSchoolSettings({ ...currentSettings, skillsRegistry });
+    renderMasterCurriculum();
+    showToast('Skill deleted.', 'success');
+  } catch (e) {
+    showToast('Failed to delete skill.', 'error');
+  }
+}
+
+function metadataForLessonType(type) {
+  return LESSON_TYPE_METADATA[type] || {
+    skills: ['Speaking', 'Listening'],
+    objective: 'Teach and practice the target language for this lesson.',
+    outcome: 'Students can use the target language with appropriate support.'
+  };
+}
+
+function unitMetadata(master, unitNumber) {
+  const topic = unitNumber === 0 ? 'starter classroom language' : `Unit ${unitNumber} language`;
+  const skills = unitNumber === 0
+    ? ['Speaking', 'Listening', 'Vocabulary', 'Classroom Language']
+    : ['Vocabulary', 'Grammar', 'Reading', 'Writing', 'Speaking', 'Assessment'];
+  return {
+    objective: unitNumber === 0
+      ? 'Build routines, greetings, classroom language, and readiness for the main Our World sequence.'
+      : `Build vocabulary, grammar, reading, writing, and speaking skills through the ${master.name} Unit ${unitNumber} topic.`,
+    outcome: unitNumber === 0
+      ? 'Students can participate in basic classroom routines and show readiness for Unit 1.'
+      : `Students can use ${topic} in controlled speaking, reading, writing, and review tasks.`,
+    skills,
+    tags: [master.name, unitNumber === 0 ? 'Starter Unit' : `Unit ${unitNumber}`]
+  };
+}
+
+function masterOverrides(masterId) {
+  return DB.schoolSettings?.curriculumMasters?.[masterId] || {};
+}
+
+function customCurriculumMasters() {
+  const entries = DB.schoolSettings?.curriculumMasters || {};
+  return Object.entries(entries)
+    .filter(([, value]) => value && value.custom)
+    .map(([id, value]) => {
+      const unitCount = Number(value.unitCount) || 1;
+      const lessonsPerUnit = Number(value.lessonsPerUnit) || 1;
+      const startUnit = value.hasUnitZero ? 0 : 1;
+      const endUnit = value.hasUnitZero ? unitCount - 1 : unitCount;
+      let lessonTotal = 0;
+      for (let unitNumber = startUnit; unitNumber <= endUnit; unitNumber += 1) {
+        const overrideCount = Number(value.units?.[String(unitNumber)]?.lessonCount);
+        lessonTotal += overrideCount > 0 ? overrideCount : lessonsPerUnit;
+      }
+      return {
+        id,
+        name: value.name || 'Untitled Program',
+        level: value.level || null,
+        lessons: lessonTotal,
+        unitCount,
+        lessonsPerUnit,
+        hasUnitZero: !!value.hasUnitZero,
+        custom: true
+      };
+    });
+}
+
+function allCurriculumMasters() {
+  return [
+    ...CURRICULUM_MASTERS,
+    ...customCurriculumMasters()
+  ];
+}
+
+function masterDisplayName(master) {
+  return masterOverrides(master.id).name || master.name;
+}
+
+function masterUnitOverride(masterId, unitNumber) {
+  return masterOverrides(masterId).units?.[String(unitNumber)] || {};
+}
+
+function masterLessonOverride(masterId, unitNumber, lessonIndex) {
+  return masterUnitOverride(masterId, unitNumber).lessons?.[String(lessonIndex)] || {};
+}
+
+function masterUnitMetadata(master, unitNumber) {
+  const fallback = unitMetadata(master, unitNumber);
+  const override = masterUnitOverride(master.id, unitNumber);
+  return {
+    ...fallback,
+    name: override.name || (unitNumber === 0 ? 'Unit 0 - Starter Unit' : `Unit ${unitNumber}`),
+    lessonCount: Number(override.lessonCount) || master.lessonsPerUnit || 1,
+    objective: override.objective || fallback.objective,
+    outcome: override.outcome || fallback.outcome,
+    skills: Array.isArray(override.skills) && override.skills.length ? override.skills : fallback.skills,
+    tags: Array.isArray(override.tags) && override.tags.length ? override.tags : fallback.tags
+  };
+}
+
+function masterLessonMetadata(master, unitNumber, lessonIndex, template = {}) {
+  const fallback = metadataForLessonType(template.type);
+  const override = masterLessonOverride(master.id, unitNumber, lessonIndex);
+  return {
+    title: override.title || template.title || `Lesson ${lessonIndex + 1}`,
+    type: override.type || template.type || 'lesson',
+    sources: Array.isArray(override.sources) && override.sources.length ? override.sources : (template.sources || ['student_book']),
+    objective: override.objective || fallback.objective,
+    outcome: override.outcome || fallback.outcome,
+    skills: Array.isArray(override.skills) && override.skills.length ? override.skills : fallback.skills
+  };
+}
+
+function inferLessonMasterRef(lesson) {
+  if (!lesson) return null;
+  let masterId = lesson.curriculumMasterId || '';
+  let unitNumber = Number.isFinite(Number(lesson.masterUnitNumber)) ? Number(lesson.masterUnitNumber) : null;
+  let lessonNumber = Number.isFinite(Number(lesson.masterLessonNumber)) ? Number(lesson.masterLessonNumber) : null;
+
+  const text = `${lesson.pos || ''} ${lesson.name || ''}`;
+  if (!masterId) {
+    const levelMatch = text.match(/Our World Level\s+(\d+)/i);
+    if (levelMatch) masterId = `our_world_l${levelMatch[1]}`;
+  }
+  if (unitNumber === null) {
+    const unitMatch = text.match(/Unit\s+(\d+)/i);
+    if (unitMatch) unitNumber = Number(unitMatch[1]);
+  }
+  if (lessonNumber === null) {
+    const lessonMatch = text.match(/Lesson\s+(\d+)/i);
+    if (lessonMatch) lessonNumber = Number(lessonMatch[1]);
+  }
+
+  const master = curriculumMasterById(masterId);
+  if (!master.id || unitNumber === null || lessonNumber === null) return null;
+  return { master, unitNumber, lessonIndex: lessonNumber - 1 };
+}
+
+function skillChips(items, className = 'skill-chip') {
+  const list = Array.isArray(items) ? items : parseListInput(items);
+  return list.length
+    ? `<div class="skill-chip-row">${list.map(item => `<span class="${className}">${esc(item)}</span>`).join('')}</div>`
+    : '';
+}
+
+function effectiveLessonMetadata(lesson) {
+  const ref = inferLessonMasterRef(lesson);
+  const template = ref ? curriculumMasterOutline(ref.master).find(unit => unit.number === ref.unitNumber)?.lessons[ref.lessonIndex] : null;
+  const fallback = ref && template
+    ? masterLessonMetadata(ref.master, ref.unitNumber, ref.lessonIndex, template)
+    : metadataForLessonType(lesson?.lessonType);
+  return {
+    objective: lesson?.objective || fallback.objective,
+    outcome: lesson?.outcome || fallback.outcome,
+    skills: (Array.isArray(lesson?.skills) && lesson.skills.length)
+      ? lesson.skills
+      : (Array.isArray(lesson?.tags) && lesson.tags.length ? lesson.tags : fallback.skills)
+  };
+}
+
+function effectiveUnitMetadata(unit) {
+  const book = DB.units.find(item => item.id === unit?.bookId);
+  const master = curriculumMasterById(unit?.curriculumMasterId || book?.curriculumMasterId || book?.name?.match(/Our World Level (\d)/)?.[1]?.replace(/^/, 'our_world_l') || '');
+  const fallback = master.id ? masterUnitMetadata(master, Number(unit?.number || 0)) : { objective: '', outcome: '', skills: [] };
+  return {
+    objective: unit?.objective || fallback.objective,
+    outcome: unit?.outcome || fallback.outcome,
+    skills: (Array.isArray(unit?.skills) && unit.skills.length)
+      ? unit.skills
+      : (Array.isArray(unit?.tags) && unit.tags.length ? unit.tags : fallback.skills)
+  };
 }
 
 // ─── Display names ───────────────────────────────────────────────────────────
@@ -3628,7 +4454,7 @@ function parsePastClasses(value) {
 }
 
 function curriculumMasterById(id) {
-  return CURRICULUM_MASTERS.find(master => master.id === id) || CURRICULUM_MASTERS[0];
+  return allCurriculumMasters().find(master => master.id === id) || allCurriculumMasters()[0] || CURRICULUM_MASTERS[0];
 }
 
 function materialLabel(sources = []) {
@@ -3704,6 +4530,7 @@ function normalizeReportCard(student) {
     growthSummary: current.growthSummary || '',
     nextSteps: current.nextSteps || '',
     homeSupport: current.homeSupport || '',
+    curriculumComment: current.curriculumComment || '',
     speakingComment: current.speakingComment || '',
     attendanceComment: current.attendanceComment || '',
     diagnosticComment: current.diagnosticComment || ''
@@ -3812,6 +4639,85 @@ function summarizeRecentNote(entries, emptyText) {
   return entries.length ? entries[0].note || emptyText : emptyText;
 }
 
+function uniqueList(items) {
+  const seen = new Set();
+  return (items || []).filter(item => {
+    const key = String(item || '').trim().toLowerCase();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function lessonHasStudentEvidence(lesson, studentId) {
+  return DB.studentnotes.some(note => note.studentId === studentId && note.lessonId === lesson.id) ||
+    DB.attendances.some(entry => entry.studentId === studentId && entry.lessonId === lesson.id) ||
+    !!logForLesson(lesson.id);
+}
+
+function curriculumEvidenceForReport(studentId, classId = '', reportDate = todayStr()) {
+  const studentClassIds = new Set(classesForStudent(studentId).map(cls => cls.id));
+  const eligibleClassIds = classId ? new Set([classId]) : studentClassIds;
+  let lessons = sortLessons(DB.lessons.filter(lesson =>
+    eligibleClassIds.has(lesson.classId) &&
+    (!reportDate || !lesson.date || lesson.date <= reportDate) &&
+    lessonHasStudentEvidence(lesson, studentId)
+  ), true);
+
+  if (!lessons.length) {
+    lessons = sortLessons(DB.lessons.filter(lesson =>
+      eligibleClassIds.has(lesson.classId) &&
+      lessonHasStudentEvidence(lesson, studentId)
+    ), true).slice(0, 6);
+  }
+
+  if (!lessons.length) {
+    lessons = sortLessons(DB.lessons.filter(lesson =>
+      eligibleClassIds.has(lesson.classId)
+    ), true).slice(0, 6);
+  }
+
+  lessons = lessons.slice(0, 8);
+
+  const units = uniqueList(lessons.map(lesson => {
+    const unit = DB.subunits.find(item => item.id === lesson.subunitId);
+    return unit ? subunitDisplayName(unit) : '';
+  }));
+  const outcomes = uniqueList(lessons.map(lesson => effectiveLessonMetadata(lesson).outcome)).slice(0, 5);
+  const objectives = uniqueList(lessons.map(lesson => effectiveLessonMetadata(lesson).objective)).slice(0, 5);
+  const skills = uniqueList(lessons.flatMap(lesson => effectiveLessonMetadata(lesson).skills)).slice(0, 10);
+
+  return { lessons, units, outcomes, objectives, skills };
+}
+
+function curriculumEvidenceSummary(evidence) {
+  if (!evidence.lessons.length) return 'No curriculum evidence is available yet.';
+  const units = evidence.units.length ? `Units covered: ${evidence.units.join(', ')}.` : '';
+  const skills = evidence.skills.length ? ` Skills practiced: ${evidence.skills.join(', ')}.` : '';
+  const outcomes = evidence.outcomes.length ? ` Learning outcomes: ${evidence.outcomes.slice(0, 3).join(' ')}` : '';
+  return `${units}${skills}${outcomes}`.trim();
+}
+
+function curriculumEvidenceHtml(evidence) {
+  if (!evidence.lessons.length) {
+    return `<div class="report-no-note">No curriculum evidence is available yet.</div>`;
+  }
+  return `
+    <div class="report-curriculum-list">
+      ${evidence.lessons.slice(0, 5).map(lesson => {
+        const metadata = effectiveLessonMetadata(lesson);
+        const unit = DB.subunits.find(item => item.id === lesson.subunitId);
+        return `
+          <div class="report-curriculum-item">
+            <div class="report-curriculum-title">${esc(lessonDisplayName(lesson))}</div>
+            <div class="report-curriculum-copy">${lesson.date ? `${esc(friendlyDate(lesson.date))} · ` : ''}${unit ? esc(subunitDisplayName(unit)) : 'Unit not set'}</div>
+            <div class="report-curriculum-copy"><strong>Outcome:</strong> ${esc(metadata.outcome)}</div>
+            ${skillChips(metadata.skills)}
+          </div>`;
+      }).join('')}
+    </div>`;
+}
+
 function dotClass(dateStr) {
   const t = todayStr();
   return !dateStr ? 'dot-future' : dateStr < t ? 'dot-past' : dateStr === t ? 'dot-today' : 'dot-future';
@@ -3912,8 +4818,8 @@ function updateShellChrome(activeTab = 'today') {
 function populateCurriculumOptions(selectedId = '') {
   const select = document.getElementById('cls-curriculum');
   if (!select) return;
-  select.innerHTML = CURRICULUM_MASTERS.map(master =>
-    `<option value="${esc(master.id)}"${master.id === selectedId ? ' selected' : ''}>${esc(master.name)}</option>`
+  select.innerHTML = allCurriculumMasters().map(master =>
+    `<option value="${esc(master.id)}"${master.id === selectedId ? ' selected' : ''}>${esc(master.id ? masterDisplayName(master) : master.name)}</option>`
   ).join('');
   updateCurriculumPreview();
 }
@@ -3923,7 +4829,8 @@ function updateCurriculumPreview() {
   const preview = document.getElementById('cls-curriculum-preview');
   const autoBuild = document.getElementById('cls-autobuild');
   if (!select || !preview || !autoBuild) return;
-  const master = curriculumMasterById(select.value);
+  const rawMaster = curriculumMasterById(select.value);
+  const master = rawMaster.id ? { ...rawMaster, name: masterDisplayName(rawMaster) } : rawMaster;
   autoBuild.disabled = !master.id;
   if (!master.id) {
     autoBuild.checked = false;
@@ -4115,7 +5022,6 @@ function renderLogStudentNotes(lessonId) {
   return `
     <div class="log-student-notes">
       <div class="label">Student Notes</div>
-      <div class="overview-note mt-8">Leave individual notes here while marking the lesson complete.</div>
       <div class="log-student-grid">
         ${classStudents.map(student => {
           const existing = DB.studentnotes.find(note => note.studentId === student.id && note.lessonId === lessonId);
@@ -4182,6 +5088,7 @@ function switchTab(name) {
   updateShellChrome(name);
   if (name === 'today')    renderToday();
   if (name === 'classes')  renderClasses();
+  if (name === 'curriculum') renderMasterCurriculum();
   if (name === 'log')      renderLog();
   if (name === 'students') renderStudents();
   if (name === 'student-profile') renderStudentProfilePage();
@@ -4191,6 +5098,402 @@ function switchTab(name) {
 
 document.querySelectorAll('.tab-btn').forEach(btn =>
   btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+
+// ════════════════════════════════════════════════════
+// MASTER CURRICULUM TAB
+// ════════════════════════════════════════════════════
+function curriculumMasterOutline(master) {
+  if (master.custom) {
+    const units = [];
+    const startUnit = master.hasUnitZero ? 0 : 1;
+    const endUnit = master.hasUnitZero ? master.unitCount - 1 : master.unitCount;
+    for (let unitNumber = startUnit; unitNumber <= endUnit; unitNumber += 1) {
+      const unitLessonCount = masterUnitMetadata(master, unitNumber).lessonCount || master.lessonsPerUnit;
+      const lessons = [];
+      for (let index = 0; index < unitLessonCount; index += 1) {
+        lessons.push({
+          title: `Lesson ${index + 1}`,
+          type: 'lesson',
+          sources: ['student_book']
+        });
+      }
+      units.push({ number: unitNumber, name: unitNumber === 0 ? 'Unit 0 - Starter Unit' : `Unit ${unitNumber}`, lessons });
+    }
+    return units.map(unit => ({ ...unit, name: masterUnitMetadata(master, unit.number).name, metadata: masterUnitMetadata(master, unit.number) }));
+  }
+
+  const units = [];
+  if (master.hasUnitZero) {
+    units.push({
+      number: 0,
+      name: 'Unit 0 - Starter Unit',
+      lessons: OW_UNIT_ZERO_LESSONS
+    });
+  }
+  for (let unitNumber = 1; unitNumber <= 9; unitNumber += 1) {
+    const lessons = OW_BASE_LESSONS.slice();
+    if ([3, 6, 9].includes(unitNumber)) {
+      const reviewNumber = unitNumber / 3;
+      lessons.push({
+        title: reviewNumber === 3 ? 'Review Exam 3 + Level Assessment' : `Review Exam ${reviewNumber}`,
+        type: reviewNumber === 3 ? 'level_assessment' : 'review_exam',
+        sources: ['assessment']
+      });
+    }
+    units.push({ number: unitNumber, name: `Unit ${unitNumber}`, lessons });
+  }
+  return units.map(unit => ({ ...unit, name: masterUnitMetadata(master, unit.number).name, metadata: masterUnitMetadata(master, unit.number) }));
+}
+
+function selectMasterCurriculum(masterId) {
+  currentMasterCurriculumId = masterId || 'our_world_l1';
+  currentMasterUnitNumber = null;
+  currentMasterLessonIndex = 0;
+  renderMasterCurriculum();
+}
+
+function selectMasterUnit(unitNumber) {
+  currentMasterUnitNumber = Number(unitNumber);
+  currentMasterLessonIndex = 0;
+  renderMasterCurriculum();
+}
+
+function selectMasterLesson(index) {
+  currentMasterLessonIndex = Number(index) || 0;
+  renderMasterCurriculum();
+}
+
+function previewMasterLessonCountFromUnit() {
+  const input = document.getElementById('master-unit-lesson-count');
+  if (!input) return;
+  const count = parsePositiveInt(input.value);
+  if (!count) return;
+  const select = document.getElementById('master-lesson-select');
+  if (!select) return;
+  const label = document.getElementById('master-lesson-select-label');
+  if (label) label.textContent = `Lesson (${count} in selected unit)`;
+  const current = Math.min(Number(select.value || 0), count - 1);
+  select.innerHTML = Array.from({ length: count }, (_, index) => {
+    const label = index === currentMasterLessonIndex
+      ? (document.getElementById('master-lesson-title')?.value.trim() || `Lesson ${index + 1}`)
+      : `Lesson ${index + 1}`;
+    return `<option value="${index}"${index === current ? ' selected' : ''}>${esc(`Lesson ${index + 1} - ${label}`)}</option>`;
+  }).join('');
+  currentMasterLessonIndex = current;
+}
+
+function syncDefaultLessonCountToUnit() {
+  const defaultInput = document.getElementById('master-lessons-per-unit');
+  const unitInput = document.getElementById('master-unit-lesson-count');
+  if (!defaultInput || !unitInput) return;
+  unitInput.value = defaultInput.value;
+  previewMasterLessonCountFromUnit();
+}
+
+function useDefaultLessonCountForUnit() {
+  syncDefaultLessonCountToUnit();
+}
+
+async function deleteCustomProgram() {
+  const masterId = document.getElementById('master-program-select')?.value || currentMasterCurriculumId;
+  const master = curriculumMasterById(masterId);
+  if (!master.custom) return;
+  if (!confirm(`Delete "${masterDisplayName(master)}" from the master curriculum library?`)) return;
+  const currentSettings = normalizeSchoolSettings(DB.schoolSettings);
+  const curriculumMasters = { ...(currentSettings.curriculumMasters || {}) };
+  delete curriculumMasters[masterId];
+  try {
+    await persistSchoolSettings({ ...currentSettings, curriculumMasters });
+    currentMasterCurriculumId = allCurriculumMasters().find(item => item.id)?.id || 'our_world_l1';
+    currentMasterUnitNumber = null;
+    currentMasterLessonIndex = 0;
+    renderMasterCurriculum();
+    populateCurriculumOptions(currentMasterCurriculumId);
+    showToast('Program deleted.', 'success');
+  } catch (e) {
+    showToast('Failed to delete program.', 'error');
+  }
+}
+
+async function createCustomProgram() {
+  const currentSettings = normalizeSchoolSettings(DB.schoolSettings);
+  const curriculumMasters = { ...(currentSettings.curriculumMasters || {}) };
+  const baseName = 'New Program';
+  let suffix = Object.keys(curriculumMasters).length + 1;
+  let id = `custom_program_${Date.now()}`;
+  while (curriculumMasters[id]) {
+    suffix += 1;
+    id = `custom_program_${Date.now()}_${suffix}`;
+  }
+  curriculumMasters[id] = {
+    custom: true,
+    name: baseName,
+    unitCount: 9,
+    lessonsPerUnit: 12,
+    hasUnitZero: false,
+    lessons: 108,
+    units: {}
+  };
+  try {
+    await persistSchoolSettings({ ...currentSettings, curriculumMasters });
+    currentMasterCurriculumId = id;
+    currentMasterUnitNumber = 1;
+    currentMasterLessonIndex = 0;
+    renderMasterCurriculum();
+    populateCurriculumOptions(id);
+    showToast('New program created. Rename it and set the unit/lesson counts.', 'success');
+  } catch (e) {
+    showToast('Failed to create program.', 'error');
+  }
+}
+
+async function saveMasterCurriculumEdits() {
+  const masterId = document.getElementById('master-program-select')?.value || currentMasterCurriculumId;
+  const unitNumber = Number(document.getElementById('master-unit-select')?.value || currentMasterUnitNumber || 0);
+  const lessonIndex = Number(document.getElementById('master-lesson-select')?.value || currentMasterLessonIndex || 0);
+  const selectedMaster = curriculumMasterById(masterId);
+
+  const currentSettings = normalizeSchoolSettings(DB.schoolSettings);
+  const curriculumMasters = { ...(currentSettings.curriculumMasters || {}) };
+  const masterEntry = {
+    ...(curriculumMasters[masterId] || {}),
+    units: { ...((curriculumMasters[masterId] || {}).units || {}) }
+  };
+  const unitKey = String(unitNumber);
+  const lessonKey = String(lessonIndex);
+  const unitEntry = {
+    ...(masterEntry.units[unitKey] || {}),
+    lessons: { ...((masterEntry.units[unitKey] || {}).lessons || {}) }
+  };
+
+  const previousProgramName = masterDisplayName(selectedMaster);
+  const programName = document.getElementById('master-program-name')?.value.trim() || '';
+  masterEntry.name = programName;
+  if (selectedMaster.custom || masterEntry.custom) {
+    masterEntry.custom = true;
+    masterEntry.unitCount = parsePositiveInt(document.getElementById('master-unit-count')?.value) || masterEntry.unitCount || 9;
+    masterEntry.lessonsPerUnit = parsePositiveInt(document.getElementById('master-lessons-per-unit')?.value) || masterEntry.lessonsPerUnit || 12;
+    masterEntry.hasUnitZero = !!document.getElementById('master-has-unit-zero')?.checked;
+  }
+  unitEntry.name = document.getElementById('master-unit-name')?.value.trim() || '';
+  if (selectedMaster.custom || masterEntry.custom) {
+    unitEntry.lessonCount = parsePositiveInt(document.getElementById('master-unit-lesson-count')?.value) || masterEntry.lessonsPerUnit || 1;
+  }
+  unitEntry.objective = document.getElementById('master-unit-objective')?.value.trim() || '';
+  unitEntry.outcome = document.getElementById('master-unit-outcome')?.value.trim() || '';
+  if (programName && previousProgramName && programName !== previousProgramName) {
+    unitEntry.objective = unitEntry.objective.replaceAll(previousProgramName, programName);
+    unitEntry.outcome = unitEntry.outcome.replaceAll(previousProgramName, programName);
+  }
+  unitEntry.skills = selectedSkillsFromRegistry('unit');
+  unitEntry.lessons[lessonKey] = {
+    ...(unitEntry.lessons[lessonKey] || {}),
+    title: document.getElementById('master-lesson-title')?.value.trim() || '',
+    objective: document.getElementById('master-lesson-objective')?.value.trim() || '',
+    outcome: document.getElementById('master-lesson-outcome')?.value.trim() || '',
+    skills: selectedSkillsFromRegistry('lesson')
+  };
+
+  masterEntry.units[unitKey] = unitEntry;
+  if (masterEntry.custom) {
+    const startUnit = masterEntry.hasUnitZero ? 0 : 1;
+    const endUnit = masterEntry.hasUnitZero ? masterEntry.unitCount - 1 : masterEntry.unitCount;
+    let lessonTotal = 0;
+    for (let item = startUnit; item <= endUnit; item += 1) {
+      lessonTotal += parsePositiveInt(masterEntry.units[String(item)]?.lessonCount) || masterEntry.lessonsPerUnit;
+    }
+    masterEntry.lessons = lessonTotal;
+  }
+  curriculumMasters[masterId] = masterEntry;
+
+  setBusy('save-master-btn', true);
+  try {
+    await persistSchoolSettings({ ...currentSettings, curriculumMasters });
+    currentMasterCurriculumId = masterId;
+    currentMasterUnitNumber = unitNumber;
+    currentMasterLessonIndex = lessonIndex;
+    populateCurriculumOptions(masterId);
+    renderMasterCurriculum();
+    renderClasses();
+    showToast('Master curriculum saved.', 'success');
+  } catch (e) {
+    showToast('Failed to save master curriculum.', 'error');
+  } finally {
+    setBusy('save-master-btn', false);
+  }
+}
+
+function renderMasterCurriculum() {
+  updateHeroSummary();
+  const masters = allCurriculumMasters().filter(master => master.id);
+  if (!masters.some(master => master.id === currentMasterCurriculumId)) {
+    currentMasterCurriculumId = masters[0]?.id || '';
+  }
+  const master = {
+    ...curriculumMasterById(currentMasterCurriculumId),
+    name: masterDisplayName(curriculumMasterById(currentMasterCurriculumId))
+  };
+  const outline = curriculumMasterOutline(master);
+  if (currentMasterUnitNumber === null || !outline.some(unit => unit.number === currentMasterUnitNumber)) {
+    currentMasterUnitNumber = outline[0]?.number ?? null;
+  }
+  const activeUnit = outline.find(unit => unit.number === currentMasterUnitNumber) || outline[0];
+  if (!activeUnit) return;
+  if (currentMasterLessonIndex < 0 || currentMasterLessonIndex >= activeUnit.lessons.length) currentMasterLessonIndex = 0;
+  const activeTemplate = activeUnit.lessons[currentMasterLessonIndex] || activeUnit.lessons[0];
+  const activeLesson = masterLessonMetadata(master, activeUnit.number, currentMasterLessonIndex, activeTemplate);
+  const unitLabel = master.hasUnitZero ? 'Unit 0 + numbered units' : 'Numbered units';
+  const customSkills = skillRegistry().filter(skill =>
+    !DEFAULT_SKILL_REGISTRY.some(item => item.toLowerCase() === skill.toLowerCase())
+  );
+
+  document.getElementById('tab-curriculum').innerHTML = `
+    ${pageIntro(
+      'Master Curriculum',
+      'Curriculum Library',
+      'Choose a program, unit, and lesson. Edit the fields once and reports can reuse them.'
+    )}
+    <div class="master-curriculum-shell">
+      <div class="log-form">
+        <div class="log-picker-grid">
+          <div class="form-group">
+            <label class="form-label">Program</label>
+            <select id="master-program-select" class="form-input" onchange="selectMasterCurriculum(this.value)">
+              ${masters.map(item => `<option value="${item.id}"${item.id === master.id ? ' selected' : ''}>${esc(masterDisplayName(item))}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Unit</label>
+            <select id="master-unit-select" class="form-input" onchange="selectMasterUnit(this.value)">
+              ${outline.map(unit => `<option value="${unit.number}"${unit.number === activeUnit.number ? ' selected' : ''}>${esc(unit.name)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="master-lesson-select-label">Lesson (${activeUnit.lessons.length} in selected unit)</label>
+            <select id="master-lesson-select" class="form-input" onchange="selectMasterLesson(this.value)">
+              ${activeUnit.lessons.map((lesson, index) => {
+                const metadata = masterLessonMetadata(master, activeUnit.number, index, lesson);
+                return `<option value="${index}"${index === currentMasterLessonIndex ? ' selected' : ''}>${esc(`Lesson ${index + 1} - ${metadata.title}`)}</option>`;
+              }).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" id="save-master-btn" onclick="saveMasterCurriculumEdits()">Save Master</button>
+          </div>
+        </div>
+        <div class="page-actions">
+          <button class="btn" onclick="createCustomProgram()">+ New Program</button>
+          ${master.custom ? `<button class="btn btn-danger" onclick="deleteCustomProgram()">Delete Program</button>` : ''}
+        </div>
+      </div>
+
+      <div class="master-outline">
+        <div class="master-side-column">
+          <section class="metadata-panel">
+            <div class="metadata-panel-title">Program</div>
+            <div class="metadata-panel-copy">${master.lessons} lessons · ${unitLabel} · 50 min</div>
+            <div class="form-group form-group-spaced">
+              <label class="form-label">Program Name</label>
+              <input id="master-program-name" class="form-input" value="${esc(master.name)}">
+            </div>
+            ${master.custom ? `
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Units</label>
+                  <input id="master-unit-count" type="number" min="1" step="1" class="form-input" value="${esc(master.unitCount || 9)}">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Default Lesson Count</label>
+                  <input id="master-lessons-per-unit" type="number" min="1" step="1" class="form-input" value="${esc(master.lessonsPerUnit || 12)}" oninput="syncDefaultLessonCountToUnit()">
+                  <div class="log-student-help">Fallback for units without their own count.</div>
+                </div>
+              </div>
+              <label class="toggle-row">
+                <input type="checkbox" id="master-has-unit-zero"${master.hasUnitZero ? ' checked' : ''}>
+                <span>Include Unit 0 starter unit</span>
+              </label>
+            ` : `
+              <input id="master-unit-count" type="hidden" value="${esc(master.hasUnitZero ? 10 : 9)}">
+              <input id="master-lessons-per-unit" type="hidden" value="${esc(master.hasUnitZero ? 12 : 12)}">
+              <input id="master-has-unit-zero" type="checkbox" class="hidden-input"${master.hasUnitZero ? ' checked' : ''}>
+            `}
+          </section>
+
+          <section class="metadata-panel">
+            <div class="metadata-panel-title">Skills Registry</div>
+            <div class="metadata-panel-copy">${DEFAULT_SKILL_REGISTRY.length} default skills available. Add custom skills only when needed.</div>
+            <div class="form-group form-group-spaced">
+              <label class="form-label">New Skill</label>
+              <input id="new-skill-name" class="form-input" placeholder="e.g. Test Strategy">
+            </div>
+            <button class="btn btn-primary" type="button" onclick="addSkillToRegistry()">Add Skill</button>
+            <div class="report-curriculum-list skill-registry-compact">
+              ${customSkills.length ? customSkills.map(skill => `
+                <div class="skill-registry-row">
+                  <div>
+                    <div class="skill-registry-name">${esc(skill)}</div>
+                    <div class="master-program-meta">Custom skill</div>
+                  </div>
+                  <button class="btn btn-danger" type="button" onclick="deleteSkillFromRegistry(${esc(JSON.stringify(skill))})">Delete</button>
+                </div>`).join('') : `<div class="empty-state-inline">No custom skills yet.</div>`}
+            </div>
+          </section>
+        </div>
+
+        <div class="master-editor-column">
+          <section class="metadata-panel">
+            <div class="metadata-panel-title">Unit Metadata</div>
+            <div class="metadata-panel-copy">Broad context for reports and planning.</div>
+            <div class="form-group form-group-spaced">
+              <label class="form-label">Unit Name</label>
+              <input id="master-unit-name" class="form-input" value="${esc(activeUnit.metadata.name)}">
+            </div>
+            ${master.custom ? `
+              <div class="form-group">
+                <label class="form-label">Lessons in This Unit</label>
+                <input id="master-unit-lesson-count" type="number" min="1" step="1" class="form-input" value="${esc(activeUnit.metadata.lessonCount || activeUnit.lessons.length)}" oninput="previewMasterLessonCountFromUnit()">
+                <div class="log-student-help">Controls the Lesson dropdown for this unit.</div>
+                <button class="btn mt-10" type="button" onclick="useDefaultLessonCountForUnit()">Use Default</button>
+              </div>
+            ` : `<input id="master-unit-lesson-count" type="hidden" value="${esc(activeUnit.lessons.length)}">`}
+            <div class="form-group">
+              <label class="form-label">Unit Objective</label>
+              <textarea id="master-unit-objective" class="form-input report-textarea">${esc(activeUnit.metadata.objective)}</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Unit Outcome</label>
+              <textarea id="master-unit-outcome" class="form-input report-textarea">${esc(activeUnit.metadata.outcome)}</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Unit Skills</label>
+              ${skillPicker('unit', activeUnit.metadata.skills)}
+            </div>
+          </section>
+
+          <section class="metadata-panel">
+            <div class="metadata-panel-title">Lesson Metadata</div>
+            <div class="metadata-panel-copy">${esc(lessonTypeLabel(activeLesson.type))} · ${esc(materialLabel(activeLesson.sources))}</div>
+            <div class="form-group form-group-spaced">
+              <label class="form-label">Lesson Title</label>
+              <input id="master-lesson-title" class="form-input" value="${esc(activeLesson.title)}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lesson Objective</label>
+              <textarea id="master-lesson-objective" class="form-input report-textarea">${esc(activeLesson.objective)}</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Learning Outcome</label>
+              <textarea id="master-lesson-outcome" class="form-input report-textarea">${esc(activeLesson.outcome)}</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lesson Skills</label>
+              ${skillPicker('lesson', activeLesson.skills)}
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>`;
+}
 
 // ════════════════════════════════════════════════════
 // TODAY TAB
@@ -4644,6 +5947,7 @@ function renderCurriculumUnitCard(unit) {
   const range = subunitDateRange(unit.id);
   const next = nextPendingLesson(lessons);
   const isActive = currentClassWorkspace.unitId === unit.id;
+  const metadata = effectiveUnitMetadata(unit);
   return `
     <article class="curriculum-unit-card${isActive ? ' active' : ''}" onclick="selectCurriculumUnit('${unit.id}')">
       <div class="unit-card-head">
@@ -4653,6 +5957,8 @@ function renderCurriculumUnitCard(unit) {
       <div class="curriculum-unit-title">${esc(unit.name || subunitDisplayName(unit))}</div>
       <div class="unit-micro">${range.start ? `${friendlyDate(range.start)} to ${friendlyDate(range.end)}` : 'No dates yet'}</div>
       <div class="compact-meta">${next ? `Next: ${esc(lessonDisplayName(next))}` : (lessons.length ? 'All lessons logged.' : 'No lessons yet.')}</div>
+      ${metadata.objective ? `<div class="master-objective">${esc(metadata.objective)}</div>` : ''}
+      ${skillChips(metadata.skills)}
       ${progressMarkup(summary, 'lessons')}
       <div class="material-chip-row">${unitMaterialSources(lessons).map(source => `<span class="material-chip">${esc(materialLabel([source]))}</span>`).join('')}</div>
     </article>`;
@@ -4698,11 +6004,13 @@ function renderLessonDrawerRow(lesson, index) {
 
 function renderLessonDetailCard(lesson) {
   const noteCount = DB.studentnotes.filter(note => note.lessonId === lesson.id).length;
+  const metadata = effectiveLessonMetadata(lesson);
   return `
     <div class="lesson-detail-card">
       <div class="lesson-drawer-label">${esc(lessonTypeLabel(lesson.lessonType))}</div>
       <div class="lesson-detail-title">${esc(lessonDisplayName(lesson))}</div>
       <div class="material-chip-row">${lessonMaterialSources(lesson).map(source => `<span class="material-chip">${esc(materialLabel([source]))}</span>`).join('')}</div>
+      ${skillChips(metadata.skills)}
       <div class="lesson-detail-grid">
         <div class="lesson-detail-item">
           <div class="lesson-drawer-label">When</div>
@@ -4711,6 +6019,14 @@ function renderLessonDetailCard(lesson) {
         <div class="lesson-detail-item">
           <div class="lesson-drawer-label">Teach</div>
           <div class="compact-meta">${esc(lesson.plan || 'No teaching plan recorded.')}</div>
+        </div>
+        <div class="lesson-detail-item">
+          <div class="lesson-drawer-label">Objective</div>
+          <div class="compact-meta">${esc(metadata.objective || 'No lesson objective recorded.')}</div>
+        </div>
+        <div class="lesson-detail-item">
+          <div class="lesson-drawer-label">Outcome</div>
+          <div class="compact-meta">${esc(metadata.outcome || 'No learning outcome recorded.')}</div>
         </div>
         <div class="lesson-detail-item">
           <div class="lesson-drawer-label">Position</div>
@@ -4900,6 +6216,14 @@ function shortDateLabel(dateStr) {
   return `${MONTHS_SHORT[date.getMonth()]} ${date.getDate()}`;
 }
 
+function lessonYear(lesson) {
+  return lesson.date ? String(parseLocalDate(lesson.date).getFullYear()) : '';
+}
+
+function currentYearString() {
+  return String(parseLocalDate(todayStr()).getFullYear());
+}
+
 function openClassWorkspace(classId) {
   currentClassWorkspace = { classId, tab: 'overview', unitId: null, lessonId: null };
   renderClasses();
@@ -4943,60 +6267,199 @@ function toggleLesson(id)  { selectCurriculumLesson(id); }
 // ════════════════════════════════════════════════════
 // LOG TAB
 // ════════════════════════════════════════════════════
+function setLogSelectionForLesson(lessonId) {
+  const lesson = DB.lessons.find(item => item.id === lessonId);
+  if (!lesson) return false;
+  currentLogSelection = {
+    year: lessonYear(lesson) || currentYearString(),
+    classId: lesson.classId || '',
+    unitId: lesson.subunitId || '',
+    lessonId: lesson.id || ''
+  };
+  return true;
+}
+
+function normalizeLogSelection() {
+  if (!currentLogSelection.year) currentLogSelection.year = currentYearString();
+  const lessonsForYear = DB.lessons.filter(lesson => lessonYear(lesson) === currentLogSelection.year);
+  const classExists = DB.classes.some(cls =>
+    cls.id === currentLogSelection.classId &&
+    lessonsForYear.some(lesson => lesson.classId === cls.id)
+  );
+  if (!classExists) {
+    currentLogSelection = { year: currentLogSelection.year, classId: '', unitId: '', lessonId: '' };
+    return;
+  }
+
+  const unitExists = DB.subunits.some(unit =>
+    unit.id === currentLogSelection.unitId &&
+    unit.classId === currentLogSelection.classId &&
+    lessonsForYear.some(lesson => lesson.subunitId === unit.id)
+  );
+  if (!unitExists) {
+    currentLogSelection.unitId = '';
+    currentLogSelection.lessonId = '';
+    return;
+  }
+
+  const lessonExists = DB.lessons.some(lesson =>
+    lesson.id === currentLogSelection.lessonId &&
+    lesson.classId === currentLogSelection.classId &&
+    lesson.subunitId === currentLogSelection.unitId &&
+    lessonYear(lesson) === currentLogSelection.year
+  );
+  if (!lessonExists) currentLogSelection.lessonId = '';
+}
+
+function logSelectionComplete() {
+  return !!(currentLogSelection.classId && currentLogSelection.unitId && currentLogSelection.lessonId);
+}
+
+function renderLogHistoryForSelection() {
+  if (!logSelectionComplete()) return '';
+  const selectedLog = DB.logs.find(log => log.lessonId === currentLogSelection.lessonId);
+  const logsHtml = selectedLog
+    ? `
+        <div class="log-item">
+          <div class="log-item-meta">${friendlyDate(selectedLog.date)} &middot; ${esc(selectedLog.className)}</div>
+          <div class="log-item-title">${esc(selectedLog.lessonName)}</div>
+          <div class="log-item-notes">${esc(selectedLog.notes)}</div>
+        </div>`
+    : `<div class="empty-state-inline">No saved log for this lesson yet.</div>`;
+
+  return `
+    <div class="label log-history-label">History</div>
+    <div class="log-history">${logsHtml}</div>`;
+}
+
 function renderLog() {
   updateHeroSummary();
-  const sortedLessons = sortLessons(DB.lessons, true);
 
-  let optionsHtml = '<option value="">— Select a lesson —</option>';
-  sortedLessons.forEach(l => {
-    const cls  = DB.classes.find(c => c.id === l.classId);
-    const su   = DB.subunits.find(s => s.id === l.subunitId);
-    const book = su ? DB.units.find(u => u.id === su.bookId) : null;
-    const context = [
-      cls  ? cls.name              : 'Unknown',
-      book ? book.name             : '',
-      su   ? subunitDisplayName(su): ''
-    ].filter(Boolean).join(' — ');
-    optionsHtml += `<option value="${l.id}">${esc(`${friendlyDate(l.date)} — ${context} — ${lessonDisplayName(l)}`)}</option>`;
-  });
+  if (pendingLogLessonId) {
+    setLogSelectionForLesson(pendingLogLessonId);
+    pendingLogLessonId = null;
+  }
+  if (!currentLogSelection.year) currentLogSelection.year = currentYearString();
+  normalizeLogSelection();
 
-  const sortedLogs = DB.logs.slice().sort((a, b) => b.date.localeCompare(a.date));
-  const logsHtml = sortedLogs.length === 0
-    ? `<div class="empty-state-inline">No logs yet.</div>`
-    : sortedLogs.map(g => `
-        <div class="log-item">
-          <div class="log-item-meta">${friendlyDate(g.date)} &middot; ${esc(g.className)}</div>
-          <div class="log-item-title">${esc(g.lessonName)}</div>
-          <div class="log-item-notes">${esc(g.notes)}</div>
-        </div>`).join('');
+  const lessonYears = Array.from(new Set(DB.lessons.map(lessonYear).filter(Boolean)));
+  const currentYear = Number(currentYearString());
+  for (let offset = 0; offset <= 10; offset += 1) {
+    lessonYears.push(String(currentYear + offset));
+  }
+  const yearOptions = Array.from(new Set(lessonYears))
+    .sort((a, b) => Number(b) - Number(a))
+    .map(year => `<option value="${year}"${currentLogSelection.year === year ? ' selected' : ''}>${esc(year)}</option>`)
+    .join('');
 
-  document.getElementById('tab-log').innerHTML = `
-    ${pageIntro('Reflection', 'Lesson Log', 'Capture what happened while the details are fresh so planning gets smarter over time.')}
-    <div class="log-form">
-      <div class="overview-note mb-14">A lesson counts as completed once it has a log. Updating the log keeps the lesson completed.</div>
-      <div class="form-group">
-        <label class="form-label">Lesson</label>
-        <select id="log-lesson-select" class="form-input" onchange="syncLogFormSelection()">${optionsHtml}</select>
-      </div>
+  const lessonsForYear = DB.lessons.filter(lesson => lessonYear(lesson) === currentLogSelection.year);
+
+  const classOptions = DB.classes
+    .slice()
+    .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+    .filter(cls => lessonsForYear.some(lesson => lesson.classId === cls.id))
+    .map(cls => `<option value="${cls.id}"${currentLogSelection.classId === cls.id ? ' selected' : ''}>${esc(cls.name || 'Untitled Class')}</option>`)
+    .join('');
+
+  const units = currentLogSelection.classId ? classSubunits(currentLogSelection.classId) : [];
+  const unitOptions = units
+    .filter(unit => lessonsForYear.some(lesson => lesson.subunitId === unit.id))
+    .map(unit => `<option value="${unit.id}"${currentLogSelection.unitId === unit.id ? ' selected' : ''}>${esc(subunitDisplayName(unit))}</option>`)
+    .join('');
+
+  const lessons = currentLogSelection.unitId
+    ? sortUnitLessons(lessonsForYear.filter(lesson => lesson.subunitId === currentLogSelection.unitId))
+    : [];
+  const lessonOptions = lessons
+    .map(lesson => {
+      const status = logForLesson(lesson.id) ? 'Logged' : 'Open';
+      const date = lesson.date ? friendlyDate(lesson.date) : 'No date';
+      return `<option value="${lesson.id}"${currentLogSelection.lessonId === lesson.id ? ' selected' : ''}>${esc(`${lessonDisplayName(lesson)} · ${date} · ${status}`)}</option>`;
+    })
+    .join('');
+
+  const selectedLesson = DB.lessons.find(lesson => lesson.id === currentLogSelection.lessonId);
+  const selectedUnit = DB.subunits.find(unit => unit.id === currentLogSelection.unitId);
+  const selectedClass = DB.classes.find(cls => cls.id === currentLogSelection.classId);
+  const selectedSummary = logSelectionComplete()
+    ? `<div class="log-selection-summary">Selected: <strong>${esc(selectedClass?.name || 'Class')}</strong> / <strong>${esc(selectedUnit ? subunitDisplayName(selectedUnit) : 'Unit')}</strong> / <strong>${esc(lessonDisplayName(selectedLesson))}</strong></div>`
+    : `<div class="empty-state-inline">Choose a class, then a unit, then a lesson to unlock notes and save history.</div>`;
+
+  const logEditorHtml = logSelectionComplete()
+    ? `
       <div class="form-group">
         <label class="form-label">Notes</label>
         <textarea id="log-notes" class="form-input" placeholder="How did the lesson go? Absences, difficulties, achievements?"></textarea>
       </div>
       <div id="log-student-notes-slot"></div>
       <button class="btn btn-primary" id="save-log-btn" onclick="saveLog()">Save Log</button>
-    </div>
-    <div class="label log-history-label">History</div>
-    <div class="log-history">${logsHtml}</div>`;
+      ${renderLogHistoryForSelection()}`
+    : '';
 
-  if (pendingLogLessonId) {
-    const sel = document.getElementById('log-lesson-select');
-    if (sel) {
-      sel.value = pendingLogLessonId;
-      syncLogFormSelection();
-      document.querySelector('.log-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    pendingLogLessonId = null;
+  document.getElementById('tab-log').innerHTML = `
+    ${pageIntro('Reflection', 'Lesson Log', '')}
+    <div class="log-form">
+      <div class="log-picker-grid">
+        <div class="form-group">
+          <label class="form-label">Year</label>
+          <select id="log-year-select" class="form-input" onchange="onLogYearChange()">
+            ${yearOptions}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Class</label>
+          <select id="log-class-select" class="form-input" onchange="onLogClassChange()">
+            <option value="">Choose a class</option>
+            ${classOptions}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Unit</label>
+          <select id="log-unit-select" class="form-input" onchange="onLogUnitChange()" ${currentLogSelection.classId ? '' : 'disabled'}>
+            <option value="">${currentLogSelection.classId ? 'Choose a unit' : 'Choose a class first'}</option>
+            ${unitOptions}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lesson</label>
+          <select id="log-lesson-select" class="form-input" onchange="onLogLessonChange()" ${currentLogSelection.unitId ? '' : 'disabled'}>
+            <option value="">${currentLogSelection.unitId ? `Choose from ${lessons.length} lesson${lessons.length === 1 ? '' : 's'}` : 'Choose a unit first'}</option>
+            ${lessonOptions}
+          </select>
+        </div>
+      </div>
+      ${selectedSummary}
+      ${logEditorHtml}
+    </div>`;
+
+  if (logSelectionComplete()) {
+    syncLogFormSelection();
+    document.querySelector('.log-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+}
+
+function onLogClassChange() {
+  const classId = document.getElementById('log-class-select')?.value || '';
+  currentLogSelection = { year: currentLogSelection.year || currentYearString(), classId, unitId: '', lessonId: '' };
+  renderLog();
+}
+
+function onLogYearChange() {
+  const year = document.getElementById('log-year-select')?.value || currentYearString();
+  currentLogSelection = { year, classId: '', unitId: '', lessonId: '' };
+  renderLog();
+}
+
+function onLogUnitChange() {
+  const unitId = document.getElementById('log-unit-select')?.value || '';
+  currentLogSelection.unitId = unitId;
+  currentLogSelection.lessonId = '';
+  renderLog();
+}
+
+function onLogLessonChange() {
+  currentLogSelection.lessonId = document.getElementById('log-lesson-select')?.value || '';
+  renderLog();
 }
 
 function syncLogFormSelection() {
@@ -5004,12 +6467,13 @@ function syncLogFormSelection() {
   const notesField = document.getElementById('log-notes');
   const saveBtn = document.getElementById('save-log-btn');
   const studentNotesSlot = document.getElementById('log-student-notes-slot');
-  if (!select || !notesField || !saveBtn || !studentNotesSlot) return;
+  if (select) currentLogSelection.lessonId = select.value || '';
+  if (!select || !notesField || !saveBtn || !studentNotesSlot || !currentLogSelection.lessonId) return;
 
-  const existing = DB.logs.find(g => g.lessonId === select.value);
+  const existing = DB.logs.find(g => g.lessonId === currentLogSelection.lessonId);
   notesField.value = existing ? existing.notes : '';
   saveBtn.textContent = existing ? 'Update Log' : 'Save Log';
-  studentNotesSlot.innerHTML = renderLogStudentNotes(select.value);
+  studentNotesSlot.innerHTML = renderLogStudentNotes(currentLogSelection.lessonId);
 }
 
 async function saveLog() {
@@ -5082,8 +6546,6 @@ async function saveLog() {
     const existingIndex = DB.logs.findIndex(g => g.id === log.id);
     if (existingIndex >= 0) DB.logs[existingIndex] = log;
     else DB.logs.push(log);
-    document.getElementById('log-notes').value = '';
-    document.getElementById('log-lesson-select').value = '';
     renderLog();
     showToast(existingLog ? 'Log updated.' : 'Log saved.', 'success');
   } catch(e) {
@@ -6023,6 +7485,8 @@ function renderStudentReportPage() {
   const latestDiagnostic = student.diagnostics.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')).at(0);
   const latestSpeaking = student.speakingLog.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '') || (b.id || '').localeCompare(a.id || '')).at(0);
   const leadTeacher = focusClass?.teacher || classes[0]?.teacher || 'Teacher not set';
+  const curriculumEvidence = curriculumEvidenceForReport(student.id, classId, report.reportDate);
+  const autoCurriculumComment = curriculumEvidenceSummary(curriculumEvidence);
 
   const autoGrowth = buildParentStory(student)
     .filter(item => ['Foundations', 'General English', 'Reading', 'Listening'].includes(item.skill))
@@ -6115,6 +7579,22 @@ function renderStudentReportPage() {
             <div class="report-section-note">Descriptor-backed summary of current performance by area.</div>
           </div>
           <div class="report-skill-grid">${skillCards}</div>
+        </div>
+
+        <div class="report-divider"></div>
+
+        <div class="report-panel">
+          <div class="report-section-heading">
+            <div class="report-section-name">Curriculum Covered</div>
+            <div class="report-section-note">Lesson outcomes and skills pulled from the master curriculum.</div>
+          </div>
+          <div class="profile-note-text">${esc(report.curriculumComment || autoCurriculumComment)}</div>
+          ${skillChips(curriculumEvidence.skills)}
+          ${curriculumEvidenceHtml(curriculumEvidence)}
+          <div class="form-group form-group-spaced">
+            <label class="form-label">Report Curriculum Comment</label>
+            <textarea id="report-curriculum-comment" class="form-input report-input report-textarea" placeholder="Summarise what was taught and which skills were practiced.">${esc(report.curriculumComment || autoCurriculumComment)}</textarea>
+          </div>
         </div>
 
         <div class="report-divider"></div>
@@ -6250,6 +7730,7 @@ function reportFormData(student) {
     teacherComment: document.getElementById('report-teacher-comment')?.value.trim() || reportCard.teacherComment || '',
     nextSteps: document.getElementById('report-next-steps')?.value.trim() || reportCard.nextSteps || '',
     homeSupport: document.getElementById('report-home-support')?.value.trim() || reportCard.homeSupport || '',
+    curriculumComment: document.getElementById('report-curriculum-comment')?.value.trim() || reportCard.curriculumComment || '',
     speakingComment: document.getElementById('report-speaking-comment')?.value.trim() || reportCard.speakingComment || '',
     attendanceComment: document.getElementById('report-attendance-comment')?.value.trim() || reportCard.attendanceComment || '',
     diagnosticComment: document.getElementById('report-diagnostic-comment')?.value.trim() || reportCard.diagnosticComment || ''
@@ -6280,8 +7761,21 @@ function buildPrintableReportDocument(student, focusClass, reportData) {
   const latestDiagnostic = student.diagnostics.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '')).at(0);
   const latestSpeaking = student.speakingLog.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '') || (b.id || '').localeCompare(a.id || '')).at(0);
   const latestNotes = DB.studentnotes.filter(entry => entry.studentId === student.id).slice().reverse().slice(0, 5);
+  const curriculumEvidence = curriculumEvidenceForReport(student.id, focusClass?.id || '', reportData.reportDate);
+  const curriculumSummary = reportData.curriculumComment || curriculumEvidenceSummary(curriculumEvidence);
   const scoreGuide = scoreGuideRow(reportData.overallLevel);
   const descriptor = skillDescriptor('general', reportData.overallLevel);
+  const printableCurriculumItems = curriculumEvidence.lessons.slice(0, 4).map(lesson => {
+    const metadata = effectiveLessonMetadata(lesson);
+    const unit = DB.subunits.find(item => item.id === lesson.subunitId);
+    return `
+      <div class="print-curriculum-item">
+        <div class="print-mini-label">${esc(lesson.date ? friendlyDate(lesson.date) : 'Lesson')}</div>
+        <div class="print-curriculum-title">${esc(lessonDisplayName(lesson))}</div>
+        <div class="print-micro">${unit ? esc(subunitDisplayName(unit)) : 'Unit not set'}</div>
+        <div class="print-copy"><strong>Outcome:</strong> ${esc(metadata.outcome)}</div>
+      </div>`;
+  }).join('');
 
   const skillsHtml = [
     { key: 'listening', title: 'Listening' },
@@ -6445,6 +7939,41 @@ function buildPrintableReportDocument(student, focusClass, reportData) {
         font-weight:900;
         letter-spacing:-.03em;
       }
+      .print-chip-row {
+        display:flex;
+        flex-wrap:wrap;
+        gap:5px;
+        margin-top:8px;
+      }
+      .print-chip {
+        border:1px solid var(--line);
+        border-radius:999px;
+        padding:4px 7px;
+        font-size:9px;
+        font-weight:800;
+        color:#5d4500;
+        background:#fff8e4;
+        text-transform:uppercase;
+        letter-spacing:.06em;
+      }
+      .print-curriculum-list {
+        display:grid;
+        grid-template-columns:repeat(2, minmax(0,1fr));
+        gap:8px;
+        margin-top:10px;
+      }
+      .print-curriculum-item {
+        border:1px solid var(--line);
+        border-radius:12px;
+        padding:9px;
+        background:#fff;
+      }
+      .print-curriculum-title {
+        margin-top:4px;
+        font-size:12px;
+        line-height:1.3;
+        font-weight:800;
+      }
       .block {
         min-height:34mm;
       }
@@ -6537,6 +8066,20 @@ function buildPrintableReportDocument(student, focusClass, reportData) {
           <div class="section-note">Descriptor-backed current performance</div>
         </div>
         <div class="skills">${skillsHtml}</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-head">
+          <div class="section-name">Curriculum Covered</div>
+          <div class="section-note">Lesson outcomes and skills taught</div>
+        </div>
+        <div class="panel">
+          <div class="copy">${multilineHtml(curriculumSummary, 'No curriculum evidence is available yet.')}</div>
+          <div class="print-chip-row">${curriculumEvidence.skills.map(skill => `<span class="print-chip">${esc(skill)}</span>`).join('')}</div>
+          <div class="print-curriculum-list">${printableCurriculumItems || '<div class="micro">No recent lessons found.</div>'}</div>
+        </div>
       </div>
 
       <div class="divider"></div>
@@ -6677,99 +8220,75 @@ function buildOurWorldCurriculumPayload(cls, master) {
   let currentDate = nextClassDate(cls.start, dayIndexes);
   let lessonSequence = 1;
   const timestamp = Date.now();
+  const masterKey = master.level || master.id.replace(/[^a-z0-9]+/gi, '_');
   const book = {
     id: `u_${timestamp}_${master.id}`,
     classId: cls.id,
     name: `${master.name} Curriculum`,
-    notes: 'Curriculum master: Student Book + Workbook + Grammar Book. Lesson duration: 50 minutes. Frequency: 5 days per week.'
+    notes: 'Curriculum master. Lesson duration: 50 minutes. Frequency follows the class schedule.',
+    program: master.custom ? master.name : 'Our World',
+    programLevel: master.level,
+    curriculumMasterId: master.id,
+    skills: ['Vocabulary', 'Grammar', 'Reading', 'Writing', 'Speaking', 'Listening']
   };
   const subunits = [];
   const lessons = [];
 
   const addLesson = (subunit, lessonNo, template, unitLabel) => {
-    const material = materialLabel(template.sources);
+    const metadata = masterLessonMetadata(master, subunit.number, lessonNo - 1, template);
+    const material = materialLabel(metadata.sources);
     lessons.push({
-      id: `l_${timestamp}_${master.level}_${lessonSequence}`,
+      id: `l_${timestamp}_${masterKey}_${lessonSequence}`,
       subunitId: subunit.id,
       bookId: book.id,
       classId: cls.id,
-      name: `${unitLabel} Lesson ${lessonNo} - ${template.title}`,
+      name: `${unitLabel} Lesson ${lessonNo} - ${metadata.title}`,
       date: currentDate,
       tstart: cls.tstart || '',
-      plan: `${template.title}. Materials: ${material}.`,
+      plan: `${metadata.title}. Materials: ${material}.`,
+      objective: metadata.objective,
+      outcome: metadata.outcome,
+      skills: metadata.skills,
+      tags: [master.name, unitLabel, lessonTypeLabel(metadata.type)],
       pos: `${master.name} · ${unitLabel} · Lesson ${lessonNo}`,
-      lessonType: template.type,
-      materialSource: template.sources,
+      lessonType: metadata.type,
+      materialSource: metadata.sources,
       durationMinutes: 50,
+      curriculumMasterId: master.id,
+      masterUnitNumber: subunit.number,
+      masterLessonNumber: lessonNo,
       sequence: lessonSequence
     });
     lessonSequence += 1;
     currentDate = nextLessonDate(currentDate, dayIndexes);
   };
 
-  const addReviewLesson = (subunit, reviewNumber, title, type) => {
-    const unitLabel = subunit.number ? `Unit ${subunit.number}` : 'Review';
-    lessons.push({
-      id: `l_${timestamp}_${master.level}_${lessonSequence}`,
-      subunitId: subunit.id,
-      bookId: book.id,
-      classId: cls.id,
-      name: title,
-      date: currentDate,
-      tstart: cls.tstart || '',
-      plan: '20 min written test + 30 min review activity. Materials: Assessment.',
-      pos: `${master.name} · After ${unitLabel}`,
-      lessonType: type,
-      materialSource: ['assessment'],
-      durationMinutes: 50,
-      sequence: lessonSequence,
-      reviewNumber
-    });
-    lessonSequence += 1;
-    currentDate = nextLessonDate(currentDate, dayIndexes);
-  };
-
-  if (master.hasUnitZero) {
-    const unitZero = {
-      id: `su_${timestamp}_${master.level}_0`,
-      bookId: book.id,
-      classId: cls.id,
-      number: 0,
-      name: 'Unit 0 - Starter Unit',
-      notes: '5-lesson onboarding unit: greetings, classroom language, core vocabulary, review, and placement confirmation.'
-    };
-    subunits.push(unitZero);
-    OW_UNIT_ZERO_LESSONS.forEach((template, index) => addLesson(unitZero, index + 1, template, 'Unit 0'));
-  }
-
-  for (let unitNumber = 1; unitNumber <= 9; unitNumber += 1) {
+  curriculumMasterOutline(master).forEach(unit => {
+    const metadata = masterUnitMetadata(master, unit.number);
+    const unitLabel = unit.number === 0 ? 'Unit 0' : `Unit ${unit.number}`;
     const subunit = {
-      id: `su_${timestamp}_${master.level}_${unitNumber}`,
+      id: `su_${timestamp}_${masterKey}_${unit.number}`,
       bookId: book.id,
       classId: cls.id,
-      number: unitNumber,
-      name: `Unit ${unitNumber}`,
-      notes: '12-lesson Our World unit sequence with vocabulary, grammar, reading, writing, project, and unit quiz.'
+      number: unit.number,
+      name: metadata.name || unit.name,
+      notes: master.custom ? 'Custom curriculum unit.' : 'Our World unit sequence with vocabulary, grammar, reading, writing, project, and assessment work.',
+      objective: metadata.objective,
+      outcome: metadata.outcome,
+      skills: metadata.skills,
+      tags: metadata.tags,
+      curriculumMasterId: master.id
     };
     subunits.push(subunit);
-    OW_BASE_LESSONS.forEach((template, index) => addLesson(subunit, index + 1, template, `Unit ${unitNumber}`));
-
-    if ([3, 6, 9].includes(unitNumber)) {
-      const reviewNumber = unitNumber / 3;
-      addReviewLesson(
-        subunit,
-        reviewNumber,
-        reviewNumber === 3 ? 'Review Exam 3 + Level Assessment' : `Review Exam ${reviewNumber}`,
-        reviewNumber === 3 ? 'level_assessment' : 'review_exam'
-      );
-    }
-  }
+    unit.lessons.forEach((template, index) => addLesson(subunit, index + 1, template, unitLabel));
+  });
 
   return { book, subunits, lessons };
 }
 
 async function createCurriculumFromMaster(cls, masterId) {
-  const master = curriculumMasterById(masterId);
+  const rawMaster = curriculumMasterById(masterId);
+  const master = rawMaster.id ? { ...rawMaster, name: masterDisplayName(rawMaster) } : rawMaster;
   if (!master.id) return;
   const payload = buildOurWorldCurriculumPayload(cls, master);
   await api('POST', '/api/units', payload.book);
@@ -6825,6 +8344,9 @@ function openSubunitModal(bookId_or_subId, classId) {
   document.getElementById('subunit-number').value  = su ? (su.number || '') : '';
   document.getElementById('subunit-name').value    = su ? su.name : '';
   document.getElementById('subunit-notes').value   = su ? (su.notes || '') : '';
+  document.getElementById('subunit-objective').value = su ? (su.objective || '') : '';
+  document.getElementById('subunit-outcome').value   = su ? (su.outcome || '') : '';
+  document.getElementById('subunit-skills').value    = su ? joinListInput(su.skills || su.tags) : '';
   document.getElementById('modal-subunit').style.display = 'flex';
 }
 
@@ -6838,6 +8360,9 @@ function openLessonModal(subunitId, bookId, classId, existingLessonId) {
   document.getElementById('lesson-name').value     = lesson ? lesson.name : '';
   document.getElementById('lesson-date').value     = lesson ? lesson.date : '';
   document.getElementById('lesson-plan').value     = lesson ? (lesson.plan || '') : '';
+  document.getElementById('lesson-objective').value = lesson ? (lesson.objective || '') : '';
+  document.getElementById('lesson-outcome').value   = lesson ? (lesson.outcome || '') : '';
+  document.getElementById('lesson-skills').value    = lesson ? joinListInput(lesson.skills || lesson.tags) : '';
   document.getElementById('lesson-pos').value      = lesson ? (lesson.pos || '') : '';
   const clsId = lesson ? lesson.classId : classId;
   const cls = DB.classes.find(c => c.id === clsId);
@@ -6932,10 +8457,11 @@ async function saveBook() {
   const classId = document.getElementById('book-classId').value;
   const name    = document.getElementById('book-name').value.trim();
   const notes   = document.getElementById('book-notes').value.trim();
+  const existingBook = existingId ? DB.units.find(u => u.id === existingId) : null;
 
   if (!name) { showToast('Please enter a book name.', 'error'); return; }
 
-  const book = { id: existingId || ('u_' + Date.now()), classId, name, notes };
+  const book = { ...(existingBook || {}), id: existingId || ('u_' + Date.now()), classId, name, notes };
   setBusy('save-book-btn', true);
   try {
     await api('POST', '/api/units', book);
@@ -6955,10 +8481,14 @@ async function saveSubunit() {
   const number  = parsePositiveInt(document.getElementById('subunit-number').value);
   const name    = document.getElementById('subunit-name').value.trim();
   const notes   = document.getElementById('subunit-notes').value.trim();
+  const objective = document.getElementById('subunit-objective').value.trim();
+  const outcome = document.getElementById('subunit-outcome').value.trim();
+  const skills = parseListInput(document.getElementById('subunit-skills').value);
+  const existingSubunit = existingId ? DB.subunits.find(s => s.id === existingId) : null;
 
   if (!name) { showToast('Please enter a unit name.', 'error'); return; }
 
-  const su = { id: existingId || ('su_' + Date.now()), bookId, classId, number, name, notes };
+  const su = { ...(existingSubunit || {}), id: existingId || ('su_' + Date.now()), bookId, classId, number, name, notes, objective, outcome, skills };
   setBusy('save-subunit-btn', true);
   try {
     await api('POST', '/api/subunits', su);
@@ -6980,12 +8510,16 @@ async function saveLesson() {
   const date      = document.getElementById('lesson-date').value;
   const tstart    = document.getElementById('lesson-tstart').value;
   const plan      = document.getElementById('lesson-plan').value.trim();
+  const objective = document.getElementById('lesson-objective').value.trim();
+  const outcome   = document.getElementById('lesson-outcome').value.trim();
+  const skills    = parseListInput(document.getElementById('lesson-skills').value);
   const pos       = document.getElementById('lesson-pos').value.trim();
+  const existingLesson = existingId ? DB.lessons.find(l => l.id === existingId) : null;
 
   if (!name) { showToast('Please enter a lesson title.', 'error'); return; }
   if (!date) { showToast('Please enter a date.', 'error'); return; }
 
-  const lesson = { id: existingId || ('l_' + Date.now()), subunitId, bookId, classId, name, date, tstart, plan, pos };
+  const lesson = { ...(existingLesson || {}), id: existingId || ('l_' + Date.now()), subunitId, bookId, classId, name, date, tstart, plan, objective, outcome, skills, pos };
   setBusy('save-lesson-btn', true);
   try {
     await api('POST', '/api/lessons', lesson);

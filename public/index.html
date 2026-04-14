@@ -4001,6 +4001,15 @@ function friendlyTime(str) {
   return `${h % 12 || 12}:${String(m).padStart(2,'0')}${h >= 12 ? 'pm' : 'am'}`;
 }
 
+function minutesBetweenTimes(start, end) {
+  if (!start || !end) return null;
+  const [startHour, startMinute] = start.split(':').map(Number);
+  const [endHour, endMinute] = end.split(':').map(Number);
+  if (![startHour, startMinute, endHour, endMinute].every(Number.isFinite)) return null;
+  const minutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+  return minutes > 0 ? minutes : null;
+}
+
 function esc(str) {
   if (!str && str !== 0) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -4155,8 +4164,18 @@ function masterLessonOverride(masterId, unitNumber, lessonIndex) {
 }
 
 function masterUnitMetadata(master, unitNumber) {
-  const fallback = unitMetadata(master, unitNumber);
   const override = masterUnitOverride(master.id, unitNumber);
+  if (master.custom) {
+    return {
+      name: Object.prototype.hasOwnProperty.call(override, 'name') ? override.name : '',
+      lessonCount: Number(override.lessonCount) || master.lessonsPerUnit || 1,
+      objective: override.objective || '',
+      outcome: override.outcome || '',
+      skills: Array.isArray(override.skills) ? override.skills : [],
+      tags: Array.isArray(override.tags) ? override.tags : []
+    };
+  }
+  const fallback = unitMetadata(master, unitNumber);
   return {
     ...fallback,
     name: override.name || (unitNumber === 0 ? 'Unit 0 - Starter Unit' : `Unit ${unitNumber}`),
@@ -4169,8 +4188,18 @@ function masterUnitMetadata(master, unitNumber) {
 }
 
 function masterLessonMetadata(master, unitNumber, lessonIndex, template = {}) {
-  const fallback = metadataForLessonType(template.type);
   const override = masterLessonOverride(master.id, unitNumber, lessonIndex);
+  if (master.custom) {
+    return {
+      title: Object.prototype.hasOwnProperty.call(override, 'title') ? override.title : (template.title || ''),
+      type: override.type || template.type || 'lesson',
+      sources: Array.isArray(override.sources) && override.sources.length ? override.sources : (template.sources || []),
+      objective: override.objective || '',
+      outcome: override.outcome || '',
+      skills: Array.isArray(override.skills) ? override.skills : []
+    };
+  }
+  const fallback = metadataForLessonType(template.type);
   return {
     title: override.title || template.title || `Lesson ${lessonIndex + 1}`,
     type: override.type || template.type || 'lesson',
@@ -5108,18 +5137,24 @@ function curriculumMasterOutline(master) {
     const startUnit = master.hasUnitZero ? 0 : 1;
     const endUnit = master.hasUnitZero ? master.unitCount - 1 : master.unitCount;
     for (let unitNumber = startUnit; unitNumber <= endUnit; unitNumber += 1) {
-      const unitLessonCount = masterUnitMetadata(master, unitNumber).lessonCount || master.lessonsPerUnit;
+      const metadata = masterUnitMetadata(master, unitNumber);
+      const unitLessonCount = metadata.lessonCount || master.lessonsPerUnit || 1;
       const lessons = [];
       for (let index = 0; index < unitLessonCount; index += 1) {
         lessons.push({
-          title: `Lesson ${index + 1}`,
+          title: '',
           type: 'lesson',
-          sources: ['student_book']
+          sources: []
         });
       }
-      units.push({ number: unitNumber, name: unitNumber === 0 ? 'Unit 0 - Starter Unit' : `Unit ${unitNumber}`, lessons });
+      units.push({
+        number: unitNumber,
+        name: metadata.name || (unitNumber === 0 ? 'Unit 0' : `Unit ${unitNumber}`),
+        lessons,
+        metadata
+      });
     }
-    return units.map(unit => ({ ...unit, name: masterUnitMetadata(master, unit.number).name, metadata: masterUnitMetadata(master, unit.number) }));
+    return units;
   }
 
   const units = [];
@@ -5177,7 +5212,8 @@ function previewMasterLessonCountFromUnit() {
     const label = index === currentMasterLessonIndex
       ? (document.getElementById('master-lesson-title')?.value.trim() || `Lesson ${index + 1}`)
       : `Lesson ${index + 1}`;
-    return `<option value="${index}"${index === current ? ' selected' : ''}>${esc(`Lesson ${index + 1} - ${label}`)}</option>`;
+    const optionLabel = label === `Lesson ${index + 1}` ? label : `Lesson ${index + 1} - ${label}`;
+    return `<option value="${index}"${index === current ? ' selected' : ''}>${esc(optionLabel)}</option>`;
   }).join('');
   currentMasterLessonIndex = current;
 }
@@ -5228,11 +5264,27 @@ async function createCustomProgram() {
   curriculumMasters[id] = {
     custom: true,
     name: baseName,
-    unitCount: 9,
-    lessonsPerUnit: 12,
+    unitCount: 1,
+    lessonsPerUnit: 1,
     hasUnitZero: false,
-    lessons: 108,
-    units: {}
+    lessons: 1,
+    units: {
+      '1': {
+        name: '',
+        lessonCount: 1,
+        objective: '',
+        outcome: '',
+        skills: [],
+        lessons: {
+          '0': {
+            title: '',
+            objective: '',
+            outcome: '',
+            skills: []
+          }
+        }
+      }
+    }
   };
   try {
     await persistSchoolSettings({ ...currentSettings, curriculumMasters });
@@ -5271,8 +5323,8 @@ async function saveMasterCurriculumEdits() {
   masterEntry.name = programName;
   if (selectedMaster.custom || masterEntry.custom) {
     masterEntry.custom = true;
-    masterEntry.unitCount = parsePositiveInt(document.getElementById('master-unit-count')?.value) || masterEntry.unitCount || 9;
-    masterEntry.lessonsPerUnit = parsePositiveInt(document.getElementById('master-lessons-per-unit')?.value) || masterEntry.lessonsPerUnit || 12;
+    masterEntry.unitCount = parsePositiveInt(document.getElementById('master-unit-count')?.value) || masterEntry.unitCount || 1;
+    masterEntry.lessonsPerUnit = parsePositiveInt(document.getElementById('master-lessons-per-unit')?.value) || masterEntry.lessonsPerUnit || 1;
     masterEntry.hasUnitZero = !!document.getElementById('master-has-unit-zero')?.checked;
   }
   unitEntry.name = document.getElementById('master-unit-name')?.value.trim() || '';
@@ -5342,7 +5394,9 @@ function renderMasterCurriculum() {
   if (currentMasterLessonIndex < 0 || currentMasterLessonIndex >= activeUnit.lessons.length) currentMasterLessonIndex = 0;
   const activeTemplate = activeUnit.lessons[currentMasterLessonIndex] || activeUnit.lessons[0];
   const activeLesson = masterLessonMetadata(master, activeUnit.number, currentMasterLessonIndex, activeTemplate);
-  const unitLabel = master.hasUnitZero ? 'Unit 0 + numbered units' : 'Numbered units';
+  const lessonMetadataCopy = master.custom
+    ? ''
+    : `<div class="metadata-panel-copy">${esc(lessonTypeLabel(activeLesson.type))} · ${esc(materialLabel(activeLesson.sources))}</div>`;
   const customSkills = skillRegistry().filter(skill =>
     !DEFAULT_SKILL_REGISTRY.some(item => item.toLowerCase() === skill.toLowerCase())
   );
@@ -5373,7 +5427,8 @@ function renderMasterCurriculum() {
             <select id="master-lesson-select" class="form-input" onchange="selectMasterLesson(this.value)">
               ${activeUnit.lessons.map((lesson, index) => {
                 const metadata = masterLessonMetadata(master, activeUnit.number, index, lesson);
-                return `<option value="${index}"${index === currentMasterLessonIndex ? ' selected' : ''}>${esc(`Lesson ${index + 1} - ${metadata.title}`)}</option>`;
+                const lessonLabel = metadata.title ? `Lesson ${index + 1} - ${metadata.title}` : `Lesson ${index + 1}`;
+                return `<option value="${index}"${index === currentMasterLessonIndex ? ' selected' : ''}>${esc(lessonLabel)}</option>`;
               }).join('')}
             </select>
           </div>
@@ -5391,7 +5446,6 @@ function renderMasterCurriculum() {
         <div class="master-side-column">
           <section class="metadata-panel">
             <div class="metadata-panel-title">Program</div>
-            <div class="metadata-panel-copy">${master.lessons} lessons · ${unitLabel} · 50 min</div>
             <div class="form-group form-group-spaced">
               <label class="form-label">Program Name</label>
               <input id="master-program-name" class="form-input" value="${esc(master.name)}">
@@ -5400,11 +5454,11 @@ function renderMasterCurriculum() {
               <div class="form-row">
                 <div class="form-group">
                   <label class="form-label">Units</label>
-                  <input id="master-unit-count" type="number" min="1" step="1" class="form-input" value="${esc(master.unitCount || 9)}">
+                  <input id="master-unit-count" type="number" min="1" step="1" class="form-input" value="${esc(master.unitCount || 1)}">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Default Lesson Count</label>
-                  <input id="master-lessons-per-unit" type="number" min="1" step="1" class="form-input" value="${esc(master.lessonsPerUnit || 12)}" oninput="syncDefaultLessonCountToUnit()">
+                  <input id="master-lessons-per-unit" type="number" min="1" step="1" class="form-input" value="${esc(master.lessonsPerUnit || 1)}" oninput="syncDefaultLessonCountToUnit()">
                   <div class="log-student-help">Fallback for units without their own count.</div>
                 </div>
               </div>
@@ -5472,7 +5526,7 @@ function renderMasterCurriculum() {
 
           <section class="metadata-panel">
             <div class="metadata-panel-title">Lesson Metadata</div>
-            <div class="metadata-panel-copy">${esc(lessonTypeLabel(activeLesson.type))} · ${esc(materialLabel(activeLesson.sources))}</div>
+            ${lessonMetadataCopy}
             <div class="form-group form-group-spaced">
               <label class="form-label">Lesson Title</label>
               <input id="master-lesson-title" class="form-input" value="${esc(activeLesson.title)}">
@@ -8225,7 +8279,7 @@ function buildOurWorldCurriculumPayload(cls, master) {
     id: `u_${timestamp}_${master.id}`,
     classId: cls.id,
     name: `${master.name} Curriculum`,
-    notes: 'Curriculum master. Lesson duration: 50 minutes. Frequency follows the class schedule.',
+    notes: 'Curriculum master. Timing follows the class schedule.',
     program: master.custom ? master.name : 'Our World',
     programLevel: master.level,
     curriculumMasterId: master.id,
@@ -8233,19 +8287,22 @@ function buildOurWorldCurriculumPayload(cls, master) {
   };
   const subunits = [];
   const lessons = [];
+  const classDurationMinutes = minutesBetweenTimes(cls.tstart, cls.tend);
 
   const addLesson = (subunit, lessonNo, template, unitLabel) => {
     const metadata = masterLessonMetadata(master, subunit.number, lessonNo - 1, template);
     const material = materialLabel(metadata.sources);
+    const lessonName = `${unitLabel} Lesson ${lessonNo}${metadata.title ? ` - ${metadata.title}` : ''}`;
+    const planParts = [metadata.title, material ? `Materials: ${material}` : ''].filter(Boolean);
     lessons.push({
       id: `l_${timestamp}_${masterKey}_${lessonSequence}`,
       subunitId: subunit.id,
       bookId: book.id,
       classId: cls.id,
-      name: `${unitLabel} Lesson ${lessonNo} - ${metadata.title}`,
+      name: lessonName,
       date: currentDate,
       tstart: cls.tstart || '',
-      plan: `${metadata.title}. Materials: ${material}.`,
+      plan: planParts.join('. '),
       objective: metadata.objective,
       outcome: metadata.outcome,
       skills: metadata.skills,
@@ -8253,7 +8310,7 @@ function buildOurWorldCurriculumPayload(cls, master) {
       pos: `${master.name} · ${unitLabel} · Lesson ${lessonNo}`,
       lessonType: metadata.type,
       materialSource: metadata.sources,
-      durationMinutes: 50,
+      durationMinutes: classDurationMinutes || undefined,
       curriculumMasterId: master.id,
       masterUnitNumber: subunit.number,
       masterLessonNumber: lessonNo,

@@ -3330,6 +3330,126 @@
       min-width: 0;
     }
 
+    .unit-focus-stack {
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .unit-progress-shell {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.68);
+      border: 1px solid rgba(148,163,184,0.14);
+      min-width: 0;
+    }
+
+    .unit-progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .unit-progress-bar {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(150px, 1fr);
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      min-width: 0;
+    }
+
+    .unit-progress-step {
+      display: grid;
+      gap: 5px;
+      border: 1px solid rgba(148,163,184,0.14);
+      border-radius: 14px;
+      padding: 10px;
+      min-height: 96px;
+      background: rgba(248,250,252,0.78);
+      text-align: left;
+      cursor: pointer;
+      min-width: 0;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .unit-progress-step:hover,
+    .unit-progress-step.active {
+      background: #fff;
+      border-color: rgba(20,184,166,0.34);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(39,48,94,0.08);
+    }
+
+    .unit-progress-index {
+      color: #4f46e5;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .unit-progress-title {
+      color: #111827;
+      font-weight: 900;
+      line-height: 1.16;
+      overflow-wrap: anywhere;
+    }
+
+    .unit-progress-meta {
+      color: #667085;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .unit-progress-track {
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.16);
+      overflow: hidden;
+      margin-top: 2px;
+    }
+
+    .unit-progress-track span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: #14b8a6;
+    }
+
+    .unit-focus-layout {
+      display: grid;
+      grid-template-columns: minmax(360px, 0.58fr) minmax(260px, 0.42fr);
+      gap: 16px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .unit-info-panel {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(148,163,184,0.16);
+      min-width: 0;
+    }
+
+    .unit-info-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .unit-info-block {
+      margin-top: 14px;
+      color: #344054;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
     .curriculum-workbench {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(360px, 0.38fr);
@@ -3612,6 +3732,7 @@
       .class-workspace-hero,
       .class-overview-grid,
       .program-curriculum-layout,
+      .unit-focus-layout,
       .curriculum-workbench,
       .school-account-grid {
         grid-template-columns: 1fr;
@@ -6932,6 +7053,7 @@ function renderClassCurriculumPanel(cls) {
     currentClassWorkspace.unitId = firstUnit ? firstUnit.id : null;
     currentClassWorkspace.lessonId = null;
   }
+  const selectedUnit = units.find(unit => unit.id === currentClassWorkspace.unitId);
 
   return `
     <section class="workspace-panel">
@@ -6950,11 +7072,12 @@ function renderClassCurriculumPanel(cls) {
         </aside>
         <div class="program-detail-panel">
           ${activeProgram ? renderProgramDetailHeader(activeProgram, cls) : ''}
-          ${units.length ? `<div class="curriculum-workbench">
-            <div class="unit-grid">
-              ${units.map(unit => renderCurriculumUnitCard(unit)).join('')}
+          ${units.length ? `<div class="unit-focus-stack">
+            ${renderUnitProgressBar(units)}
+            <div class="unit-focus-layout">
+              ${renderLessonDrawer(cls)}
+              ${selectedUnit ? renderSelectedUnitInfoPanel(selectedUnit) : ''}
             </div>
-            ${renderLessonDrawer(cls)}
           </div>` : `<div class="empty-state-section" style="text-align:center;display:grid;justify-items:center;gap:14px;">
             <div>No units in this program yet.</div>
             ${activeBookId ? `<button class="btn btn-primary" onclick="openSubunitModal('${activeBookId}','${cls.id}')">Add Unit</button>` : ''}
@@ -7011,6 +7134,57 @@ function renderProgramDetailHeader(item, cls) {
       <button class="btn" onclick="openBookModal('${book.id}')">Edit Program</button>
     </div>
   </div>`;
+}
+
+function renderUnitProgressBar(units) {
+  return `<div class="unit-progress-shell">
+    <div class="unit-progress-head">
+      <div>
+        <div class="workspace-mini-label">Unit path</div>
+        <div class="compact-meta">Choose a unit to open its lessons.</div>
+      </div>
+    </div>
+    <div class="unit-progress-bar">
+      ${units.map((unit, index) => renderUnitProgressStep(unit, index)).join('')}
+    </div>
+  </div>`;
+}
+
+function renderUnitProgressStep(unit, index) {
+  const lessons = sortUnitLessons(DB.lessons.filter(lesson => lesson.subunitId === unit.id));
+  const summary = completionSummary(lessons);
+  const range = subunitDateRange(unit.id);
+  const isActive = currentClassWorkspace.unitId === unit.id;
+  const doneCount = lessons.filter(lesson => logForLesson(lesson.id)).length;
+  const title = unit.number === 0 ? 'Unit 0' : unit.number ? `Unit ${unit.number}` : `Unit ${index + 1}`;
+  return `<button class="unit-progress-step${isActive ? ' active' : ''}" onclick="selectCurriculumUnit('${unit.id}')">
+    <span class="unit-progress-index">${esc(title)}</span>
+    <span class="unit-progress-title">${esc(unit.name || subunitDisplayName(unit))}</span>
+    <span class="unit-progress-meta">${doneCount}/${lessons.length} logged${range.start ? ` · ${friendlyDate(range.start)}` : ''}</span>
+    <span class="unit-progress-track"><span style="width:${summary.percent}%"></span></span>
+  </button>`;
+}
+
+function renderSelectedUnitInfoPanel(unit) {
+  const lessons = sortUnitLessons(DB.lessons.filter(lesson => lesson.subunitId === unit.id));
+  const summary = completionSummary(lessons);
+  const range = subunitDateRange(unit.id);
+  const metadata = effectiveUnitMetadata(unit);
+  return `<aside class="unit-info-panel">
+    <div class="unit-info-head">
+      <div>
+        <div class="workspace-mini-label">${esc(unit.number === 0 ? 'Unit 0' : unit.number ? `Unit ${unit.number}` : 'Unit')}</div>
+        <div class="workspace-section-title">${esc(unit.name || subunitDisplayName(unit))}</div>
+      </div>
+      ${statusBadge(summary)}
+    </div>
+    <div class="compact-meta">${range.start ? `${friendlyDate(range.start)} to ${friendlyDate(range.end)}` : 'No dates yet'} · ${lessons.length} lessons</div>
+    ${metadata.objective ? `<div class="unit-info-block"><div class="lesson-drawer-label">Objective</div><div>${esc(metadata.objective)}</div></div>` : ''}
+    ${metadata.outcome ? `<div class="unit-info-block"><div class="lesson-drawer-label">Outcome</div><div>${esc(metadata.outcome)}</div></div>` : ''}
+    ${skillChips(metadata.skills)}
+    ${progressMarkup(summary, 'lessons')}
+    <div class="material-chip-row">${unitMaterialSources(lessons).map(source => `<span class="material-chip">${esc(materialLabel([source]))}</span>`).join('')}</div>
+  </aside>`;
 }
 
 function renderCurriculumUnitCard(unit) {

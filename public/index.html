@@ -473,6 +473,10 @@
       border: 1px solid var(--border);
     }
 
+    .modal-card-wide {
+      max-width: 620px;
+    }
+
     .modal-title {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.2rem;
@@ -3434,6 +3438,31 @@
   </div>
 </div>
 
+<!-- ═══ Modal: Custom Program ═══ -->
+<div id="modal-custom-program" class="modal-backdrop" style="display:none;">
+  <div class="modal-card modal-card-wide">
+    <div class="modal-title" id="custom-program-modal-title">New Program</div>
+    <input type="hidden" id="custom-program-id">
+    <div class="form-group">
+      <label class="form-label">Program Name</label>
+      <input type="text" id="custom-program-name" class="form-input" placeholder="e.g. New Program">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Unit Count</label>
+      <input type="number" id="custom-program-unit-count" class="form-input" min="1" step="1" value="1" oninput="renderCustomProgramModalUnits()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Lessons Per Unit</label>
+      <div class="metadata-panel-copy">Set the structure now. You can edit objectives, outcomes, titles, and skills after creating the program.</div>
+      <div id="custom-program-unit-plan" class="unit-plan-list mt-10"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-custom-program')">Cancel</button>
+      <button class="btn btn-primary" id="save-custom-program-btn" onclick="saveCustomProgramFromModal()">Create Program</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ Modal: New Class ═══ -->
 <div id="modal-class" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
@@ -5244,18 +5273,8 @@ function previewMasterLessonCountFromUnit() {
   currentMasterLessonIndex = current;
 }
 
-function customUnitNumbersFromControls() {
-  const unitCount = parsePositiveInt(document.getElementById('master-unit-count')?.value) || 1;
-  const hasUnitZero = !!document.getElementById('master-has-unit-zero')?.checked;
-  const startUnit = hasUnitZero ? 0 : 1;
-  const endUnit = hasUnitZero ? unitCount - 1 : unitCount;
-  const units = [];
-  for (let unitNumber = startUnit; unitNumber <= endUnit; unitNumber += 1) units.push(unitNumber);
-  return units;
-}
-
-function renderCustomUnitPlanRows(master, units = null) {
-  const rowValues = new Map(Array.from(document.querySelectorAll('.master-unit-plan-count')).map(input => [
+function renderCustomUnitPlanRows(master, units = null, inputClass = 'master-unit-plan-count') {
+  const rowValues = new Map(Array.from(document.querySelectorAll(`.${inputClass}`)).map(input => [
     String(input.dataset.unitNumber),
     input.value
   ]));
@@ -5267,25 +5286,30 @@ function renderCustomUnitPlanRows(master, units = null) {
     return `
       <div class="unit-plan-row">
         <div class="unit-plan-name">${esc(label)}</div>
-        <input class="form-input master-unit-plan-count" type="number" min="1" step="1" data-unit-number="${esc(unitNumber)}" value="${esc(lessonCount)}" oninput="syncActiveUnitLessonCountFromPlan()">
+        <input class="form-input ${esc(inputClass)}" type="number" min="1" step="1" data-unit-number="${esc(unitNumber)}" value="${esc(lessonCount)}">
       </div>`;
   }).join('');
 }
 
-function previewMasterUnitPlan() {
-  const container = document.getElementById('master-unit-plan');
-  if (!container) return;
-  const master = curriculumMasterById(document.getElementById('master-program-select')?.value || currentMasterCurriculumId);
-  container.innerHTML = renderCustomUnitPlanRows(master, customUnitNumbersFromControls());
-  syncActiveUnitLessonCountFromPlan();
+function customProgramModalUnitNumbers() {
+  const unitCount = parsePositiveInt(document.getElementById('custom-program-unit-count')?.value) || 1;
+  return Array.from({ length: unitCount }, (_, index) => index + 1);
 }
 
-function syncActiveUnitLessonCountFromPlan() {
-  const unitInput = document.getElementById('master-unit-lesson-count');
-  const activeRow = document.querySelector(`.master-unit-plan-count[data-unit-number="${currentMasterUnitNumber}"]`);
-  if (!unitInput || !activeRow) return;
-  unitInput.value = activeRow.value || '1';
-  previewMasterLessonCountFromUnit();
+function renderCustomProgramModalUnits() {
+  const container = document.getElementById('custom-program-unit-plan');
+  if (!container) return;
+  const masterId = document.getElementById('custom-program-id')?.value || '';
+  const master = masterId ? curriculumMasterById(masterId) : {
+    id: '',
+    custom: true,
+    name: document.getElementById('custom-program-name')?.value.trim() || 'New Program',
+    unitCount: parsePositiveInt(document.getElementById('custom-program-unit-count')?.value) || 1,
+    lessonsPerUnit: 1,
+    hasUnitZero: false,
+    units: {}
+  };
+  container.innerHTML = renderCustomUnitPlanRows(master, customProgramModalUnitNumbers(), 'custom-program-unit-count-input');
 }
 
 async function deleteCustomProgram() {
@@ -5309,51 +5333,83 @@ async function deleteCustomProgram() {
   }
 }
 
-async function createCustomProgram() {
+function openCustomProgramModal(masterId = '') {
+  const master = masterId ? curriculumMasterById(masterId) : null;
+  const isEdit = !!(master && master.custom);
+  document.getElementById('custom-program-modal-title').textContent = isEdit ? 'Edit Program Structure' : 'New Program';
+  document.getElementById('custom-program-id').value = isEdit ? master.id : '';
+  document.getElementById('custom-program-name').value = isEdit ? masterDisplayName(master) : 'New Program';
+  document.getElementById('custom-program-unit-count').value = isEdit ? (master.unitCount || 1) : 1;
+  document.getElementById('save-custom-program-btn').textContent = isEdit ? 'Save Structure' : 'Create Program';
+  renderCustomProgramModalUnits();
+  document.getElementById('modal-custom-program').style.display = 'flex';
+}
+
+async function saveCustomProgramFromModal() {
   const currentSettings = normalizeSchoolSettings(DB.schoolSettings);
   const curriculumMasters = { ...(currentSettings.curriculumMasters || {}) };
-  const baseName = 'New Program';
+  const existingId = document.getElementById('custom-program-id')?.value || '';
+  const existingEntry = existingId ? (curriculumMasters[existingId] || {}) : {};
+  const baseName = document.getElementById('custom-program-name')?.value.trim() || 'New Program';
+  const unitCount = parsePositiveInt(document.getElementById('custom-program-unit-count')?.value) || 1;
   let suffix = Object.keys(curriculumMasters).length + 1;
-  let id = `custom_program_${Date.now()}`;
+  let id = existingId || `custom_program_${Date.now()}`;
   while (curriculumMasters[id]) {
+    if (existingId) break;
     suffix += 1;
     id = `custom_program_${Date.now()}_${suffix}`;
   }
-  curriculumMasters[id] = {
-    custom: true,
-    name: baseName,
-    unitCount: 1,
-    lessonsPerUnit: 1,
-    hasUnitZero: false,
-    lessons: 1,
-    units: {
-      '1': {
-        name: '',
-        lessonCount: 1,
+  const units = {};
+  let lessonTotal = 0;
+  document.querySelectorAll('.custom-program-unit-count-input').forEach(input => {
+    const unitKey = String(input.dataset.unitNumber);
+    const lessonCount = parsePositiveInt(input.value) || 1;
+    const previousUnit = existingEntry.units?.[unitKey] || {};
+    const previousLessons = previousUnit.lessons || {};
+    const lessons = {};
+    for (let index = 0; index < lessonCount; index += 1) {
+      lessons[String(index)] = previousLessons[String(index)] || {
+        title: '',
         objective: '',
         outcome: '',
-        skills: [],
-        lessons: {
-          '0': {
-            title: '',
-            objective: '',
-            outcome: '',
-            skills: []
-          }
-        }
-      }
+        skills: []
+      };
     }
+    units[unitKey] = {
+      ...previousUnit,
+      name: previousUnit.name || '',
+      objective: previousUnit.objective || '',
+      outcome: previousUnit.outcome || '',
+      skills: Array.isArray(previousUnit.skills) ? previousUnit.skills : [],
+      lessonCount,
+      lessons
+    };
+    lessonTotal += lessonCount;
+  });
+  curriculumMasters[id] = {
+    ...existingEntry,
+    custom: true,
+    name: baseName,
+    unitCount,
+    lessonsPerUnit: 1,
+    hasUnitZero: false,
+    lessons: lessonTotal,
+    units
   };
+  setBusy('save-custom-program-btn', true);
   try {
     await persistSchoolSettings({ ...currentSettings, curriculumMasters });
     currentMasterCurriculumId = id;
     currentMasterUnitNumber = 1;
     currentMasterLessonIndex = 0;
+    closeModal('modal-custom-program');
     renderMasterCurriculum();
     populateCurriculumOptions(id);
-    showToast('New program created. Rename it and set the unit/lesson counts.', 'success');
+    showToast(existingId ? 'Program structure saved.' : 'Program created.', 'success');
   } catch (e) {
-    showToast('Failed to create program.', 'error');
+    showToast(existingId ? 'Failed to save program structure.' : 'Failed to create program.', 'error');
+  } finally {
+    setBusy('save-custom-program-btn', false);
   }
 }
 
@@ -5510,7 +5566,7 @@ function renderMasterCurriculum() {
           </div>
         </div>
         <div class="page-actions">
-          <button class="btn" onclick="createCustomProgram()">+ New Program</button>
+          <button class="btn" onclick="openCustomProgramModal()">+ New Program</button>
           ${master.custom ? `<button class="btn btn-danger" onclick="deleteCustomProgram()">Delete Program</button>` : ''}
         </div>
       </div>
@@ -5524,22 +5580,11 @@ function renderMasterCurriculum() {
               <input id="master-program-name" class="form-input" value="${esc(master.name)}">
             </div>
             ${master.custom ? `
-              <div class="form-group">
-                <label class="form-label">Units</label>
-                <input id="master-unit-count" type="number" min="1" step="1" class="form-input" value="${esc(master.unitCount || 1)}" oninput="previewMasterUnitPlan()">
-              </div>
-              <label class="toggle-row">
-                <input type="checkbox" id="master-has-unit-zero"${master.hasUnitZero ? ' checked' : ''} onchange="previewMasterUnitPlan()">
-                <span>Include Unit 0 starter unit</span>
-              </label>
+              <input id="master-unit-count" type="hidden" value="${esc(master.unitCount || 1)}">
               <input id="master-lessons-per-unit" type="hidden" value="${esc(master.lessonsPerUnit || 1)}">
-              <div class="form-group form-group-spaced">
-                <label class="form-label">Unit Lesson Plan</label>
-                <div class="metadata-panel-copy">Set each unit's lesson count here. Save to refresh the Unit and Lesson dropdowns.</div>
-                <div id="master-unit-plan" class="unit-plan-list">
-                  ${renderCustomUnitPlanRows(master)}
-                </div>
-              </div>
+              <input id="master-has-unit-zero" type="checkbox" class="hidden-input"${master.hasUnitZero ? ' checked' : ''}>
+              <div class="metadata-panel-copy">${esc(master.unitCount || 1)} unit${(master.unitCount || 1) === 1 ? '' : 's'} · ${esc(master.lessons || 0)} lesson${(master.lessons || 0) === 1 ? '' : 's'}</div>
+              <button class="btn mt-10" type="button" onclick="openCustomProgramModal('${esc(master.id)}')">Edit Units and Lessons</button>
             ` : `
               <input id="master-unit-count" type="hidden" value="${esc(master.hasUnitZero ? 10 : 9)}">
               <input id="master-lessons-per-unit" type="hidden" value="${esc(master.hasUnitZero ? 12 : 12)}">

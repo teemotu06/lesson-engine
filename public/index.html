@@ -1205,6 +1205,135 @@
     .lesson-dot.today    { background: var(--accent); }
     .lesson-dot.upcoming { background: var(--dim); }
 
+    /* ── People sub-tabs ── */
+    .people-subtabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 22px;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(148,163,184,0.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.78);
+      border-radius: 20px;
+      padding: 5px;
+      width: fit-content;
+    }
+
+    .people-subtab {
+      border: 0;
+      border-radius: 15px;
+      padding: 9px 18px;
+      background: transparent;
+      color: #667085;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .people-subtab.active {
+      color: #101828;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 10px 24px rgba(39,48,94,0.08);
+    }
+
+    /* ── Teacher directory ── */
+    .teacher-directory {
+      display: grid;
+      gap: 14px;
+    }
+
+    .teacher-directory-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 20px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.82);
+      border-radius: 24px;
+      box-shadow: 0 16px 30px rgba(134, 148, 169, 0.12);
+      min-width: 0;
+    }
+
+    .teacher-identity {
+      min-width: 0;
+    }
+
+    .teacher-primary {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.12rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #111827;
+    }
+
+    .teacher-secondary {
+      margin-top: 4px;
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+    }
+
+    .teacher-assigned {
+      margin-top: 8px;
+      color: var(--ink-muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .teacher-directory-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 14px;
+      min-width: 0;
+    }
+
+    .teacher-directory-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    /* ── Teacher modal sections ── */
+    .modal-section-head {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 18px 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .day-checkbox-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .day-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-str);
+      background: var(--bg-input);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background 150ms, border-color 150ms;
+    }
+
+    .day-checkbox-label input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 14px;
+      height: 14px;
+    }
+
     /* ── Students ── */
     .student-row {
       display: flex;
@@ -2148,6 +2277,114 @@
       color: #067647;
     }
 
+    .availability-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.55fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .availability-list,
+    .unplaced-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .availability-row {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1.1fr) minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.16);
+      background: rgba(255,255,255,0.76);
+      cursor: pointer;
+      transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .availability-row:hover,
+    .availability-row.active {
+      border-color: rgba(94,107,255,0.36);
+      box-shadow: 0 14px 28px rgba(39,48,94,0.10);
+      transform: translateY(-1px);
+    }
+
+    .availability-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.12);
+    }
+
+    .availability-dot.warn {
+      background: #f59e0b;
+      box-shadow: 0 0 0 4px rgba(245,158,11,0.14);
+    }
+
+    .availability-dot.danger {
+      background: #ef4444;
+      box-shadow: 0 0 0 4px rgba(239,68,68,0.14);
+    }
+
+    .availability-main,
+    .availability-meta {
+      min-width: 0;
+    }
+
+    .availability-title {
+      color: #111827;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .availability-subtitle,
+    .availability-meta {
+      margin-top: 4px;
+      color: #667085;
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+
+    .capacity-meter {
+      width: 140px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .capacity-track {
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.22);
+      overflow: hidden;
+    }
+
+    .capacity-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: #22c55e;
+    }
+
+    .capacity-fill.warn { background: #f59e0b; }
+    .capacity-fill.danger { background: #ef4444; }
+
+    .unplaced-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(148,163,184,0.14);
+    }
+
+    .unplaced-name {
+      color: #111827;
+      font-weight: 800;
+    }
+
     .ops-empty {
       padding: 14px;
       border-radius: 18px;
@@ -2422,6 +2659,12 @@
       border-color: rgba(94,107,255,0.42);
       color: var(--blue-deep);
       box-shadow: 0 10px 18px rgba(94,107,255,0.14);
+    }
+
+    .class-chip.disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .setup-flow {
@@ -3240,7 +3483,8 @@
       .workspace-header,
       .dashboard-hero,
       .activity-layout,
-      .ops-grid {
+      .ops-grid,
+      .availability-grid {
         grid-template-columns: 1fr;
       }
 
@@ -3269,12 +3513,23 @@
         position: static;
       }
 
-      .student-directory-card {
+      .student-directory-card,
+      .teacher-directory-card {
         grid-template-columns: 1fr;
       }
 
-      .student-directory-actions {
+      .student-directory-actions,
+      .teacher-directory-actions {
         justify-content: flex-start;
+      }
+
+      .availability-row {
+        grid-template-columns: 12px minmax(0, 1fr);
+      }
+
+      .capacity-meter {
+        width: 100%;
+        grid-column: 2;
       }
 
       .shell-sidebar {
@@ -3534,12 +3789,15 @@
         </div>
         <div class="form-group">
           <label class="form-label">Teacher</label>
-          <input type="text" id="cls-teacher" class="form-input" list="teacher-options" placeholder="Leave blank if unassigned">
-          <datalist id="teacher-options"></datalist>
+          <select id="cls-teacher" class="form-input"></select>
         </div>
         <div class="form-group">
           <label class="form-label">Room</label>
           <input type="text" id="cls-room" class="form-input" placeholder="e.g. Room 3">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Students</label>
+          <input type="number" id="cls-max-students" class="form-input" min="1" step="1" placeholder="Leave blank for no limit">
         </div>
       </div>
 
@@ -3601,12 +3859,26 @@
     <input type="hidden" id="book-id">
     <input type="hidden" id="book-classId">
     <div class="form-group">
+      <label class="form-label">Master Curriculum</label>
+      <select id="book-curriculum-master" class="form-input" onchange="onBookCurriculumChange()"></select>
+    </div>
+    <div class="form-group">
       <label class="form-label">Book Name</label>
       <input type="text" id="book-name" class="form-input" placeholder="e.g. Super Phonics Book 4">
     </div>
     <div class="form-group">
       <label class="form-label">Notes / Focus</label>
       <textarea id="book-notes" class="form-input" placeholder="e.g. Main phonics book for this term"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Duration Minutes</label>
+        <input type="number" id="book-duration-minutes" class="form-input" min="0" step="1" placeholder="e.g. 35">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Break After Minutes</label>
+        <input type="number" id="book-break-after-minutes" class="form-input" min="0" step="1" placeholder="Optional">
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeModal('modal-book')">Cancel</button>
@@ -3763,13 +4035,92 @@
   </div>
 </div>
 
+<!-- ═══ Modal: Teacher ═══ -->
+<div id="modal-teacher" class="modal-backdrop" style="display:none;">
+  <div class="modal-card modal-card-wide">
+    <div class="modal-title" id="modal-teacher-title">Register Teacher</div>
+    <input type="hidden" id="teacher-id">
+    <div class="modal-section-head">Teacher Details</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Name <span style="color:var(--red)">*</span></label>
+        <input type="text" id="teacher-name" class="form-input" placeholder="e.g. Kim Minji or 김민지">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date of Birth</label>
+        <input type="date" id="teacher-dob" class="form-input">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="teacher-email" class="form-input" placeholder="e.g. teacher@school.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input type="text" id="teacher-phone" class="form-input" placeholder="e.g. 010-1234-5678">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Subject Specialisation</label>
+        <input type="text" id="teacher-specialisation" class="form-input" placeholder="e.g. Phonics, CEFR B1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Employment Type</label>
+        <select id="teacher-employment-type" class="form-input">
+          <option value="">— Select —</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Contractor">Contractor</option>
+          <option value="Substitute">Substitute</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Start Date</label>
+      <input type="date" id="teacher-start-date" class="form-input">
+    </div>
+    <div class="modal-section-head">Availability</div>
+    <div class="form-group">
+      <label class="form-label">Working Days</label>
+      <div class="day-checkbox-row" id="teacher-days">
+        <label class="day-checkbox-label"><input type="checkbox" value="Mon"> Mon</label>
+        <label class="day-checkbox-label"><input type="checkbox" value="Tue"> Tue</label>
+        <label class="day-checkbox-label"><input type="checkbox" value="Wed"> Wed</label>
+        <label class="day-checkbox-label"><input type="checkbox" value="Thu"> Thu</label>
+        <label class="day-checkbox-label"><input type="checkbox" value="Fri"> Fri</label>
+        <label class="day-checkbox-label"><input type="checkbox" value="Sat"> Sat</label>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Available From</label>
+        <input type="time" id="teacher-hours-start" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Available Until</label>
+        <input type="time" id="teacher-hours-end" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Max Classes / Day</label>
+        <input type="number" id="teacher-max-classes" class="form-input" min="1" max="20" placeholder="e.g. 6">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-teacher')">Cancel</button>
+      <button class="btn btn-primary" id="save-teacher-btn" onclick="saveTeacher()">Save</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast-shelf" class="toast-shelf"></div>
 
 <script>
 // ════════════════════════════════════════════════════
 // STATE
 // ════════════════════════════════════════════════════
-let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [], schoolSettings: { id: 'school', schoolName: '', holidays: [] } };
+let DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [], schoolSettings: { id: 'school', schoolName: '', holidays: [] }, teachers: [] };
 let expandedClasses  = {};
 let expandedBooks    = {};   // keyed by unit/book ID
 let expandedSubunits = {};   // keyed by subunit ID
@@ -3782,6 +4133,9 @@ let currentMasterUnitNumber = null;
 let currentMasterLessonIndex = 0;
 let currentStudentProfile = { studentId: null, classId: null };
 let currentStudentReport = { studentId: null, classId: null };
+let currentPeopleTab = 'students';
+let currentScheduleTab = 'availability';
+let selectedAvailabilityClassId = '';
 const LEVEL_OPTIONS = ['Pre-CEFR', 'Pre-A1', 'A1.1', 'A1.2', 'A1.3', 'A2.1', 'A2.2', 'A2.3', 'B1.1', 'B1.2', 'B1.3', 'B2.1', 'B2.2', 'B2.3', 'C1'];
 const REPORT_LEVEL_OPTIONS = LEVEL_OPTIONS.filter(level => level !== 'Pre-CEFR');
 const OW_BASE_LESSONS = [
@@ -4020,7 +4374,7 @@ async function api(method, path, body) {
 }
 
 async function loadData() {
-  const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances, schoolSettings] = await Promise.all([
+  const [classes, units, subunits, lessons, logs, students, enrollments, studentnotes, attendances, schoolSettings, teachers] = await Promise.all([
     api('GET', '/api/classes'),
     api('GET', '/api/units'),
     api('GET', '/api/subunits'),
@@ -4031,6 +4385,7 @@ async function loadData() {
     api('GET', '/api/studentnotes'),
     api('GET', '/api/attendances'),
     api('GET', '/api/school-settings').catch(() => ({ id: 'school', schoolName: '', holidays: [] })),
+    api('GET', '/api/teachers').catch(() => []),
   ]);
   DB = {
     classes:      classes      || [],
@@ -4042,7 +4397,8 @@ async function loadData() {
     enrollments:  enrollments  || [],
     studentnotes: studentnotes || [],
     attendances:  attendances  || [],
-    schoolSettings: normalizeSchoolSettings(schoolSettings)
+    schoolSettings: normalizeSchoolSettings(schoolSettings),
+    teachers:     teachers     || [],
   };
 }
 
@@ -4492,17 +4848,21 @@ function teacherBadge(teacher) {
 }
 
 function uniqueTeacherNames(extra = []) {
+  const registeredNames = (DB.teachers || []).map(t => (t.name || '').trim()).filter(Boolean);
   return [...new Set(
-    ['Tani', 'Alba', ...DB.classes.map(cls => cls.teacher).filter(Boolean), ...extra.filter(Boolean)]
+    ['Tani', 'Alba', ...registeredNames, ...DB.classes.map(cls => cls.teacher).filter(Boolean), ...extra.filter(Boolean)]
       .map(name => String(name).trim())
       .filter(Boolean)
   )].sort((a, b) => a.localeCompare(b));
 }
 
 function refreshTeacherOptions(extra = []) {
-  const el = document.getElementById('teacher-options');
-  if (!el) return;
-  el.innerHTML = uniqueTeacherNames(extra).map(name => `<option value="${esc(name)}"></option>`).join('');
+  // Re-populate the class modal teacher select if it is currently open
+  const modal = document.getElementById('modal-class');
+  if (modal && modal.style.display !== 'none') {
+    const currentVal = (document.getElementById('cls-teacher')?.value || '').trim();
+    populateTeacherSelect(currentVal);
+  }
 }
 
 function uniqueStudentNames(extra = []) {
@@ -4543,6 +4903,49 @@ function studentsForClass(classId) {
 
 function enrollmentForStudentInClass(studentId, classId) {
   return DB.enrollments.find(enrollment => enrollment.studentId === studentId && enrollment.classId === classId) || null;
+}
+
+function classMaxStudents(cls) {
+  return parsePositiveInt(cls?.maxStudents);
+}
+
+function classCapacityInfo(cls) {
+  const enrolled = studentsForClass(cls.id).length;
+  const max = classMaxStudents(cls);
+  const ratio = max ? enrolled / max : 0;
+  let status = 'available';
+  let tone = 'good';
+  if (max && enrolled >= max) {
+    status = 'full';
+    tone = 'danger';
+  } else if (max && ratio >= 0.8) {
+    status = 'almost full';
+    tone = 'warn';
+  }
+  return {
+    enrolled,
+    max,
+    ratio,
+    status,
+    tone,
+    label: max ? `${enrolled}/${max}` : `${enrolled}/No max`,
+    percent: max ? Math.min(100, Math.round(ratio * 100)) : 0
+  };
+}
+
+function classCanAcceptStudent(classId, studentId = '') {
+  if (studentId && enrollmentForStudentInClass(studentId, classId)) return true;
+  const cls = DB.classes.find(item => item.id === classId);
+  if (!cls) return false;
+  const capacity = classCapacityInfo(cls);
+  return !capacity.max || capacity.enrolled < capacity.max;
+}
+
+function unplacedStudents() {
+  return DB.students
+    .map(student => normalizeStudentRecord(student))
+    .filter(student => classesForStudent(student.id).length === 0)
+    .sort((a, b) => studentPrimaryLabel(a).localeCompare(studentPrimaryLabel(b)));
 }
 
 function attendanceForStudentLesson(studentId, lessonId) {
@@ -4729,6 +5132,20 @@ function classVitalInfo(cls) {
   const days = (cls.days || []).join(', ') || 'No days set';
   const time = cls.tstart ? `${friendlyTime(cls.tstart)}${cls.tend ? ` - ${friendlyTime(cls.tend)}` : ''}` : 'No time set';
   return `${days} · ${time} · Started ${friendlyDate(cls.start)}`;
+}
+
+function curriculumMinutesForBook(book) {
+  return (parsePositiveInt(book?.durationMinutes) || 0) + (parsePositiveInt(book?.breakAfterMinutes) || 0);
+}
+
+function curriculumMinutesUsed(classId, excludeBookId = '') {
+  return DB.units
+    .filter(book => book.classId === classId && book.id !== excludeBookId)
+    .reduce((total, book) => total + curriculumMinutesForBook(book), 0);
+}
+
+function classDurationMinutes(cls) {
+  return minutesBetweenTimes(cls?.tstart, cls?.tend) || 0;
 }
 
 function classLevelLabel(cls) {
@@ -6218,7 +6635,7 @@ function renderClassDirectory() {
         <div class="class-directory-meta">
           <div>${esc(curriculum)}</div>
           <div>${esc((cls.days || []).join(', ') || 'Days not set')} · ${friendlyTime(cls.tstart)}${cls.tend ? `-${friendlyTime(cls.tend)}` : ''}</div>
-          <div>${esc(cls.teacher || 'No teacher')} · ${studentCount} student${studentCount === 1 ? '' : 's'}</div>
+          <div>${esc(cls.teacher || 'No teacher')} · ${esc(classCapacityInfo(cls).label)} students</div>
         </div>
         <div class="class-next-card">
           <div class="class-next-label">Next lesson</div>
@@ -6244,7 +6661,7 @@ function renderClassWorkspace() {
   const clsLessons = sortLessons(DB.lessons.filter(l => l.classId === cls.id));
   const summary = completionSummary(clsLessons);
   const nextLesson = nextPendingLesson(clsLessons);
-  const studentCount = studentsForClass(cls.id).length;
+  const capacity = classCapacityInfo(cls);
   const unitCount = classSubunits(cls.id).length;
   const endDate = classEndDate(cls.id);
   const tabs = ['overview', 'curriculum', 'students', 'reports', 'settings'];
@@ -6270,7 +6687,7 @@ function renderClassWorkspace() {
         ${workspaceMetric(summary.label, 'Progress')}
         ${workspaceMetric(String(clsLessons.length), 'Lessons')}
         ${workspaceMetric(String(unitCount), 'Units')}
-        ${workspaceMetric(String(studentCount), 'Students')}
+        ${workspaceMetric(capacity.label, 'Students')}
       </div>
 
       <div class="workspace-tabs">
@@ -6363,7 +6780,7 @@ function renderClassCurriculumPanel(cls) {
           <div class="workspace-section-title">Units and lessons</div>
         </div>
         <div class="page-actions">
-          ${firstBookForClass(cls.id) ? `<button class="btn" onclick="openSubunitModal('${firstBookForClass(cls.id).id}','${cls.id}')">Add Unit</button>` : `<button class="btn" onclick="openBookModal('${cls.id}')">Add Curriculum</button>`}
+          ${units.length && firstBookForClass(cls.id) ? `<button class="btn" onclick="openSubunitModal('${firstBookForClass(cls.id).id}','${cls.id}')">Add Unit</button>` : `<button class="btn" onclick="openBookModal('${cls.id}')">Add Curriculum</button>`}
         </div>
       </div>
       ${units.length ? `<div class="curriculum-workbench">
@@ -6371,7 +6788,10 @@ function renderClassCurriculumPanel(cls) {
           ${units.map(unit => renderCurriculumUnitCard(unit)).join('')}
         </div>
         ${renderLessonDrawer(cls)}
-      </div>` : `<div class="empty-state-section">No curriculum is attached to this class yet. Add a curriculum master from class creation, or add a curriculum container manually.</div>`}
+      </div>` : `<div class="empty-state-section" style="text-align:center;display:grid;justify-items:center;gap:14px;">
+        <div>No curriculum added yet. Click Add Curriculum to attach a program to this class.</div>
+        <button class="btn btn-primary" onclick="openBookModal('${cls.id}')">Add Curriculum</button>
+      </div>`}
     </section>`;
 }
 
@@ -6496,6 +6916,7 @@ function renderClassStudentsPanel(cls) {
       ${people.length ? `<div class="student-mini-grid">
         ${people.map(student => {
           const isEnrolled = enrolledIds.has(student.id);
+          const canEnroll = isEnrolled || classCanAcceptStudent(cls.id, student.id);
           return `<div class="student-mini-card">
           <div class="compact-title">${esc(studentPrimaryLabel(student))}</div>
           <div class="compact-meta">${studentKoreanName(student) ? esc(studentKoreanName(student)) + ' · ' : ''}${student.dob ? 'DOB ' + friendlyDate(student.dob) : 'DOB not set'}</div>
@@ -6504,7 +6925,7 @@ function renderClassStudentsPanel(cls) {
             <button class="btn" onclick="openStudentReport('${student.id}','${cls.id}')">Report</button>
             ${isEnrolled
               ? `<button class="btn btn-danger" onclick="removePersonFromClass('${student.id}','${cls.id}')">Remove</button>`
-              : `<button class="btn btn-primary" onclick="enrollPersonInClass('${student.id}','${cls.id}')">Enroll</button>`}
+              : `<button class="btn btn-primary" onclick="enrollPersonInClass('${student.id}','${cls.id}')" ${canEnroll ? '' : 'disabled'}>${canEnroll ? 'Enroll' : 'Full'}</button>`}
           </div>
         </div>`;
         }).join('')}
@@ -6537,6 +6958,12 @@ function renderClassReportsPanel(cls) {
 
 function renderClassSettingsPanel(cls) {
   const books = sortBooks(DB.units.filter(book => book.classId === cls.id));
+  const totalMinutes = classDurationMinutes(cls);
+  const usedMinutes = curriculumMinutesUsed(cls.id);
+  const remainingMinutes = totalMinutes ? Math.max(0, totalMinutes - usedMinutes) : 0;
+  const minutesSummary = totalMinutes
+    ? `${usedMinutes}/${totalMinutes} minutes used · ${remainingMinutes} available`
+    : `${usedMinutes} minutes planned · class time not set`;
   return `
     <section class="workspace-panel">
       <div class="workspace-section-head">
@@ -6558,7 +6985,7 @@ function renderClassSettingsPanel(cls) {
         <div class="overview-card">
           <div class="label">Curriculum Containers</div>
           <div class="overview-value">${books.length}</div>
-          <div class="overview-note">Hidden from the main workflow; used as curriculum data containers.</div>
+          <div class="overview-note">${esc(minutesSummary)}</div>
         </div>
       </div>
       <div class="week-strip mt-14">
@@ -6566,7 +6993,7 @@ function renderClassSettingsPanel(cls) {
           <div class="week-date-chip">Book</div>
           <div>
             <div class="compact-title">${esc(book.name || 'Untitled Curriculum')}</div>
-            <div class="compact-meta">${esc(book.notes || 'No notes.')}</div>
+            <div class="compact-meta">${esc(book.notes || 'No notes.')} · ${curriculumMinutesForBook(book)} min${book.breakAfterMinutes ? ` incl. ${esc(book.breakAfterMinutes)} min break` : ''}</div>
           </div>
           <button class="btn" onclick="openBookModal('${book.id}')">Edit</button>
         </div>`).join('') : `<div class="empty-state-inline">No curriculum container exists yet.</div>`}
@@ -6766,7 +7193,112 @@ function renderLogHistoryForSelection() {
     <div class="log-history">${logsHtml}</div>`;
 }
 
+function renderScheduleTabs() {
+  const tabs = [
+    { id: 'availability', label: 'Class Availability' },
+    { id: 'log', label: 'Lesson Log' },
+  ];
+  return `
+    <div class="people-subtabs">
+      ${tabs.map(tab => `<button class="people-subtab${currentScheduleTab === tab.id ? ' active' : ''}" onclick="switchScheduleTab('${tab.id}')">${tab.label}</button>`).join('')}
+    </div>`;
+}
+
+function switchScheduleTab(tab) {
+  currentScheduleTab = tab;
+  renderLog();
+}
+
+function selectAvailabilityClass(classId) {
+  selectedAvailabilityClassId = classId;
+  currentScheduleTab = 'availability';
+  renderLog();
+}
+
 function renderLog() {
+  if (pendingLogLessonId) currentScheduleTab = 'log';
+  updateHeroSummary();
+  document.getElementById('tab-log').innerHTML = `
+    ${pageIntro('Schedule', 'Schedule', 'Check class capacity, place students, or record lesson evidence.')}
+    ${renderScheduleTabs()}
+    ${currentScheduleTab === 'availability' ? renderClassAvailabilityPanel() : renderLessonLogPanel()}`;
+  if (currentScheduleTab === 'log' && logSelectionComplete()) {
+    syncLogFormSelection();
+    document.querySelector('.log-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderClassAvailabilityPanel() {
+  const classes = DB.classes.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  if (!selectedAvailabilityClassId || !DB.classes.some(cls => cls.id === selectedAvailabilityClassId)) {
+    selectedAvailabilityClassId = classes.find(cls => classCanAcceptStudent(cls.id))?.id || classes[0]?.id || '';
+  }
+  const selectedClass = DB.classes.find(cls => cls.id === selectedAvailabilityClassId) || null;
+  const unplaced = unplacedStudents();
+  const availabilityRows = classes.map(cls => {
+    const capacity = classCapacityInfo(cls);
+    const selected = cls.id === selectedAvailabilityClassId;
+    return `
+      <div class="availability-row${selected ? ' active' : ''}" onclick="selectAvailabilityClass('${cls.id}')">
+        <div class="availability-dot ${capacity.tone === 'good' ? '' : capacity.tone}"></div>
+        <div class="availability-main">
+          <div class="availability-title">${esc(cls.name || 'Untitled Class')}</div>
+          <div class="availability-subtitle">${esc(classLevelLabel(cls))} · ${esc(cls.teacher || 'No teacher')}</div>
+        </div>
+        <div class="availability-meta">${esc((cls.days || []).join(', ') || 'Days not set')} · ${cls.tstart ? friendlyTime(cls.tstart) : 'Time not set'}${cls.tend ? `-${friendlyTime(cls.tend)}` : ''}</div>
+        <div class="capacity-meter">
+          <div class="ops-pill ${capacity.tone}">${esc(capacity.status)}</div>
+          <div class="capacity-track"><div class="capacity-fill ${capacity.tone === 'good' ? '' : capacity.tone}" style="width:${capacity.max ? capacity.percent : 20}%"></div></div>
+          <div class="compact-meta">${esc(capacity.label)} students</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const selectedCapacity = selectedClass ? classCapacityInfo(selectedClass) : null;
+  const unplacedRows = unplaced.map(student => {
+    const canAdd = selectedClass && classCanAcceptStudent(selectedClass.id, student.id);
+    const actionLabel = selectedClass ? (canAdd ? 'Add' : 'Full') : 'Select class';
+    return `
+      <div class="unplaced-row">
+        <div>
+          <div class="unplaced-name">${esc(studentPrimaryLabel(student))}</div>
+          <div class="compact-meta">${studentKoreanName(student) ? esc(studentKoreanName(student)) + ' · ' : ''}${student.dob ? 'DOB ' + friendlyDate(student.dob) : 'No class assigned'}</div>
+        </div>
+        <button class="btn btn-primary" onclick="addUnplacedStudentToClass('${student.id}')" ${canAdd ? '' : 'disabled'}>${actionLabel}</button>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="hero-stats">
+      ${heroStat(String(classes.length), 'Classes', classes.length ? 'Capacity records ready.' : 'Create a class first.')}
+      ${heroStat(String(unplaced.length), 'Unplaced Students', unplaced.length ? 'Need class assignment.' : 'All students are placed.')}
+      ${heroStat(String(classes.filter(cls => classCapacityInfo(cls).status === 'full').length), 'Full Classes', 'At maximum capacity.')}
+    </div>
+    <div class="availability-grid">
+      <section class="ops-card full">
+        <div class="dashboard-panel-head">
+          <div>
+            <div class="dashboard-caption">Class availability</div>
+            <div class="dashboard-panel-title small">Capacity by class</div>
+          </div>
+          <button class="mini-link" onclick="openClassModal()">New class <span>›</span></button>
+        </div>
+        <div class="availability-list">${availabilityRows || '<div class="ops-empty">No classes yet.</div>'}</div>
+      </section>
+      <section class="ops-card">
+        <div class="dashboard-panel-head">
+          <div>
+            <div class="dashboard-caption">Unplaced students</div>
+            <div class="dashboard-panel-title small">${selectedClass ? esc(selectedClass.name || 'Selected class') : 'Select a class'}</div>
+            <div class="activity-hint">${selectedCapacity ? `${esc(selectedCapacity.label)} students · ${esc(selectedCapacity.status)}` : 'Choose a class to place students.'}</div>
+          </div>
+        </div>
+        <div class="unplaced-list">${unplacedRows || '<div class="ops-empty">No unplaced students found.</div>'}</div>
+      </section>
+    </div>`;
+}
+
+function renderLessonLogPanel() {
   updateHeroSummary();
 
   if (pendingLogLessonId) {
@@ -6830,8 +7362,7 @@ function renderLog() {
       ${renderLogHistoryForSelection()}`
     : '';
 
-  document.getElementById('tab-log').innerHTML = `
-    ${pageIntro('Reflection', 'Lesson Log', '')}
+  const html = `
     <div class="log-form">
       <div class="log-picker-grid">
         <div class="form-group">
@@ -6865,11 +7396,7 @@ function renderLog() {
       ${selectedSummary}
       ${logEditorHtml}
     </div>`;
-
-  if (logSelectionComplete()) {
-    syncLogFormSelection();
-    document.querySelector('.log-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  return html;
 }
 
 function onLogClassChange() {
@@ -6995,14 +7522,43 @@ async function saveLog() {
 function renderStudents() {
   updateHeroSummary();
   const el = document.getElementById('tab-students');
+  const subTabs = [
+    { id: 'students', label: 'Students' },
+    { id: 'parents',  label: 'Parents'  },
+    { id: 'teachers', label: 'Teachers' },
+  ];
+  const subTabsHtml = `
+    <div class="people-subtabs">
+      ${subTabs.map(t => `<button class="people-subtab${currentPeopleTab === t.id ? ' active' : ''}" onclick="switchPeopleTab('${t.id}')">${t.label}</button>`).join('')}
+    </div>`;
+
+  let panelHtml = '';
+  if (currentPeopleTab === 'students') panelHtml = renderStudentsPanel();
+  else if (currentPeopleTab === 'parents') panelHtml = renderParentsPanel();
+  else if (currentPeopleTab === 'teachers') panelHtml = renderTeachersPanel();
+
+  el.innerHTML = `
+    ${pageIntro('People Database', 'People', 'Create a permanent person profile once, then enroll or remove that person from any class without deleting their record.')}
+    ${subTabsHtml}
+    ${panelHtml}`;
+}
+
+function switchPeopleTab(tab) {
+  currentPeopleTab = tab;
+  renderStudents();
+}
+
+function renderStudentsPanel() {
   const students = DB.students
     .map(student => normalizeStudentRecord(student))
     .sort((a, b) => studentPrimaryLabel(a).localeCompare(studentPrimaryLabel(b)));
+
   let html = `
-    ${pageIntro('People Database', 'People', 'Create a permanent person profile once, then enroll or remove that person from any class without deleting their record.',
-      `<button class="btn btn-primary" onclick="openStudentModal()">+ New Person Profile</button>`)}
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+      <button class="btn btn-primary" onclick="openStudentModal()">+ New Student Profile</button>
+    </div>
     <div class="hero-stats">
-      ${heroStat(String(DB.students.length), 'People', DB.students.length ? 'Shared profiles across the LMS.' : 'No people added yet.')}
+      ${heroStat(String(DB.students.length), 'Students', DB.students.length ? 'Shared profiles across the LMS.' : 'No students added yet.')}
       ${heroStat(String(DB.studentnotes.length), 'Lesson Evidence', DB.studentnotes.length ? 'Teacher observations saved.' : 'No lesson evidence yet.')}
       ${heroStat(String(DB.enrollments.length), 'Current Classes', DB.enrollments.length ? 'Active student-class links.' : 'No class links yet.')}
     </div>`;
@@ -7049,7 +7605,168 @@ function renderStudents() {
     });
     html += `</div>`;
   }
-  el.innerHTML = html;
+  return html;
+}
+
+function renderParentsPanel() {
+  return `
+    <div class="hero-stats">
+      ${heroStat('0', 'Parents', 'Parent profiles coming soon.')}
+    </div>
+    <div class="empty-state-section">Parent profiles are not yet available. This section will let you link parents to students and manage contact details.</div>`;
+}
+
+function renderTeachersPanel() {
+  const teachers = (DB.teachers || []).slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  let html = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+      <button class="btn btn-primary" onclick="openTeacherModal()">+ Register Teacher</button>
+    </div>
+    <div class="hero-stats">
+      ${heroStat(String(teachers.length), 'Teachers', teachers.length ? 'Registered staff profiles.' : 'No teachers registered yet.')}
+    </div>`;
+
+  if (teachers.length === 0) {
+    html += `<div class="empty-state-section">No teacher profiles yet. Register the first teacher from here.</div>`;
+  } else {
+    html += `<div class="teacher-directory">`;
+    teachers.forEach(teacher => {
+      const assignedClasses = DB.classes.filter(cls => (cls.teacher || '').trim() === (teacher.name || '').trim());
+      const days = (teacher.availability?.days || []).join(', ') || 'Not set';
+      const hours = (teacher.availability?.hoursStart && teacher.availability?.hoursEnd)
+        ? `${friendlyTime(teacher.availability.hoursStart)}–${friendlyTime(teacher.availability.hoursEnd)}`
+        : 'Not set';
+      html += `
+        <div class="teacher-directory-card">
+          <div class="teacher-identity">
+            <div class="teacher-primary">${esc(teacher.name || 'Unnamed Teacher')}</div>
+            <div class="teacher-secondary">${esc(teacher.specialisation || teacher.employmentType || 'No specialisation added.')}</div>
+            <div class="teacher-assigned">${assignedClasses.length ? `Assigned to ${esc(assignedClasses.map(cls => cls.name || 'Untitled Class').join(', '))}` : 'No assigned classes yet.'}</div>
+          </div>
+          <div class="teacher-directory-meta">
+            <div class="student-meta-block">
+              <div class="student-meta-label">Employment</div>
+              <div class="student-meta-value">${esc(teacher.employmentType || 'Not set')}</div>
+            </div>
+            <div class="student-meta-block">
+              <div class="student-meta-label">Start Date</div>
+              <div class="student-meta-value">${teacher.startDate ? esc(friendlyDate(teacher.startDate)) : 'Not set'}</div>
+            </div>
+            <div class="student-meta-block">
+              <div class="student-meta-label">Working Days</div>
+              <div class="student-meta-value">${esc(days)}</div>
+            </div>
+            <div class="student-meta-block">
+              <div class="student-meta-label">Hours</div>
+              <div class="student-meta-value">${esc(hours)}${teacher.availability?.maxClassesPerDay ? ` · max ${teacher.availability.maxClassesPerDay}/day` : ''}</div>
+            </div>
+          </div>
+          <div class="teacher-directory-actions">
+            <button class="btn" onclick="openTeacherModal('${teacher.id}')">Edit</button>
+            <button class="btn btn-danger" onclick="confirmDeleteTeacher('${teacher.id}')">Delete</button>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+  return html;
+}
+
+// ════════════════════════════════════════════════════
+// TEACHERS
+// ════════════════════════════════════════════════════
+function openTeacherModal(teacherId = null) {
+  const teacher = teacherId ? (DB.teachers || []).find(t => t.id === teacherId) : null;
+  document.getElementById('modal-teacher-title').textContent = teacher ? 'Edit Teacher' : 'Register Teacher';
+  document.getElementById('teacher-id').value = teacher?.id || '';
+  document.getElementById('teacher-name').value = teacher?.name || '';
+  document.getElementById('teacher-dob').value = teacher?.dob || '';
+  document.getElementById('teacher-email').value = teacher?.email || '';
+  document.getElementById('teacher-phone').value = teacher?.phone || '';
+  document.getElementById('teacher-specialisation').value = teacher?.specialisation || '';
+  document.getElementById('teacher-employment-type').value = teacher?.employmentType || '';
+  document.getElementById('teacher-start-date').value = teacher?.startDate || '';
+  const selectedDays = new Set(teacher?.availability?.days || []);
+  document.querySelectorAll('#teacher-days input[type="checkbox"]').forEach(cb => {
+    cb.checked = selectedDays.has(cb.value);
+  });
+  document.getElementById('teacher-hours-start').value = teacher?.availability?.hoursStart || '';
+  document.getElementById('teacher-hours-end').value = teacher?.availability?.hoursEnd || '';
+  document.getElementById('teacher-max-classes').value = teacher?.availability?.maxClassesPerDay || '';
+  document.getElementById('modal-teacher').style.display = 'flex';
+}
+
+async function saveTeacher() {
+  const name = document.getElementById('teacher-name').value.trim();
+  if (!name) { showToast('Please enter a teacher name.', 'error'); return; }
+
+  const existingId = document.getElementById('teacher-id').value;
+  const previousTeacher = existingId ? (DB.teachers || []).find(t => t.id === existingId) : null;
+  const previousName = (previousTeacher?.name || '').trim();
+  const days = Array.from(document.querySelectorAll('#teacher-days input[type="checkbox"]:checked')).map(cb => cb.value);
+
+  const teacher = {
+    id: existingId || 'tc_' + Date.now(),
+    name,
+    dob:              document.getElementById('teacher-dob').value,
+    email:            document.getElementById('teacher-email').value.trim(),
+    phone:            document.getElementById('teacher-phone').value.trim(),
+    specialisation:   document.getElementById('teacher-specialisation').value.trim(),
+    employmentType:   document.getElementById('teacher-employment-type').value,
+    startDate:        document.getElementById('teacher-start-date').value,
+    availability: {
+      days,
+      hoursStart:      document.getElementById('teacher-hours-start').value,
+      hoursEnd:        document.getElementById('teacher-hours-end').value,
+      maxClassesPerDay: document.getElementById('teacher-max-classes').value
+        ? Number(document.getElementById('teacher-max-classes').value)
+        : '',
+    }
+  };
+
+  setBusy('save-teacher-btn', true);
+  try {
+    await api('POST', '/api/teachers', teacher);
+    if (existingId && previousName && previousName !== name) {
+      const renamedClasses = DB.classes
+        .filter(cls => (cls.teacher || '').trim() === previousName)
+        .map(cls => ({ ...cls, teacher: name }));
+      await Promise.all(renamedClasses.map(cls => api('POST', '/api/classes', cls)));
+      DB.classes = DB.classes.map(cls => renamedClasses.find(updated => updated.id === cls.id) || cls);
+    }
+    const idx = (DB.teachers || []).findIndex(t => t.id === teacher.id);
+    if (idx >= 0) DB.teachers[idx] = teacher;
+    else DB.teachers.push(teacher);
+    refreshTeacherOptions();
+    closeModal('modal-teacher');
+    renderStudents();
+    if (document.getElementById('tab-classes')?.classList.contains('active')) renderClasses();
+    if (document.getElementById('tab-admin')?.classList.contains('active')) renderAdmin();
+    showToast(existingId ? 'Teacher profile updated.' : 'Teacher registered.', 'success');
+  } catch (e) {
+    showToast('Failed to save teacher.', 'error');
+  } finally {
+    setBusy('save-teacher-btn', false);
+  }
+}
+
+async function confirmDeleteTeacher(teacherId) {
+  const teacher = (DB.teachers || []).find(t => t.id === teacherId);
+  if (!teacher) return;
+  const assignedClasses = DB.classes.filter(cls => (cls.teacher || '').trim() === (teacher.name || '').trim());
+  const assignmentNote = assignedClasses.length
+    ? `\n\n${assignedClasses.length} class${assignedClasses.length === 1 ? '' : 'es'} will keep "${teacher.name}" as an unregistered teacher assignment.`
+    : '';
+  if (!confirm(`Delete teacher profile for "${teacher.name}"?${assignmentNote}\n\nThis cannot be undone.`)) return;
+  try {
+    await api('DELETE', `/api/teachers/${teacherId}`);
+    DB.teachers = (DB.teachers || []).filter(t => t.id !== teacherId);
+    refreshTeacherOptions();
+    renderStudents();
+    showToast('Teacher profile deleted.', 'success');
+  } catch (e) {
+    showToast('Failed to delete teacher.', 'error');
+  }
 }
 
 // ════════════════════════════════════════════════════
@@ -7264,7 +7981,7 @@ async function clearAllData() {
   if (!confirm('Final confirmation: permanently delete all classes, books, units, lessons, students, and logs?')) return;
   try {
     await api('DELETE', '/api/clear');
-    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [], schoolSettings: { id: 'school', schoolName: '', holidays: [] } };
+    DB = { classes: [], units: [], subunits: [], lessons: [], logs: [], students: [], enrollments: [], studentnotes: [], attendances: [], schoolSettings: { id: 'school', schoolName: '', holidays: [] }, teachers: [] };
     refreshTeacherOptions();
     refreshStudentOptions();
     renderSettings();
@@ -7284,14 +8001,20 @@ function renderStudentClassPicker(selectedClassIds = []) {
     slot.innerHTML = `<div class="overview-note">Create classes first, then assign students here.</div>`;
     return;
   }
-  slot.innerHTML = DB.classes.map(cls => `
-    <button type="button" class="class-chip${selectedClassIds.includes(cls.id) ? ' active' : ''}" data-class-id="${cls.id}">
-      ${esc(cls.name)}
-    </button>`).join('');
+  slot.innerHTML = DB.classes.map(cls => {
+    const selected = selectedClassIds.includes(cls.id);
+    const capacity = classCapacityInfo(cls);
+    const disabled = !selected && capacity.max && capacity.enrolled >= capacity.max;
+    return `
+      <button type="button" class="class-chip${selected ? ' active' : ''}${disabled ? ' disabled' : ''}" data-class-id="${cls.id}" ${disabled ? 'disabled' : ''}>
+        ${esc(cls.name)} · ${esc(capacity.label)}
+      </button>`;
+  }).join('');
 
   slot.querySelectorAll('.class-chip').forEach(btn => {
     btn.addEventListener('click', event => {
       event.preventDefault();
+      if (btn.disabled) return;
       btn.classList.toggle('active');
     });
   });
@@ -7341,6 +8064,13 @@ async function saveStudent() {
     ? normalizeStudentRecord(getStudent(existingId))
     : (DB.students.find(entry => (studentEnglishName(entry) || '').trim().toLocaleLowerCase() === normalizedName) ? normalizeStudentRecord(DB.students.find(entry => (studentEnglishName(entry) || '').trim().toLocaleLowerCase() === normalizedName)) : null);
   const createdNew = !student;
+  const overCapacityClass = selectedClassIds
+    .map(classId => DB.classes.find(cls => cls.id === classId))
+    .find(cls => cls && !classCanAcceptStudent(cls.id, student?.id || ''));
+  if (overCapacityClass) {
+    showToast(`${overCapacityClass.name || 'This class'} is full.`, 'error');
+    return;
+  }
 
   if (!student) {
     const assessment = {
@@ -7425,6 +8155,11 @@ async function saveStudent() {
 
 async function enrollPersonInClass(studentId, classId) {
   if (enrollmentForStudentInClass(studentId, classId)) return;
+  const cls = DB.classes.find(item => item.id === classId);
+  if (!classCanAcceptStudent(classId, studentId)) {
+    showToast(`${cls?.name || 'This class'} is full.`, 'error');
+    return;
+  }
   const enrollment = { id: `en_${studentId}_${classId}`, studentId, classId };
   try {
     await api('POST', '/api/enrollments', enrollment);
@@ -7434,6 +8169,31 @@ async function enrollPersonInClass(studentId, classId) {
     showToast('Person enrolled in class.', 'success');
   } catch (e) {
     showToast('Failed to enroll person.', 'error');
+  }
+}
+
+async function addUnplacedStudentToClass(studentId) {
+  const classId = selectedAvailabilityClassId;
+  if (!classId) {
+    showToast('Select a class first.', 'error');
+    return;
+  }
+  if (enrollmentForStudentInClass(studentId, classId)) return;
+  const cls = DB.classes.find(item => item.id === classId);
+  if (!classCanAcceptStudent(classId, studentId)) {
+    showToast(`${cls?.name || 'This class'} is full.`, 'error');
+    return;
+  }
+  const enrollment = { id: `en_${studentId}_${classId}`, studentId, classId };
+  try {
+    await api('POST', '/api/enrollments', enrollment);
+    DB.enrollments.push(enrollment);
+    renderLog();
+    renderStudents();
+    if (document.getElementById('tab-classes')?.classList.contains('active')) renderClasses();
+    showToast('Student added to class.', 'success');
+  } catch (e) {
+    showToast('Failed to add student to class.', 'error');
   }
 }
 
@@ -8649,13 +9409,13 @@ async function saveStudentReportPage() {
   }
 }
 
-function buildOurWorldCurriculumPayload(cls, master) {
+function buildOurWorldCurriculumPayload(cls, master, existingBook = null) {
   const dayIndexes = classDayIndexes(cls.days);
   let currentDate = nextClassDate(cls.start, dayIndexes);
   let lessonSequence = 1;
   const timestamp = Date.now();
   const masterKey = master.level || master.id.replace(/[^a-z0-9]+/gi, '_');
-  const book = {
+  const book = existingBook || {
     id: `u_${timestamp}_${master.id}`,
     classId: cls.id,
     name: `${master.name} Curriculum`,
@@ -8730,6 +9490,24 @@ async function createCurriculumFromMaster(cls, masterId) {
   const payload = buildOurWorldCurriculumPayload(cls, master);
   await api('POST', '/api/units', payload.book);
   DB.units.push(payload.book);
+  await buildCurriculumUnderUnit(cls, masterId, payload.book.id);
+}
+
+async function buildCurriculumUnderUnit(cls, masterId, existingBookId) {
+  const rawMaster = curriculumMasterById(masterId);
+  const master = rawMaster.id ? { ...rawMaster, name: masterDisplayName(rawMaster) } : rawMaster;
+  if (!master.id || !existingBookId) return;
+  const existingBook = DB.units.find(book => book.id === existingBookId) || {
+    id: existingBookId,
+    classId: cls.id,
+    name: `${master.name} Curriculum`,
+    notes: 'Curriculum master. Timing follows the class schedule.',
+    program: master.custom ? master.name : 'Our World',
+    programLevel: master.level,
+    curriculumMasterId: master.id,
+    skills: ['Vocabulary', 'Grammar', 'Reading', 'Writing', 'Speaking', 'Listening']
+  };
+  const payload = buildOurWorldCurriculumPayload(cls, master, existingBook);
   for (const subunit of payload.subunits) {
     await api('POST', '/api/subunits', subunit);
     DB.subunits.push(subunit);
@@ -8740,14 +9518,27 @@ async function createCurriculumFromMaster(cls, masterId) {
   }
 }
 
+function populateTeacherSelect(currentValue = '') {
+  const select = document.getElementById('cls-teacher');
+  if (!select) return;
+  const registered = new Set((DB.teachers || []).map(t => (t.name || '').trim()).filter(Boolean));
+  const teacherNames = uniqueTeacherNames(currentValue ? [currentValue] : []);
+  const options = [`<option value="">— Unassigned —</option>`];
+  teacherNames.forEach(name => {
+    const suffix = registered.has(name) ? '' : ' (unregistered)';
+    options.push(`<option value="${esc(name)}"${name === currentValue ? ' selected' : ''}>${esc(name)}${suffix}</option>`);
+  });
+  select.innerHTML = options.join('');
+}
+
 function openClassModal(existingId) {
   const cls = existingId ? DB.classes.find(c => c.id === existingId) : null;
   document.getElementById('modal-class-title').textContent = cls ? 'Edit Class' : 'New Class';
-  refreshTeacherOptions(cls ? [cls.teacher] : []);
   document.getElementById('cls-id').value         = existingId || '';
   document.getElementById('cls-name').value       = cls ? cls.name : '';
-  document.getElementById('cls-teacher').value    = cls ? (cls.teacher || '') : '';
+  populateTeacherSelect(cls ? (cls.teacher || '') : '');
   document.getElementById('cls-room').value       = cls ? (cls.room || '') : '';
+  document.getElementById('cls-max-students').value = cls ? (cls.maxStudents || '') : '';
   document.getElementById('cls-start').value      = cls ? cls.start : '';
   document.getElementById('cls-tstart').value     = cls ? (cls.tstart || '') : '15:00';
   document.getElementById('cls-tend').value       = cls ? (cls.tend || '') : '15:50';
@@ -8767,9 +9558,34 @@ function openBookModal(existingId_or_classId, isClassId) {
   document.getElementById('modal-book-title').textContent = book ? 'Edit Book' : 'Add Book';
   document.getElementById('book-id').value    = book ? book.id : '';
   document.getElementById('book-classId').value = book ? book.classId : existingId_or_classId;
+  populateBookCurriculumSelect(book?.curriculumMasterId || '');
   document.getElementById('book-name').value  = book ? book.name : '';
   document.getElementById('book-notes').value = book ? (book.notes || '') : '';
+  const classId = book ? book.classId : existingId_or_classId;
+  const cls = DB.classes.find(c => c.id === classId);
+  const remaining = cls ? Math.max(0, classDurationMinutes(cls) - curriculumMinutesUsed(classId, book?.id || '')) : 0;
+  document.getElementById('book-duration-minutes').value = book ? (book.durationMinutes || '') : (remaining || '');
+  document.getElementById('book-break-after-minutes').value = book ? (book.breakAfterMinutes || '') : '';
   document.getElementById('modal-book').style.display = 'flex';
+}
+
+function populateBookCurriculumSelect(selectedId = '') {
+  const select = document.getElementById('book-curriculum-master');
+  if (!select) return;
+  select.innerHTML = [
+    `<option value="">Manual curriculum</option>`,
+    ...allCurriculumMasters()
+      .filter(master => master.id)
+      .map(master => `<option value="${esc(master.id)}"${master.id === selectedId ? ' selected' : ''}>${esc(masterDisplayName(master))}</option>`)
+  ].join('');
+}
+
+function onBookCurriculumChange() {
+  const masterId = document.getElementById('book-curriculum-master')?.value || '';
+  const nameField = document.getElementById('book-name');
+  if (!nameField || !masterId) return;
+  const master = curriculumMasterById(masterId);
+  if (master?.id) nameField.value = `${masterDisplayName(master)} Curriculum`;
 }
 
 function openSubunitModal(bookId_or_subId, classId) {
@@ -8842,6 +9658,7 @@ async function saveClass() {
   const name    = document.getElementById('cls-name').value.trim();
   const teacher = document.getElementById('cls-teacher').value.trim();
   const room    = document.getElementById('cls-room').value.trim();
+  const maxStudents = parsePositiveInt(document.getElementById('cls-max-students').value) || '';
   const start   = document.getElementById('cls-start').value;
   const tstart  = document.getElementById('cls-tstart').value;
   const tend    = document.getElementById('cls-tend').value;
@@ -8863,6 +9680,7 @@ async function saveClass() {
     name,
     teacher,
     room,
+    maxStudents,
     start,
     tstart,
     tend,
@@ -8897,20 +9715,39 @@ async function saveClass() {
 async function saveBook() {
   const existingId = document.getElementById('book-id').value;
   const classId = document.getElementById('book-classId').value;
+  const curriculumMasterId = document.getElementById('book-curriculum-master')?.value || '';
   const name    = document.getElementById('book-name').value.trim();
   const notes   = document.getElementById('book-notes').value.trim();
+  const durationMinutes = parsePositiveInt(document.getElementById('book-duration-minutes').value) || 0;
+  const breakAfterMinutes = parsePositiveInt(document.getElementById('book-break-after-minutes').value) || 0;
   const existingBook = existingId ? DB.units.find(u => u.id === existingId) : null;
+  const cls = DB.classes.find(c => c.id === classId);
+  const classMinutes = classDurationMinutes(cls);
+  const usedMinutes = curriculumMinutesUsed(classId, existingId);
+  const proposedMinutes = durationMinutes + breakAfterMinutes;
 
   if (!name) { showToast('Please enter a book name.', 'error'); return; }
+  if (classMinutes && usedMinutes + proposedMinutes > classMinutes) {
+    showToast(`Curriculum time exceeds class duration. ${usedMinutes}/${classMinutes} minutes already used.`, 'error');
+    return;
+  }
 
-  const book = { ...(existingBook || {}), id: existingId || ('u_' + Date.now()), classId, name, notes };
+  const book = { ...(existingBook || {}), id: existingId || ('u_' + Date.now()), classId, name, notes, durationMinutes, breakAfterMinutes };
+  if (curriculumMasterId) book.curriculumMasterId = curriculumMasterId;
+  else delete book.curriculumMasterId;
   setBusy('save-book-btn', true);
   try {
-    await api('POST', '/api/units', book);
-    if (existingId) { DB.units = DB.units.map(u => u.id === existingId ? book : u); }
-    else { DB.units.push(book); }
-    closeModal('modal-book');
-    renderClasses();
+	    await api('POST', '/api/units', book);
+	    if (existingId) { DB.units = DB.units.map(u => u.id === existingId ? book : u); }
+	    else { DB.units.push(book); }
+	    if (book.curriculumMasterId && cls) {
+	      await buildCurriculumUnderUnit(cls, book.curriculumMasterId, book.id);
+	      currentClassWorkspace.tab = 'curriculum';
+	      currentClassWorkspace.unitId = DB.subunits.find(unit => unit.bookId === book.id)?.id || currentClassWorkspace.unitId;
+	      currentClassWorkspace.lessonId = null;
+	    }
+	    closeModal('modal-book');
+	    renderClasses();
     showToast(existingId ? 'Book updated.' : 'Book added.', 'success');
   } catch(e) { showToast('Failed to save book.', 'error'); }
   finally { setBusy('save-book-btn', false); }

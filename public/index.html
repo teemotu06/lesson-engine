@@ -2158,6 +2158,56 @@
       line-height: 1.45;
     }
 
+    .admin-teacher-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .admin-day-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .admin-day-block {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(248,250,252,0.66);
+      border: 1px solid rgba(148,163,184,0.14);
+    }
+
+    .admin-day-title {
+      color: #111827;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .admin-class-row {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid rgba(148,163,184,0.12);
+    }
+
+    .admin-class-time {
+      color: #4f46e5;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .admin-alert-grid {
+      display: grid;
+      gap: 9px;
+    }
+
     .teacher-row {
       display: flex;
       gap: 18px;
@@ -3328,6 +3378,12 @@
           </span>
           <span>Home</span>
         </button>
+        <button class="tab-btn" data-tab="admin">
+          <span class="tab-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/></svg>
+          </span>
+          <span>Admin</span>
+        </button>
         <button class="tab-btn" data-tab="classes">
           <span class="tab-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>
@@ -3410,6 +3466,7 @@
 
       <div class="content-shell">
         <div id="tab-today" class="tab-content active"></div>
+        <div id="tab-admin" class="tab-content"></div>
         <div id="tab-classes" class="tab-content"></div>
         <div id="tab-curriculum" class="tab-content"></div>
         <div id="tab-log" class="tab-content"></div>
@@ -3477,8 +3534,12 @@
         </div>
         <div class="form-group">
           <label class="form-label">Teacher</label>
-          <input type="text" id="cls-teacher" class="form-input" list="teacher-options" placeholder="e.g. Tani">
+          <input type="text" id="cls-teacher" class="form-input" list="teacher-options" placeholder="Leave blank if unassigned">
           <datalist id="teacher-options"></datalist>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Room</label>
+          <input type="text" id="cls-room" class="form-input" placeholder="e.g. Room 3">
         </div>
       </div>
 
@@ -3860,6 +3921,7 @@ const LEGACY_LEVEL_MAP = {
 };
 const TAB_META = {
   today: { kicker: 'Home', title: 'Knowledge', subtitle: 'Welcome back!' },
+  admin: { kicker: 'Admin', title: 'Schedule dashboard', subtitle: 'Weekly teacher schedules, rooms, conflicts, and substitute alerts.' },
   classes: { kicker: 'All courses', title: 'Curriculum map', subtitle: 'Build the structure behind every class.' },
   curriculum: { kicker: 'Master curriculum', title: 'Curriculum library', subtitle: 'Program structure, objectives, outcomes, and report skills.' },
   log: { kicker: 'Schedule', title: 'Lesson log', subtitle: 'Capture what happened and what comes next.' },
@@ -4062,6 +4124,13 @@ function minutesBetweenTimes(start, end) {
   if (![startHour, startMinute, endHour, endMinute].every(Number.isFinite)) return null;
   const minutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
   return minutes > 0 ? minutes : null;
+}
+
+function timeToMinutes(value) {
+  if (!value) return null;
+  const [hours, minutes] = value.split(':').map(Number);
+  if (![hours, minutes].every(Number.isFinite)) return null;
+  return hours * 60 + minutes;
 }
 
 function esc(str) {
@@ -4662,6 +4731,19 @@ function classVitalInfo(cls) {
   return `${days} · ${time} · Started ${friendlyDate(cls.start)}`;
 }
 
+function classLevelLabel(cls) {
+  const master = curriculumMasterById(cls.curriculumMasterId || '');
+  if (master?.id) return masterDisplayName(master);
+  if (cls.curriculumName) return cls.curriculumName;
+  const enrolled = enrollmentsForClass(cls.id)
+    .map(enrollment => DB.students.find(student => student.id === enrollment.studentId))
+    .filter(Boolean);
+  const levels = uniqueList(enrolled
+    .map(student => normalizeLevelValue(student.level || student.assessment?.general?.current || '', ''))
+    .filter(Boolean));
+  return levels.length ? levels.slice(0, 2).join(', ') : 'Level not set';
+}
+
 function levelShiftLabel(start, current) {
   if (start === current) return `holding at ${current}`;
   return levelRank(current) >= levelRank(start) ? `moved from ${start} to ${current}` : `recalibrated from ${start} to ${current}`;
@@ -5170,6 +5252,7 @@ function switchTab(name) {
     c.classList.toggle('active', c.id === 'tab-' + name));
   updateShellChrome(name);
   if (name === 'today')    renderToday();
+  if (name === 'admin')    renderAdmin();
   if (name === 'classes')  renderClasses();
   if (name === 'curriculum') renderMasterCurriculum();
   if (name === 'log')      renderLog();
@@ -5895,6 +5978,197 @@ function renderToday() {
 function logFromToday(lessonId) {
   pendingLogLessonId = lessonId;
   switchTab('log');
+}
+
+// ════════════════════════════════════════════════════
+// ADMIN TAB
+// ════════════════════════════════════════════════════
+const ADMIN_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+function weeklyScheduleEntries() {
+  return DB.classes.flatMap(cls => {
+    const days = Array.isArray(cls.days) && cls.days.length ? cls.days : [];
+    return days.map(day => {
+      const startMinutes = timeToMinutes(cls.tstart);
+      const endMinutes = timeToMinutes(cls.tend);
+      return {
+        cls,
+        day,
+        teacher: (cls.teacher || '').trim(),
+        room: (cls.room || '').trim(),
+        start: cls.tstart || '',
+        end: cls.tend || '',
+        startMinutes,
+        endMinutes,
+        level: classLevelLabel(cls)
+      };
+    });
+  });
+}
+
+function scheduleTimeLabel(entry) {
+  if (!entry.start) return 'Time not set';
+  return `${friendlyTime(entry.start)}${entry.end ? `-${friendlyTime(entry.end)}` : ''}`;
+}
+
+function entriesOverlap(a, b) {
+  if (!Number.isFinite(a.startMinutes) || !Number.isFinite(a.endMinutes) ||
+      !Number.isFinite(b.startMinutes) || !Number.isFinite(b.endMinutes)) return false;
+  return a.startMinutes < b.endMinutes && b.startMinutes < a.endMinutes;
+}
+
+function scheduleIssueRows(entries) {
+  const issues = [];
+  DB.classes.filter(cls => !(cls.teacher || '').trim()).forEach(cls => {
+    const days = (cls.days || []).join(', ') || 'No days set';
+    const time = cls.tstart ? `${friendlyTime(cls.tstart)}${cls.tend ? `-${friendlyTime(cls.tend)}` : ''}` : 'Time not set';
+    issues.push({
+      tone: 'danger',
+      title: `Substitute needed: ${cls.name || 'Untitled class'}`,
+      meta: `${days} · ${time} · ${classLevelLabel(cls)} · ${cls.room || 'Room not set'}`
+    });
+  });
+
+  ADMIN_DAYS.forEach(day => {
+    const dayEntries = entries.filter(entry => entry.day === day);
+    for (let i = 0; i < dayEntries.length; i += 1) {
+      for (let j = i + 1; j < dayEntries.length; j += 1) {
+        const a = dayEntries[i];
+        const b = dayEntries[j];
+        if (!entriesOverlap(a, b)) continue;
+        if (a.teacher && a.teacher === b.teacher) {
+          issues.push({
+            tone: 'danger',
+            title: `Teacher conflict: ${a.teacher}`,
+            meta: `${day} · ${scheduleTimeLabel(a)} ${a.cls.name || 'Untitled class'} overlaps ${scheduleTimeLabel(b)} ${b.cls.name || 'Untitled class'}`
+          });
+        }
+        if (a.room && a.room === b.room) {
+          issues.push({
+            tone: 'warn',
+            title: `Room conflict: ${a.room}`,
+            meta: `${day} · ${a.cls.name || 'Untitled class'} overlaps ${b.cls.name || 'Untitled class'}`
+          });
+        }
+      }
+    }
+  });
+
+  return issues.map(issue => `
+      <div class="ops-row">
+        <div class="ops-row-main">
+          <div class="ops-row-title">${esc(issue.title)}</div>
+          <div class="ops-row-meta">${esc(issue.meta)}</div>
+        </div>
+        <span class="ops-pill ${issue.tone}">${issue.tone === 'danger' ? 'Action' : 'Check'}</span>
+      </div>`);
+}
+
+function scheduleGapRows(entries) {
+  const rows = [];
+  const teacherNames = uniqueList(entries.map(entry => entry.teacher).filter(Boolean)).sort((a, b) => a.localeCompare(b));
+  teacherNames.forEach(teacher => {
+    ADMIN_DAYS.forEach(day => {
+      const sorted = entries
+        .filter(entry => entry.teacher === teacher && entry.day === day && Number.isFinite(entry.startMinutes) && Number.isFinite(entry.endMinutes))
+        .sort((a, b) => a.startMinutes - b.startMinutes);
+      for (let index = 0; index < sorted.length - 1; index += 1) {
+        const current = sorted[index];
+        const next = sorted[index + 1];
+        const gap = next.startMinutes - current.endMinutes;
+        if (gap >= 30) {
+          rows.push({
+            teacher,
+            day,
+            gap,
+            meta: `${friendlyTime(current.end)}-${friendlyTime(next.start)} between ${current.cls.name || 'Untitled class'} and ${next.cls.name || 'Untitled class'}`
+          });
+        }
+      }
+    });
+  });
+  return rows.map(row => `
+      <div class="ops-row">
+        <div class="ops-row-main">
+          <div class="ops-row-title">${esc(row.teacher)} · ${esc(row.day)} gap</div>
+          <div class="ops-row-meta">${esc(row.meta)}</div>
+        </div>
+        <span class="ops-pill warn">${row.gap} min</span>
+      </div>`);
+}
+
+function teacherScheduleHtml(entries) {
+  const teacherNames = uniqueList(entries.map(entry => entry.teacher || 'Unassigned')).sort((a, b) => {
+    if (a === 'Unassigned') return 1;
+    if (b === 'Unassigned') return -1;
+    return a.localeCompare(b);
+  });
+  if (!teacherNames.length) return `<div class="ops-empty">No classes have schedule days yet.</div>`;
+  return teacherNames.map(teacherName => {
+    const teacherEntries = entries.filter(entry => (entry.teacher || 'Unassigned') === teacherName);
+    const dayBlocks = ADMIN_DAYS.map(day => {
+      const dayEntries = teacherEntries
+        .filter(entry => entry.day === day)
+        .sort((a, b) => (a.startMinutes ?? Number.MAX_SAFE_INTEGER) - (b.startMinutes ?? Number.MAX_SAFE_INTEGER));
+      if (!dayEntries.length) return '';
+      return `
+        <div class="admin-day-block">
+          <div class="admin-day-title">${esc(day)}</div>
+          ${dayEntries.map(entry => `
+            <div class="admin-class-row">
+              <div class="admin-class-time">${esc(scheduleTimeLabel(entry))}</div>
+              <div class="ops-row-main">
+                <div class="ops-row-title">${esc(entry.cls.name || 'Untitled class')}</div>
+                <div class="ops-row-meta">${esc(entry.level)} · ${esc(entry.room || 'Room not set')}</div>
+              </div>
+              <span class="ops-pill ${entry.teacher ? 'good' : 'danger'}">${entry.teacher ? 'Assigned' : 'Sub'}</span>
+            </div>`).join('')}
+        </div>`;
+    }).filter(Boolean).join('');
+    return `
+      <section class="ops-card full">
+        <div class="dashboard-panel-head">
+          <div>
+            <div class="dashboard-caption">Teacher</div>
+            <div class="dashboard-panel-title small">${esc(teacherName)}</div>
+          </div>
+          <span class="ops-pill">${teacherEntries.length} slot${teacherEntries.length === 1 ? '' : 's'}</span>
+        </div>
+        <div class="admin-day-list">${dayBlocks || '<div class="ops-empty">No classes this week.</div>'}</div>
+      </section>`;
+  }).join('');
+}
+
+function renderAdmin() {
+  updateHeroSummary();
+  const entries = weeklyScheduleEntries();
+  const substituteCount = DB.classes.filter(cls => !(cls.teacher || '').trim()).length;
+  const teacherCount = uniqueList(entries.map(entry => entry.teacher).filter(Boolean)).length;
+  const roomCount = uniqueList(entries.map(entry => entry.room).filter(Boolean)).length;
+  document.getElementById('tab-admin').innerHTML = `
+    <div class="dashboard-shell">
+      <section class="dashboard-panel">
+        <div class="dashboard-panel-head">
+          <div>
+            <div class="dashboard-caption">This week</div>
+            <div class="dashboard-panel-title">Admin dashboard</div>
+            <div class="activity-hint">Weekly teacher schedules with class time, level, room, conflicts, gaps, and substitute coverage.</div>
+          </div>
+          <button class="mini-link" onclick="openClassModal()">New class <span>›</span></button>
+        </div>
+        <div class="hero-stats">
+          ${heroStat(String(DB.classes.length), 'Classes', 'Scheduled course records.')}
+          ${heroStat(String(teacherCount), 'Teachers', 'Assigned this week.')}
+          ${heroStat(String(roomCount), 'Rooms', 'Rooms in use.')}
+          ${heroStat(String(substituteCount), 'Sub Alerts', substituteCount ? 'Needs coverage.' : 'All classes assigned.')}
+        </div>
+      </section>
+      <div class="ops-grid">
+        ${dashboardCard('Scheduling alerts', 'Conflicts', scheduleIssueRows(entries), 'No teacher conflicts, room conflicts, or substitute alerts found.', '', 'wide')}
+        ${dashboardCard('Teacher gaps', 'Coverage', scheduleGapRows(entries), "No gaps of 30 minutes or more between a teacher's classes this week.", '', 'wide')}
+        ${teacherScheduleHtml(entries)}
+      </div>
+    </div>`;
 }
 
 // ════════════════════════════════════════════════════
@@ -8472,7 +8746,8 @@ function openClassModal(existingId) {
   refreshTeacherOptions(cls ? [cls.teacher] : []);
   document.getElementById('cls-id').value         = existingId || '';
   document.getElementById('cls-name').value       = cls ? cls.name : '';
-  document.getElementById('cls-teacher').value    = cls ? cls.teacher : 'Tani';
+  document.getElementById('cls-teacher').value    = cls ? (cls.teacher || '') : '';
+  document.getElementById('cls-room').value       = cls ? (cls.room || '') : '';
   document.getElementById('cls-start').value      = cls ? cls.start : '';
   document.getElementById('cls-tstart').value     = cls ? (cls.tstart || '') : '15:00';
   document.getElementById('cls-tend').value       = cls ? (cls.tend || '') : '15:50';
@@ -8563,8 +8838,10 @@ document.addEventListener('keydown', e => {
 // ════════════════════════════════════════════════════
 async function saveClass() {
   const existingId = document.getElementById('cls-id').value;
+  const existingClass = existingId ? DB.classes.find(c => c.id === existingId) : null;
   const name    = document.getElementById('cls-name').value.trim();
   const teacher = document.getElementById('cls-teacher').value.trim();
+  const room    = document.getElementById('cls-room').value.trim();
   const start   = document.getElementById('cls-start').value;
   const tstart  = document.getElementById('cls-tstart').value;
   const tend    = document.getElementById('cls-tend').value;
@@ -8573,7 +8850,6 @@ async function saveClass() {
   const shouldAutoBuild = !existingId && curriculumId && document.getElementById('cls-autobuild')?.checked;
 
   if (!name)  { showToast('Please enter a class name.', 'error'); return; }
-  if (!teacher) { showToast('Please enter a teacher name.', 'error'); return; }
   if (!start) { showToast('Please enter a start date.', 'error'); return; }
   if (shouldAutoBuild && !days.length) {
     showToast('Choose at least one class day before auto-building the curriculum.', 'error');
@@ -8582,16 +8858,18 @@ async function saveClass() {
 
   const selectedMaster = curriculumMasterById(curriculumId);
   const cls = {
+    ...(existingClass || {}),
     id: existingId || ('c_' + Date.now()),
     name,
     teacher,
+    room,
     start,
     tstart,
     tend,
     days,
-    curriculumMasterId: shouldAutoBuild ? selectedMaster.id : undefined,
-    curriculumName: shouldAutoBuild ? selectedMaster.name : undefined,
-    lessonDurationMinutes: shouldAutoBuild ? 50 : undefined
+    curriculumMasterId: shouldAutoBuild ? selectedMaster.id : (existingClass?.curriculumMasterId || undefined),
+    curriculumName: shouldAutoBuild ? selectedMaster.name : (existingClass?.curriculumName || undefined),
+    lessonDurationMinutes: shouldAutoBuild ? (minutesBetweenTimes(tstart, tend) || undefined) : existingClass?.lessonDurationMinutes
   };
   setBusy('save-class-btn', true);
   try {
@@ -8607,6 +8885,7 @@ async function saveClass() {
     refreshTeacherOptions([teacher]);
     closeModal('modal-class');
     renderClasses();
+    if (document.getElementById('tab-admin')?.classList.contains('active')) renderAdmin();
     const message = shouldAutoBuild
       ? `${cls.name} created with ${selectedMaster.lessons} planned lessons.`
       : (existingId ? 'Class updated.' : 'Class created.');

@@ -3219,6 +3219,117 @@
       margin-top: 2px;
     }
 
+    .program-overview-strip,
+    .program-timeline {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .program-overview-row,
+    .program-timeline-card {
+      width: 100%;
+      border: 1px solid rgba(148,163,184,0.16);
+      background: rgba(255,255,255,0.68);
+      text-align: left;
+      cursor: pointer;
+      min-width: 0;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .program-overview-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 16px;
+    }
+
+    .program-overview-row:hover,
+    .program-timeline-card:hover,
+    .program-timeline-card.active {
+      background: rgba(255,255,255,0.94);
+      border-color: rgba(91,106,245,0.26);
+      transform: translateY(-1px);
+      box-shadow: 0 16px 34px rgba(39,48,94,0.09);
+    }
+
+    .program-overview-copy {
+      min-width: 0;
+    }
+
+    .program-time-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      padding: 7px 10px;
+      border-radius: 14px;
+      background: rgba(20,184,166,0.10);
+      color: #0f766e;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .program-curriculum-layout {
+      display: grid;
+      grid-template-columns: minmax(210px, 0.26fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      min-width: 0;
+    }
+
+    .program-timeline {
+      position: sticky;
+      top: 16px;
+    }
+
+    .program-timeline-card {
+      display: grid;
+      gap: 7px;
+      padding: 14px;
+      border-radius: 18px;
+    }
+
+    .program-timeline-card.active {
+      border-left: 4px solid #14b8a6;
+    }
+
+    .program-timeline-title {
+      color: #111827;
+      font-weight: 900;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    .program-count-row {
+      color: #344054;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .program-detail-panel {
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .program-detail-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.68);
+      border: 1px solid rgba(148,163,184,0.14);
+      min-width: 0;
+    }
+
     .curriculum-workbench {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(360px, 0.38fr);
@@ -3500,6 +3611,7 @@
 
       .class-workspace-hero,
       .class-overview-grid,
+      .program-curriculum-layout,
       .curriculum-workbench,
       .school-account-grid {
         grid-template-columns: 1fr;
@@ -3511,6 +3623,14 @@
 
       .lesson-drawer {
         position: static;
+      }
+
+      .program-timeline {
+        position: static;
+      }
+
+      .program-detail-head {
+        flex-direction: column;
       }
 
       .student-directory-card,
@@ -3852,19 +3972,19 @@
   </div>
 </div>
 
-<!-- ═══ Modal: Add Book ═══ -->
+<!-- ═══ Modal: Add Program ═══ -->
 <div id="modal-book" class="modal-backdrop" style="display:none;">
   <div class="modal-card">
-    <div class="modal-title" id="modal-book-title">Add Book</div>
+    <div class="modal-title" id="modal-book-title">Add Program</div>
     <input type="hidden" id="book-id">
     <input type="hidden" id="book-classId">
     <div class="form-group">
-      <label class="form-label">Master Curriculum</label>
+      <label class="form-label">Master Program</label>
       <select id="book-curriculum-master" class="form-input" onchange="onBookCurriculumChange()"></select>
     </div>
     <div class="form-group">
-      <label class="form-label">Book Name</label>
-      <input type="text" id="book-name" class="form-input" placeholder="e.g. Super Phonics Book 4">
+      <label class="form-label">Program Name</label>
+      <input type="text" id="book-name" class="form-input" placeholder="e.g. Super Phonics">
     </div>
     <div class="form-group">
       <label class="form-label">Notes / Focus</label>
@@ -4127,7 +4247,7 @@ let expandedSubunits = {};   // keyed by subunit ID
 let expandedLessons  = {};   // keyed by lesson ID
 let pendingLogLessonId = null;
 let currentLogSelection = { year: '', classId: '', unitId: '', lessonId: '' };
-let currentClassWorkspace = { classId: null, tab: 'overview', unitId: null, lessonId: null };
+let currentClassWorkspace = { classId: null, tab: 'overview', bookId: null, unitId: null, lessonId: null };
 let currentMasterCurriculumId = 'our_world_l1';
 let currentMasterUnitNumber = null;
 let currentMasterLessonIndex = 0;
@@ -4473,6 +4593,14 @@ function friendlyTime(str) {
   return `${h % 12 || 12}:${String(m).padStart(2,'0')}${h >= 12 ? 'pm' : 'am'}`;
 }
 
+function friendlyTimeFromMinutes(totalMinutes) {
+  if (!Number.isFinite(totalMinutes)) return '';
+  const minutesInDay = ((totalMinutes % 1440) + 1440) % 1440;
+  const hours = Math.floor(minutesInDay / 60);
+  const minutes = minutesInDay % 60;
+  return friendlyTime(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`);
+}
+
 function minutesBetweenTimes(start, end) {
   if (!start || !end) return null;
   const [startHour, startMinute] = start.split(':').map(Number);
@@ -4764,6 +4892,18 @@ function lessonDisplayName(lesson) {
 // ─── Sort helpers ─────────────────────────────────────────────────────────────
 function sortBooks(books) {
   return books.slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+}
+
+function bookOrderValue(book) {
+  const match = String(book?.id || '').match(/^u_(\d+)/);
+  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+}
+
+function sortProgramBooks(books) {
+  return books.slice().sort((a, b) =>
+    bookOrderValue(a) - bookOrderValue(b) ||
+    (a.name || '').localeCompare(b.name || '')
+  );
 }
 
 function sortSubunits(subs) {
@@ -6598,7 +6738,7 @@ function renderClasses() {
     el.innerHTML = renderClassWorkspace();
     return;
   }
-  currentClassWorkspace = { classId: null, tab: 'overview', unitId: null, lessonId: null };
+  currentClassWorkspace = { classId: null, tab: 'overview', bookId: null, unitId: null, lessonId: null };
   el.innerHTML = renderClassDirectory();
 }
 
@@ -6708,6 +6848,7 @@ function renderClassWorkspacePanel(cls) {
 
 function renderClassOverviewPanel(cls) {
   const lessons = sortLessons(DB.lessons.filter(l => l.classId === cls.id));
+  const programs = programScheduleForClass(cls);
   const nextLesson = nextPendingLesson(lessons);
   const today = todayStr();
   const weekEnd = addDays(today, 6);
@@ -6746,6 +6887,18 @@ function renderClassOverviewPanel(cls) {
     <section class="workspace-panel">
       <div class="workspace-section-head">
         <div>
+          <div class="workspace-mini-label">Program order</div>
+          <div class="workspace-section-title">Today&apos;s curriculum map</div>
+        </div>
+        <button class="btn" onclick="selectClassWorkspaceTab('curriculum')">Open Curriculum</button>
+      </div>
+      <div class="program-overview-strip">
+        ${programs.length ? programs.map(item => renderProgramOverviewRow(item)).join('') : `<div class="empty-state-inline">No programs added yet.</div>`}
+      </div>
+    </section>
+    <section class="workspace-panel">
+      <div class="workspace-section-head">
+        <div>
           <div class="workspace-mini-label">Class memory</div>
           <div class="workspace-section-title">Recent logs</div>
         </div>
@@ -6765,7 +6918,15 @@ function renderClassOverviewPanel(cls) {
 }
 
 function renderClassCurriculumPanel(cls) {
-  const units = classSubunits(cls.id);
+  const programs = programScheduleForClass(cls);
+  const books = programs.map(item => item.book);
+  const unitBook = DB.subunits.find(unit => unit.id === currentClassWorkspace.unitId)?.bookId || null;
+  let activeBookId = books.some(book => book.id === currentClassWorkspace.bookId)
+    ? currentClassWorkspace.bookId
+    : (books.some(book => book.id === unitBook) ? unitBook : books[0]?.id || null);
+  currentClassWorkspace.bookId = activeBookId;
+  const activeProgram = programs.find(item => item.book.id === activeBookId);
+  const units = activeBookId ? programSubunits(activeBookId) : [];
   const firstUnit = units[0];
   if (!currentClassWorkspace.unitId || !units.some(unit => unit.id === currentClassWorkspace.unitId)) {
     currentClassWorkspace.unitId = firstUnit ? firstUnit.id : null;
@@ -6777,22 +6938,79 @@ function renderClassCurriculumPanel(cls) {
       <div class="workspace-section-head">
         <div>
           <div class="workspace-mini-label">Curriculum</div>
-          <div class="workspace-section-title">Units and lessons</div>
+          <div class="workspace-section-title">Programs, units and lessons</div>
         </div>
         <div class="page-actions">
-          ${units.length && firstBookForClass(cls.id) ? `<button class="btn" onclick="openSubunitModal('${firstBookForClass(cls.id).id}','${cls.id}')">Add Unit</button>` : `<button class="btn" onclick="openBookModal('${cls.id}')">Add Curriculum</button>`}
+          ${books.length ? `<button class="btn" onclick="openBookModal('${cls.id}')">Add Program</button>` : `<button class="btn" onclick="openBookModal('${cls.id}')">Add Curriculum</button>`}
         </div>
       </div>
-      ${units.length ? `<div class="curriculum-workbench">
-        <div class="unit-grid">
-          ${units.map(unit => renderCurriculumUnitCard(unit)).join('')}
+      ${books.length ? `<div class="program-curriculum-layout">
+        <aside class="program-timeline">
+          ${programs.map(item => renderProgramTimelineCard(item, item.book.id === activeBookId)).join('')}
+        </aside>
+        <div class="program-detail-panel">
+          ${activeProgram ? renderProgramDetailHeader(activeProgram, cls) : ''}
+          ${units.length ? `<div class="curriculum-workbench">
+            <div class="unit-grid">
+              ${units.map(unit => renderCurriculumUnitCard(unit)).join('')}
+            </div>
+            ${renderLessonDrawer(cls)}
+          </div>` : `<div class="empty-state-section" style="text-align:center;display:grid;justify-items:center;gap:14px;">
+            <div>No units in this program yet.</div>
+            ${activeBookId ? `<button class="btn btn-primary" onclick="openSubunitModal('${activeBookId}','${cls.id}')">Add Unit</button>` : ''}
+          </div>`}
         </div>
-        ${renderLessonDrawer(cls)}
       </div>` : `<div class="empty-state-section" style="text-align:center;display:grid;justify-items:center;gap:14px;">
         <div>No curriculum added yet. Click Add Curriculum to attach a program to this class.</div>
         <button class="btn btn-primary" onclick="openBookModal('${cls.id}')">Add Curriculum</button>
       </div>`}
     </section>`;
+}
+
+function renderProgramOverviewRow(item) {
+  const { book, duration, breakAfter, start, end } = item;
+  const units = programSubunits(book.id).length;
+  const lessons = programLessonCount(book.id);
+  return `<button class="program-overview-row" onclick="selectCurriculumBook('${book.id}')">
+    <div class="program-time-chip">${start !== null ? friendlyTimeFromMinutes(start) : 'Time not set'}</div>
+    <div class="program-overview-copy">
+      <div class="compact-title">${esc(book.name || 'Untitled Program')}</div>
+      <div class="compact-meta">${end !== null ? `${friendlyTimeFromMinutes(start)} - ${friendlyTimeFromMinutes(end)}` : `${duration || 0} min`}${breakAfter ? ` · ${breakAfter} min break` : ''} · ${units} units · ${lessons} lessons</div>
+    </div>
+    <span class="rail-course-arrow">›</span>
+  </button>`;
+}
+
+function renderProgramTimelineCard(item, isActive) {
+  const { book, duration, breakAfter, start, end, index } = item;
+  const unitCount = programSubunits(book.id).length;
+  const lessonCount = programLessonCount(book.id);
+  const timeLabel = start !== null ? friendlyTimeFromMinutes(start) : `Program ${index + 1}`;
+  const rangeLabel = end !== null ? `${friendlyTimeFromMinutes(start)} - ${friendlyTimeFromMinutes(end)}` : 'Time not set';
+  return `<button class="program-timeline-card${isActive ? ' active' : ''}" onclick="selectCurriculumBook('${book.id}')">
+    <span class="program-time-chip">${esc(timeLabel)}</span>
+    <span class="program-timeline-title">${esc(book.name || 'Untitled Program')}</span>
+    <span class="compact-meta">${esc(rangeLabel)} · ${duration || 0} min${breakAfter ? ` · ${breakAfter} min break` : ''}</span>
+    <span class="program-count-row">${unitCount} units · ${lessonCount} lessons</span>
+  </button>`;
+}
+
+function renderProgramDetailHeader(item, cls) {
+  const { book, duration, breakAfter, start, end } = item;
+  const rangeLabel = start !== null && end !== null
+    ? `${friendlyTimeFromMinutes(start)} - ${friendlyTimeFromMinutes(end)}`
+    : (cls.tstart ? 'Add duration to place this program in the class time.' : 'Set class start and end times to build a schedule.');
+  return `<div class="program-detail-head">
+    <div>
+      <div class="workspace-mini-label">Selected program</div>
+      <div class="workspace-section-title">${esc(book.name || 'Untitled Program')}</div>
+      <div class="compact-meta">${esc(rangeLabel)} · ${duration || 0} min${breakAfter ? ` · ${breakAfter} min break after` : ''}</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn" onclick="openSubunitModal('${book.id}','${cls.id}')">Add Unit</button>
+      <button class="btn" onclick="openBookModal('${book.id}')">Edit Program</button>
+    </div>
+  </div>`;
 }
 
 function renderCurriculumUnitCard(unit) {
@@ -7020,6 +7238,32 @@ function classSubunits(classId) {
   return sortSubunits(DB.subunits.filter(unit => unit.classId === classId));
 }
 
+function classProgramBooks(classId) {
+  return sortProgramBooks(DB.units.filter(book => book.classId === classId));
+}
+
+function programSubunits(bookId) {
+  return sortSubunits(DB.subunits.filter(unit => unit.bookId === bookId));
+}
+
+function programLessonCount(bookId) {
+  return DB.lessons.filter(lesson => lesson.bookId === bookId).length;
+}
+
+function programScheduleForClass(cls) {
+  const startMinutes = timeToMinutes(cls?.tstart);
+  let cursor = startMinutes;
+  return classProgramBooks(cls.id).map((book, index) => {
+    const duration = parsePositiveInt(book.durationMinutes) || 0;
+    const breakAfter = parsePositiveInt(book.breakAfterMinutes) || 0;
+    const hasStart = Number.isFinite(cursor);
+    const start = hasStart ? cursor : null;
+    const end = hasStart && duration ? cursor + duration : null;
+    if (hasStart) cursor += duration + breakAfter;
+    return { book, index, duration, breakAfter, start, end };
+  });
+}
+
 function firstBookForClass(classId) {
   return sortBooks(DB.units.filter(book => book.classId === classId))[0] || null;
 }
@@ -7086,12 +7330,12 @@ function currentYearString() {
 }
 
 function openClassWorkspace(classId) {
-  currentClassWorkspace = { classId, tab: 'overview', unitId: null, lessonId: null };
+  currentClassWorkspace = { classId, tab: 'overview', bookId: null, unitId: null, lessonId: null };
   renderClasses();
 }
 
 function closeClassWorkspace() {
-  currentClassWorkspace = { classId: null, tab: 'overview', unitId: null, lessonId: null };
+  currentClassWorkspace = { classId: null, tab: 'overview', bookId: null, unitId: null, lessonId: null };
   renderClasses();
 }
 
@@ -7101,6 +7345,8 @@ function selectClassWorkspaceTab(tab) {
 }
 
 function selectCurriculumUnit(unitId) {
+  const unit = DB.subunits.find(item => item.id === unitId);
+  currentClassWorkspace.bookId = unit?.bookId || currentClassWorkspace.bookId;
   currentClassWorkspace.unitId = unitId;
   currentClassWorkspace.lessonId = null;
   currentClassWorkspace.tab = 'curriculum';
@@ -7114,9 +7360,20 @@ function selectCurriculumLesson(lessonId) {
 }
 
 function jumpToLesson(unitId, lessonId) {
+  const unit = DB.subunits.find(item => item.id === unitId);
   currentClassWorkspace.tab = 'curriculum';
+  currentClassWorkspace.bookId = unit?.bookId || currentClassWorkspace.bookId;
   currentClassWorkspace.unitId = unitId;
   currentClassWorkspace.lessonId = lessonId;
+  renderClasses();
+}
+
+function selectCurriculumBook(bookId) {
+  const firstUnit = programSubunits(bookId)[0];
+  currentClassWorkspace.tab = 'curriculum';
+  currentClassWorkspace.bookId = bookId;
+  currentClassWorkspace.unitId = firstUnit?.id || null;
+  currentClassWorkspace.lessonId = null;
   renderClasses();
 }
 
@@ -9555,7 +9812,7 @@ function openBookModal(existingId_or_classId, isClassId) {
   //              edit = openBookModal(bookId) where bookId starts with 'u_'
   const isEdit = existingId_or_classId && existingId_or_classId.startsWith('u_');
   const book = isEdit ? DB.units.find(u => u.id === existingId_or_classId) : null;
-  document.getElementById('modal-book-title').textContent = book ? 'Edit Book' : 'Add Book';
+  document.getElementById('modal-book-title').textContent = book ? 'Edit Program' : 'Add Program';
   document.getElementById('book-id').value    = book ? book.id : '';
   document.getElementById('book-classId').value = book ? book.classId : existingId_or_classId;
   populateBookCurriculumSelect(book?.curriculumMasterId || '');
@@ -9573,7 +9830,7 @@ function populateBookCurriculumSelect(selectedId = '') {
   const select = document.getElementById('book-curriculum-master');
   if (!select) return;
   select.innerHTML = [
-    `<option value="">Manual curriculum</option>`,
+    `<option value="">Manual program</option>`,
     ...allCurriculumMasters()
       .filter(master => master.id)
       .map(master => `<option value="${esc(master.id)}"${master.id === selectedId ? ' selected' : ''}>${esc(masterDisplayName(master))}</option>`)
@@ -9726,7 +9983,7 @@ async function saveBook() {
   const usedMinutes = curriculumMinutesUsed(classId, existingId);
   const proposedMinutes = durationMinutes + breakAfterMinutes;
 
-  if (!name) { showToast('Please enter a book name.', 'error'); return; }
+  if (!name) { showToast('Please enter a program name.', 'error'); return; }
   if (classMinutes && usedMinutes + proposedMinutes > classMinutes) {
     showToast(`Curriculum time exceeds class duration. ${usedMinutes}/${classMinutes} minutes already used.`, 'error');
     return;
@@ -9740,16 +9997,18 @@ async function saveBook() {
 	    await api('POST', '/api/units', book);
 	    if (existingId) { DB.units = DB.units.map(u => u.id === existingId ? book : u); }
 	    else { DB.units.push(book); }
+	    if (currentClassWorkspace.classId === classId) currentClassWorkspace.bookId = book.id;
 	    if (book.curriculumMasterId && cls) {
 	      await buildCurriculumUnderUnit(cls, book.curriculumMasterId, book.id);
 	      currentClassWorkspace.tab = 'curriculum';
+	      currentClassWorkspace.bookId = book.id;
 	      currentClassWorkspace.unitId = DB.subunits.find(unit => unit.bookId === book.id)?.id || currentClassWorkspace.unitId;
 	      currentClassWorkspace.lessonId = null;
 	    }
 	    closeModal('modal-book');
 	    renderClasses();
-    showToast(existingId ? 'Book updated.' : 'Book added.', 'success');
-  } catch(e) { showToast('Failed to save book.', 'error'); }
+    showToast(existingId ? 'Program updated.' : 'Program added.', 'success');
+  } catch(e) { showToast('Failed to save program.', 'error'); }
   finally { setBusy('save-book-btn', false); }
 }
 
